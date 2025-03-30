@@ -6,12 +6,18 @@ using UnityEngine.EventSystems;
 using TMPro;
 
 [RequireComponent(typeof(CanvasGroup))]
-public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    public EmailData emailData;
     public Image image;
     public TextMeshProUGUI label;
-    public string mainName;
-    public string fullInfo;
+    public string mainName => emailData != null ? emailData.characterName : "";
+    public string fullInfo => emailData != null ? emailData.ToString() : "";
+
+
+    
+
+
 
     [HideInInspector] public Transform parentAfterDrag;
 
@@ -24,7 +30,11 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     void Start()
     {
-        label.text = mainName;
+        if (label != null && emailData != null)
+        {
+            label.text = emailData.characterName;
+        }
+
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -55,5 +65,18 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         this.enabled = false;
         canvasGroup.blocksRaycasts = false;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (emailData != null)
+        {
+            TooltipController.Instance.ShowTooltip(fullInfo);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        TooltipController.Instance.HideTooltip();
     }
 }

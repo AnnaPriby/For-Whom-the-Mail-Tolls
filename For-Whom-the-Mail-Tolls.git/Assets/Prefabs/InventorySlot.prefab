@@ -90,10 +90,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f3a75af0d8a8c40a2c28dd7d1be123, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  emailData: {fileID: 11400000, guid: af5f76685e88e4640bb384014924c18d, type: 2}
   image: {fileID: 7511264496791245976}
   label: {fileID: 3086966405143017288}
-  mainName: Greetings
-  fullInfo: SomethigSomethigSomething,Hello
   parentAfterDrag: {fileID: 0}
 --- !u!225 &346119369212831662
 CanvasGroup:
