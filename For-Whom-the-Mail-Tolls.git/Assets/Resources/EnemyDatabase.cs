@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemyDatabase", menuName = "ScriptableObjects/EnemyDatabase", order = 1)]
+[CreateAssetMenu(fileName = "EnemyDatabase", menuName = "ScriptableObjects/EnemyDatabase")]
 public class EnemyDatabase : ScriptableObject
 {
     public List<EnemyData> enemies;
-
-
 }
+

@@ -13,12 +13,20 @@ MonoBehaviour:
   m_Name: EnemyDatabase
   m_EditorClassIdentifier: 
   enemies:
-  - Name: Enemy1
-    Health: 100
-    Speed: 5
-  - Name: Enemy2
-    Health: 200
-    Speed: 3
-  - Name: Enemy3
-    Health: 212
-    Speed: 24
+  - Name: I find this situation very regrettable.
+    Stamina: -3
+    Sanity: 2
+    Text: I find this situation very regrettable. No man of your stature should be
+      subjected to such circumstances.
+  - Name: I am trying my best
+    Stamina: -2
+    Sanity: 3
+    Text: I am trying my best and I want to apologize for any inconvenience caused.
+  - Name: I will try to fix it.
+    Stamina: 1
+    Sanity: -5
+    Text: I'm a bit overloaded at the moment
+  - Name: problem?
+    Stamina: 3
+    Sanity: -1
+    Text: Are you sure this is a problem? I wasn't involved in this.

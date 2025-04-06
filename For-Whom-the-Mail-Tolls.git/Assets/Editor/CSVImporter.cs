@@ -1,54 +1,54 @@
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
-using System.IO;
 using System.Collections.Generic;
 using Codice.CM.Client.Differences.Graphic;
 
-public class CSVImporter : EditorWindow
+public class EnemyCSVImporter
 {
-    [MenuItem("Tools/Import Enemies from CSV")]
-    static void ImportCSV()
+    [MenuItem("Tools/Import Enemies From CSV")]
+    public static void ImportEnemies()
     {
-        string path = "Assets/Resources/enemyData.csv";
-        TextAsset csvFile = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
+        string assetPath = "Assets/EnemyDatabase.asset";
 
-        if (csvFile == null)
+        EnemyDatabase db = AssetDatabase.LoadAssetAtPath<EnemyDatabase>(assetPath);
+        if (db == null)
         {
-            Debug.LogError("CSV file not found at " + path);
+            db = ScriptableObject.CreateInstance<EnemyDatabase>();
+            AssetDatabase.CreateAsset(db, assetPath);
+        }
+
+        TextAsset csv = Resources.Load<TextAsset>("Enemies");
+        if (csv == null)
+        {
+            Debug.LogError("Enemies.csv not found in Resources folder.");
             return;
         }
-        string[] data = csvFile.text.Split('\n');
-        List<EnemyData> enemyList = new List<EnemyData>();
 
-        for (int i = 1; i < data.Length; i++)
+        db.enemies = new List<EnemyData>();
+        string[] lines = csv.text.Split('\n');
+
+        for (int i = 1; i < lines.Length; i++)
         {
-            if (string.IsNullOrWhiteSpace(data[i])) continue;
+            if (string.IsNullOrWhiteSpace(lines[i])) continue;
 
-            string[] row = data[i].Trim().Split(',');
+            string[] row = lines[i].Trim().Split(',');
+            if (row.Length < 4) continue;
 
             EnemyData enemy = new EnemyData
             {
                 Name = row[0],
-                Health = int.Parse(row[1]),
-                Speed = float.Parse(row[2])
+                Stamina = int.Parse(row[1]),
+                Sanity = int.Parse(row[2]),
+                Text = row[3].Trim('"')
             };
 
-            enemyList.Add(enemy);
+            db.enemies.Add(enemy);
         }
-
-        // Create or update the ScriptableObject
-        EnemyDatabase db = AssetDatabase.LoadAssetAtPath<EnemyDatabase>("Assets/EnemyDatabase.asset");
-
-        if (db == null)
-        {
-            db = ScriptableObject.CreateInstance<EnemyDatabase>();
-            AssetDatabase.CreateAsset(db, "Assets/EnemyDatabase.asset");
-        }
-
-        db.enemies = enemyList;
 
         EditorUtility.SetDirty(db);
         AssetDatabase.SaveAssets();
-        Debug.Log("EnemyDatabase updated with " + enemyList.Count + " entries.");
+        AssetDatabase.Refresh();
+
+        Debug.Log($"✅ Imported {db.enemies.Count} enemies from CSV.");
     }
 }
