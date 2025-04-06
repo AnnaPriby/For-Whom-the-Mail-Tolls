@@ -5,24 +5,33 @@ using TMPro;
 
 public class RevealSlot : MonoBehaviour, IDropHandler
 {
-    [Header("UI References")]
+    [Header("UI Elements")]
     public TextMeshProUGUI infoDisplay;
     public Slider staminaSlider;
     public Slider sanitySlider;
     public TextMeshProUGUI staminaValueText;
     public TextMeshProUGUI sanityValueText;
 
+    [Header("Slider Fill Images")]
+    public Image staminaFill;
+    public Image sanityFill;
+
+    [Header("Gradient Colors")]
+    public Color fullColor = Color.green;
+    public Color lowColor = Color.red;
+
     private float startingStamina;
     private float startingSanity;
 
     void Start()
     {
-        // Store the original (max) values for clamping later
+        // Store the original starting values to use as max clamp
         startingStamina = staminaSlider.value;
         startingSanity = sanitySlider.value;
 
-        // Update the number labels at start
+        // Initial UI update
         UpdateStatLabels();
+        UpdateSliderGradients();
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -32,26 +41,18 @@ public class RevealSlot : MonoBehaviour, IDropHandler
 
         if (item != null)
         {
-            // Show enemy's descriptive text
+            // Show descriptive text only
             infoDisplay.text = item.enemyTextOnly;
 
-            // Add/subtract values but keep within [0, starting]
-            staminaSlider.value = Mathf.Clamp(
-                staminaSlider.value + item.Stamina,
-                0,
-                startingStamina
-            );
+            // Add/subtract stats, clamped to original range
+            staminaSlider.value = Mathf.Clamp(staminaSlider.value + item.Stamina, 0, startingStamina);
+            sanitySlider.value = Mathf.Clamp(sanitySlider.value + item.Sanity, 0, startingSanity);
 
-            sanitySlider.value = Mathf.Clamp(
-                sanitySlider.value + item.Sanity,
-                0,
-                startingSanity
-            );
-
-            // Update number labels to match slider values
+            // Update number labels and slider fill gradients
             UpdateStatLabels();
+            UpdateSliderGradients();
 
-            // Disable further dragging and hide the object
+            // Disable further dragging & hide item
             item.DisableDragging();
             dropped.SetActive(false);
         }
@@ -64,5 +65,20 @@ public class RevealSlot : MonoBehaviour, IDropHandler
 
         if (sanityValueText != null)
             sanityValueText.text = Mathf.RoundToInt(sanitySlider.value).ToString();
+    }
+
+    private void UpdateSliderGradients()
+    {
+        if (staminaFill != null)
+        {
+            float ratio = staminaSlider.value / startingStamina;
+            staminaFill.color = Color.Lerp(lowColor, fullColor, ratio);
+        }
+
+        if (sanityFill != null)
+        {
+            float ratio = sanitySlider.value / startingSanity;
+            sanityFill.color = Color.Lerp(lowColor, fullColor, ratio);
+        }
     }
 }
