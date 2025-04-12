@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5745d5d206f81794195e44aeebc29f7c, type: 3}
+  m_Name: EnemyDatabase
+  m_EditorClassIdentifier: 
+  enemies:
+  - Name: I find this situation very regrettable.
+    Stamina: -3
+    Sanity: 2
+    Text: I find this situation very regrettable. No man of your stature should be
+      subjected to such circumstances.
+  - Name: I am trying my best
+    Stamina: -2
+    Sanity: 3
+    Text: I am trying my best and I want to apologize for any inconvenience caused.
+  - Name: I will try to fix it.
+    Stamina: 1
+    Sanity: -5
+    Text: I'm a bit overloaded at the moment
+  - Name: problem?
+    Stamina: 3
+    Sanity: -1
+    Text: Are you sure this is a problem? I wasn't involved in this.
+  - Name: Foools
+    Stamina: -4
+    Sanity: 1
+    Text: You realy think that this is okay
+  - Name: Tooools
+    Stamina: 1
+    Sanity: 5
+    Text: NEEEEW STUF
