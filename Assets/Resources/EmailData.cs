@@ -1,9 +1,11 @@
+using UnityEngine;
+
 [System.Serializable]
-public class EnemyData
+public class EmailData
 {
     public string Name;
     public int Stamina;
     public int Sanity;
-    public string Text;
+    [TextArea]
+    public string MainText;
 }
-

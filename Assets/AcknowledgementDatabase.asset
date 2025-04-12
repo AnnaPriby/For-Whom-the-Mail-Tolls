@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: AcknowledgementDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::AcknowledgementDatabase
+  entries:
+  - Name: Regeret
+    Stamina: 0
+    Sanity: -2
+    MainText: I find this situation very (immesurably) regrettable.
+  - Name: I'm looking into it immediately!
+    Stamina: 0
+    Sanity: -2
+    MainText: I have received your email and want to tell you that I'm looking into
+      the matter immediately!
+  - Name: I'm so sorry
+    Stamina: 0
+    Sanity: -2
+    MainText: Oh I'm so sorry Jessica. That must have been a mistake on my end.
+  - Name: received your email
+    Stamina: 0
+    Sanity: -1
+    MainText: I have received your email.
+  - Name: I see.
+    Stamina: 0
+    Sanity: -1
+    MainText: I see.
+  - Name: No Problem
+    Stamina: 0
+    Sanity: -1
+    MainText: I don't think this will be a problem.
+  - Name: Its your problem
+    Stamina: -1
+    Sanity: 1
+    MainText: Are you sure this isn't a your problem?
+  - Name: You don't say.
+    Stamina: -1
+    Sanity: 1
+    MainText: You don't say.
+  - Name: Who cares?
+    Stamina: -1
+    Sanity: 1
+    MainText: Who cares?
+  - Name: not my fucking problem
+    Stamina: -2
+    Sanity: 2
+    MainText: I'm afraid that's not my fucking problem.
+  - Name: Wtf
+    Stamina: -2
+    Sanity: 2
+    MainText: Wtf am I supposed to do with that.
+  - Name: Cant stand it anymore
+    Stamina: -3
+    Sanity: 3
+    MainText: I can't stand your obnoxious fucking emails anymore.
+  - Name: wanted to die immediately
+    Stamina: -3
+    Sanity: 3
+    MainText: I saw that email in my inbox and wanted to die immediately
+  - Name: WORST human
+    Stamina: -4
+    Sanity: 4
+    MainText: It's the WORST human on EARTH messaging me AGAIN.
+  - Name: DIE
+    Stamina: -4
+    Sanity: 4
+    MainText: DIE.

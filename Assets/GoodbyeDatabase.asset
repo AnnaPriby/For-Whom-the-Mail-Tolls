@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: GoodbyeDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::GoodbyeDatabase
+  entries:
+  - Name: '"Kind regards'
+    Stamina: 0
+    Sanity: 0
+    MainText: -2
+  - Name: '"Respectfully'
+    Stamina: 0
+    Sanity: 0
+    MainText: -2
+  - Name: '"Yours sincerely'
+    Stamina: 0
+    Sanity: 0
+    MainText: -2
+  - Name: '"Have a nice shift'
+    Stamina: 0
+    Sanity: 0
+    MainText: -1
+  - Name: xx
+    Stamina: 0
+    Sanity: -1
+    MainText: xx
+  - Name: Let me know if you have any troubles!
+    Stamina: 0
+    Sanity: -1
+    MainText: Let me know if you have any troubles!
+  - Name: Let me know if you have any troubles as usual!
+    Stamina: -1
+    Sanity: 1
+    MainText: Let me know if you have any troubles as usual!
+  - Name: '"Ciao'
+    Stamina: 0
+    Sanity: -1
+    MainText: 1
+  - Name: '"gl'
+    Stamina: 0
+    Sanity: -1
+    MainText: 1
+  - Name: '*Just name*'
+    Stamina: -1
+    Sanity: 1
+    MainText: '*Just name*'
+  - Name: '"Choke on that coffee'
+    Stamina: 0
+    Sanity: -2
+    MainText: 2
+  - Name: "\U0001F44B"
+    Stamina: -2
+    Sanity: 2
+    MainText: "\U0001F44B"
+  - Name: '"Your slave and enemy'
+    Stamina: 0
+    Sanity: -3
+    MainText: 3
+  - Name: '"Don''t you dare message me ever again'
+    Stamina: 0
+    Sanity: -3
+    MainText: 3
+  - Name: '"See ya'
+    Stamina: 0
+    Sanity: -4
+    MainText: 4
+  - Name: DIEEEEEEEEEEEEE
+    Stamina: -4
+    Sanity: 4
+    MainText: DIEEEEEEEEEEEEE

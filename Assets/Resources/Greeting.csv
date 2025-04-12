@@ -1,0 +1,16 @@
+name,Stamina,Sanity,MainText
+"Hello Jessica,",0,-2,"Hello Jessica,"
+"Dear Jessica,",0,-2,"Dear Jessica,"
+"Hope this message finds you well,",0,-2,"Hope this message finds you well,"
+"My dearest Jessica,",0,-1,"My dearest Jessica,"
+"Hey,",0,-1,"Hey,"
+"Greetings,",0,-1,"Greetings,"
+"Jessica, Jessica...",-1,1,"Jessica, Jessica..."
+"Dear,",-1,1,"Dear,"
+"You poor little thing,",-1,1,"You poor little thing,"
+"You disingenuous rat,",-2,2,"You disingenuous rat,"
+"Look who comes begging again,",-2,2,"Look who comes begging again,"
+"Listen bitch,",-3,3,"Listen bitch,"
+"Hey cunt,",-3,3,"Hey cunt,"
+"You worthless piece of shit,",-4,4,"You worthless piece of shit,"
+DIE!,-4,4,DIE!

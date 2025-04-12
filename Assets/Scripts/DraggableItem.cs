@@ -7,8 +7,8 @@ using TMPro;
 [RequireComponent(typeof(CanvasGroup))]
 public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    [Header("Scriptable Object")]
-    [SerializeField] private EnemyDatabase enemyDatabase;
+    [Header("Scriptable Object Source (Any EmailDatabase)")]
+    [SerializeField] private ScriptableObject emailDatabaseObject;
 
     [Header("UI References")]
     [SerializeField] private Image image;
@@ -16,21 +16,19 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     [HideInInspector] public Transform parentAfterDrag;
 
-    private EnemyData enemyData;
+    private EmailData emailData;
     private CanvasGroup canvasGroup;
 
-    private static HashSet<int> usedIndexes = new HashSet<int>(); // tracks globally used indices
+    private static HashSet<int> usedIndexes = new HashSet<int>(); // Global uniqueness tracker
 
-    public string enemyTextOnly => enemyData != null ? enemyData.Text : "";
-
-
-    public string mainName => enemyData != null ? enemyData.Name : "";
-    public string fullInfo => enemyData != null
-   
-        ? $"<b>{enemyData.Name}</b>\nStamina: {enemyData.Stamina}\nSanity: {enemyData.Sanity}\n<i>{enemyData.Text}</i>"
+    // Public access to properties
+    public string enemyTextOnly => emailData != null ? emailData.MainText : "";
+    public string mainName => emailData != null ? emailData.Name : "";
+    public string fullInfo => emailData != null
+        ? $"<b>{emailData.Name}</b>\nStamina: {emailData.Stamina}\nSanity: {emailData.Sanity}\n<i>{emailData.MainText}</i>"
         : "";
-    public int Stamina => enemyData != null ? enemyData.Stamina : 0;
-    public int Sanity => enemyData != null ? enemyData.Sanity : 0;
+    public int Stamina => emailData != null ? emailData.Stamina : 0;
+    public int Sanity => emailData != null ? emailData.Sanity : 0;
 
     void Awake()
     {
@@ -39,25 +37,27 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     void Start()
     {
-        AssignUniqueEnemy();
-        if (label != null && enemyData != null)
+        AssignUniqueEmail();
+        if (label != null && emailData != null)
         {
-            label.text = enemyData.Name;
+            label.text = emailData.Name;
         }
     }
 
-    private void AssignUniqueEnemy()
+    private void AssignUniqueEmail()
     {
-        if (enemyDatabase == null || enemyDatabase.enemies == null || enemyDatabase.enemies.Count == 0)
+        // Try casting to any supported database type
+        List<EmailData> tableEntries = GetEmailEntriesFromObject();
+
+        if (tableEntries == null || tableEntries.Count == 0)
         {
-            Debug.LogWarning("No enemies found in the database.");
+            Debug.LogWarning("No entries found in assigned email database.");
             return;
         }
 
-        // All used? Optionally reset or skip
-        if (usedIndexes.Count >= enemyDatabase.enemies.Count)
+        if (usedIndexes.Count >= tableEntries.Count)
         {
-            Debug.LogWarning("All enemy entries are already used!");
+            Debug.LogWarning("All email entries have already been used.");
             return;
         }
 
@@ -66,18 +66,34 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         do
         {
-            index = Random.Range(0, enemyDatabase.enemies.Count);
+            index = Random.Range(0, tableEntries.Count);
             safety--;
         } while (usedIndexes.Contains(index) && safety > 0);
 
         if (safety <= 0)
         {
-            Debug.LogError("Could not assign a unique enemy (safety limit reached).");
+            Debug.LogError("Could not assign a unique entry (safety limit reached).");
             return;
         }
 
         usedIndexes.Add(index);
-        enemyData = enemyDatabase.enemies[index];
+        emailData = tableEntries[index];
+    }
+
+    private List<EmailData> GetEmailEntriesFromObject()
+    {
+        switch (emailDatabaseObject)
+        {
+            case GreetingDatabase g: return g.entries;
+            case AcknowledgementDatabase a: return a.entries;
+            case OpinionDatabase o: return o.entries;
+            case SolutionDatabase s: return s.entries;
+            case GoodbyeDatabase gb: return gb.entries;
+            case JessicaEmailsDatabase j: return j.entries;
+            default:
+                Debug.LogError("Unsupported ScriptableObject type assigned to DraggableItem.");
+                return null;
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -114,7 +130,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (enemyData != null)
+        if (emailData != null)
         {
             TooltipController.Instance.ShowTooltip(fullInfo);
         }
@@ -125,8 +141,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         TooltipController.Instance.HideTooltip();
     }
 
-    // Optional: call this if you want to manually clear assigned enemies between game rounds
-    public static void ResetUsedEnemies()
+    // Allow resetting used entries between rounds
+    public static void ResetUsedEmails()
     {
         usedIndexes.Clear();
     }
