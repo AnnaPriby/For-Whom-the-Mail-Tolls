@@ -19,16 +19,18 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private EmailData emailData;
     private CanvasGroup canvasGroup;
 
-    private static HashSet<int> usedIndexes = new HashSet<int>(); // Global uniqueness tracker
+    private static HashSet<int> usedIndexes = new HashSet<int>();
 
-    // Public access to properties
-    public string enemyTextOnly => emailData != null ? emailData.MainText : "";
-    public string mainName => emailData != null ? emailData.Name : "";
-    public string fullInfo => emailData != null
-        ? $"<b>{emailData.Name}</b>\nStamina: {emailData.Stamina}\nSanity: {emailData.Sanity}\n<i>{emailData.MainText}</i>"
-        : "";
-    public int Stamina => emailData != null ? emailData.Stamina : 0;
-    public int Sanity => emailData != null ? emailData.Sanity : 0;
+    // ✅ Properties for external access
+    public string MainTextOnly => emailData?.MainText ?? "";
+    public int Stamina => emailData?.Stamina ?? 0;
+    public int Sanity => emailData?.Sanity ?? 0;
+
+    // ✅ Tooltip display content
+    public string FullInfo => emailData != null
+    ? $"<b>{emailData.Name}</b>\n<i>\"{emailData.MainText}\"</i>\n\n<color=#f4c542>Stamina:</color> {emailData.Stamina}\n<color=#42b0f5>Sanity:</color> {emailData.Sanity}"
+    : "";
+
 
     void Awake()
     {
@@ -38,15 +40,15 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     void Start()
     {
         AssignUniqueEmail();
+
         if (label != null && emailData != null)
         {
-            label.text = emailData.Name;
+            label.text = emailData.Name; // ✅ Show name only on label
         }
     }
 
     private void AssignUniqueEmail()
     {
-        // Try casting to any supported database type
         List<EmailData> tableEntries = GetEmailEntriesFromObject();
 
         if (tableEntries == null || tableEntries.Count == 0)
@@ -103,7 +105,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetAsLastSibling();
 
         canvasGroup.blocksRaycasts = false;
-
         if (image != null) image.raycastTarget = false;
         if (label != null) label.raycastTarget = false;
     }
@@ -117,7 +118,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         transform.SetParent(parentAfterDrag);
         canvasGroup.blocksRaycasts = true;
-
         if (image != null) image.raycastTarget = true;
         if (label != null) label.raycastTarget = true;
     }
@@ -128,20 +128,21 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         canvasGroup.blocksRaycasts = false;
     }
 
+    // ✅ Show tooltip with name and text
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (emailData != null)
         {
-            TooltipController.Instance.ShowTooltip(fullInfo);
+            TooltipController.Instance.ShowTooltip(FullInfo);
         }
     }
+
 
     public void OnPointerExit(PointerEventData eventData)
     {
         TooltipController.Instance.HideTooltip();
     }
 
-    // Allow resetting used entries between rounds
     public static void ResetUsedEmails()
     {
         usedIndexes.Clear();

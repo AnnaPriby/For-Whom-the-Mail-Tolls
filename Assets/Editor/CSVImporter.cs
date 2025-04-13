@@ -14,7 +14,7 @@ public class EmailCSVImporter : EditorWindow
         ImportTable<GoodbyeDatabase>("Goodbye", "GoodbyeDatabase.asset");
         ImportTable<JessicaEmailsDatabase>("JessicaEmails", "JessicaEmailsDatabase.asset");
 
-        Debug.Log("✅ All email tables imported.");
+        Debug.Log("✅ All email tables imported and updated.");
     }
 
     private static void ImportTable<T>(string csvFileName, string assetFileName) where T : ScriptableObject
@@ -27,7 +27,7 @@ public class EmailCSVImporter : EditorWindow
         }
 
         string[] lines = csv.text.Split('\n');
-        List<EmailData> entries = new List<EmailData>();
+        List<EmailData> newEntries = new List<EmailData>();
 
         for (int i = 1; i < lines.Length; i++)
         {
@@ -63,7 +63,7 @@ public class EmailCSVImporter : EditorWindow
                 MainText = text
             };
 
-            entries.Add(data);
+            newEntries.Add(data);
         }
 
         string path = $"Assets/{assetFileName}";
@@ -75,11 +75,17 @@ public class EmailCSVImporter : EditorWindow
             AssetDatabase.CreateAsset(db, path);
         }
 
-        // Use reflection to set 'entries' list
-        typeof(T).GetField("entries").SetValue(db, entries);
+        // ✅ Clear existing entries before updating
+        var field = typeof(T).GetField("entries");
+        if (field != null)
+        {
+            field.SetValue(db, newEntries);
+        }
 
         EditorUtility.SetDirty(db);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+
+        Debug.Log($"✅ Imported {newEntries.Count} entries into {typeof(T).Name}.");
     }
 }

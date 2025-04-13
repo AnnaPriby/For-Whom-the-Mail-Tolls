@@ -1,11 +1,24 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine.UI;
 
 public class RevealSlot : MonoBehaviour, IDropHandler
 {
+    [Header("UI")]
     public TextMeshProUGUI infoDisplay;
+
+    [Header("References")]
     public StatManager statManager;
+    public Button sendButton;
+
+    private DraggableItem currentItem;
+
+    void Start()
+    {
+        if (sendButton != null)
+            sendButton.onClick.AddListener(ApplyStatsFromItem);
+    }
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -14,14 +27,29 @@ public class RevealSlot : MonoBehaviour, IDropHandler
 
         if (item != null)
         {
-            infoDisplay.text = item.enemyTextOnly;
-
-            // ✅ Ask StatManager to update values
-            statManager.ApplyStaminaDelta(item.Stamina);
-            statManager.ApplySanityDelta(item.Sanity);
+            currentItem = item;
+            infoDisplay.text = item.MainTextOnly;
 
             item.DisableDragging();
             dropped.SetActive(false);
+
+            Debug.Log("📥 Message dropped and waiting to be sent.");
         }
+    }
+
+    private void ApplyStatsFromItem()
+    {
+        if (currentItem == null)
+        {
+            Debug.LogWarning("❌ No message to send.");
+            return;
+        }
+
+        statManager.ApplyStaminaDelta(currentItem.Stamina);
+        statManager.ApplySanityDelta(currentItem.Sanity);
+
+        Debug.Log($"📬 Sent: {currentItem.name} → Stamina: {statManager.CurrentStamina}, Sanity: {statManager.CurrentSanity}");
+
+        currentItem = null;
     }
 }

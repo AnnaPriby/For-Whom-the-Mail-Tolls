@@ -13,62 +13,62 @@ MonoBehaviour:
   m_Name: GreetingDatabase
   m_EditorClassIdentifier: 
   entries:
-  - Name: '"Hello Jessica'
-    Stamina: 0
-    Sanity: 0
-    MainText: -2
-  - Name: '"Dear Jessica'
-    Stamina: 0
-    Sanity: 0
-    MainText: -2
-  - Name: '"Hope this message finds you well'
-    Stamina: 0
-    Sanity: 0
-    MainText: -2
-  - Name: '"My dearest Jessica'
-    Stamina: 0
-    Sanity: 0
-    MainText: -1
-  - Name: '"Hey'
-    Stamina: 0
-    Sanity: 0
-    MainText: -1
-  - Name: '"Greetings'
-    Stamina: 0
-    Sanity: 0
-    MainText: -1
-  - Name: '"Jessica'
-    Stamina: 0
-    Sanity: -1
-    MainText: 1
-  - Name: '"Dear'
-    Stamina: 0
-    Sanity: -1
-    MainText: 1
-  - Name: '"You poor little thing'
-    Stamina: 0
-    Sanity: -1
-    MainText: 1
-  - Name: '"You disingenuous rat'
+  - Name: Hello Jessica
     Stamina: 0
     Sanity: -2
-    MainText: 2
-  - Name: '"Look who comes begging again'
+    MainText: Hello Jessica
+  - Name: Dear Jessica
     Stamina: 0
     Sanity: -2
-    MainText: 2
-  - Name: '"Listen bitch'
+    MainText: Dear Jessica
+  - Name: Hope this message finds you well
     Stamina: 0
-    Sanity: -3
-    MainText: 3
-  - Name: '"Hey cunt'
+    Sanity: -2
+    MainText: Hope this message finds you well
+  - Name: My dearest Jessica
     Stamina: 0
-    Sanity: -3
-    MainText: 3
-  - Name: '"You worthless piece of shit'
+    Sanity: -1
+    MainText: My dearest Jessica
+  - Name: Hey
     Stamina: 0
-    Sanity: -4
-    MainText: 4
+    Sanity: -1
+    MainText: Hey
+  - Name: Greetings
+    Stamina: 0
+    Sanity: -1
+    MainText: Greetings
+  - Name: Jessica Jessica
+    Stamina: -1
+    Sanity: 1
+    MainText: Jessica
+  - Name: Dear
+    Stamina: -1
+    Sanity: 1
+    MainText: Dear
+  - Name: You poor little thing
+    Stamina: -1
+    Sanity: 1
+    MainText: You poor little thing
+  - Name: You disingenuous rat
+    Stamina: -2
+    Sanity: 2
+    MainText: You disingenuous rat
+  - Name: Look who comes begging again
+    Stamina: -2
+    Sanity: 2
+    MainText: Look who comes begging again
+  - Name: Listen bitch
+    Stamina: -3
+    Sanity: 3
+    MainText: Listen bitch
+  - Name: Hey cunt
+    Stamina: -3
+    Sanity: 3
+    MainText: Hey cunt
+  - Name: You worthless piece of shit
+    Stamina: -4
+    Sanity: 4
+    MainText: You worthless piece of shit
   - Name: DIE!
     Stamina: -4
     Sanity: 4

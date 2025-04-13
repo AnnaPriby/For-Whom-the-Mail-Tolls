@@ -48,6 +48,7 @@ public class StatManager : MonoBehaviour
         UpdateSanityVisuals();
     }
 
+
     private void UpdateStaminaVisuals()
     {
         if (staminaValueText != null)
@@ -84,4 +85,9 @@ public class StatManager : MonoBehaviour
         sanitySlider.value = maxSanity;
         UpdateAllVisuals();
     }
+
+    public int CurrentStamina => Mathf.RoundToInt(staminaSlider.value);
+    public int CurrentSanity => Mathf.RoundToInt(sanitySlider.value);
+
+
 }

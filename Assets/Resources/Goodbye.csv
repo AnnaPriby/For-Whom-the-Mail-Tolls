@@ -1,17 +1,17 @@
 name,Stamina,Sanity,MainText
-"Kind regards,",0,-2,"Kind regards,"
-"Respectfully,",0,-2,"Respectfully,"
-"Yours sincerely,",0,-2,"Yours sincerely,"
-"Have a nice shift,",0,-1,"Have a nice shift,"
+Kind regards,0,-2,"Kind regards,
+Respectfully,0,-2,"Respectfully,
+Yours sincerely,0,-2,"Yours sincerely,
+Have a nice shift,0,-1,"Have a nice shift,
 xx,0,-1,xx
 Let me know if you have any troubles!,0,-1,Let me know if you have any troubles!
 Let me know if you have any troubles as usual!,-1,1,Let me know if you have any troubles as usual!
-"Ciao,",-1,1,"Ciao,"
-"gl,",-1,1,"gl,"
+Ciao,-1,1,"Ciao,"
+gl,-1,1,"gl,"
 *Just name*,-1,1,*Just name*
-"Choke on that coffee,",-2,2,"Choke on that coffee,"
+Choke on that coffee,-2,2,"Choke on that coffee,"
 👋,-2,2,👋
-"Your slave and enemy,",-3,3,"Your slave and enemy,"
-"Don't you dare message me ever again,",-3,3,"Don't you dare message me ever again,"
-"See ya, fuckeeeeeeer",-4,4,"See ya, fuckeeeeeeer"
+Your slave and enemy,-3,3,"Your slave and enemy,"
+Don't you dare message me ever again,-3,3,"Don't you dare message me ever again,"
+See ya fuckeeeeeeer,-4,4,"See ya fuckeeeeeeer"
 DIEEEEEEEEEEEEE,-4,4,DIEEEEEEEEEEEEE
