@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.norska-lib.spreadsheets": "https://github.com/NorskaGames/NorskaLib.Spreadsheets.git",
     "com.unity.collab-proxy": "2.7.1",
     "com.unity.feature.2d": "2.0.1",
     "com.unity.ide.rider": "3.0.35",

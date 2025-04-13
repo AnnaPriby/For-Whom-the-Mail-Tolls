@@ -1,18 +1,5 @@
 {
   "dependencies": {
-    "com.merry-yellow.code-assist": {
-      "version": "file:com.merry-yellow.code-assist",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.norska-lib.spreadsheets": {
-      "version": "https://github.com/NorskaGames/NorskaLib.Spreadsheets.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "bf43763b1641023278d0f77a23dd2d3a9fcf3fbe"
-    },
     "com.unity.2d.animation": {
       "version": "9.2.0",
       "depth": 1,
