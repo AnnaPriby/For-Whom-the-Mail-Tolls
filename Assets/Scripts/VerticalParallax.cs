@@ -2,15 +2,19 @@
 
 public class VerticalParallax : MonoBehaviour
 {
-    public Transform background;                   // World-space background
-    public RectTransform foregroundUI;             // UI element in Canvas
-    public GameObject dragZone;                    // Object with multiple colliders
+    public Transform background;
+    public Transform middleLayer;
+    public RectTransform foregroundUI;
+    public GameObject dragZone;
+
+    public float middleParallaxMultiplier = 1.2f;     // Positive! We'll invert deltaY
     public float foregroundParallaxMultiplier = 0.5f;
+    public float dragLimit = 3f;                      // Max background drag (down)
+    public float middleLayerLimit = 2f;               // Max UP movement for middle layer
     public float returnSpeed = 5f;
 
-    public float dragLimit = 3f;                   // 🔥 NEW: Max distance downward from start position
-
     private Vector3 bgStartPos;
+    private Vector3 middleStartPos;
     private Vector2 fgStartPos;
 
     private bool dragging = false;
@@ -19,6 +23,7 @@ public class VerticalParallax : MonoBehaviour
     void Start()
     {
         bgStartPos = background.position;
+        middleStartPos = middleLayer.position;
         fgStartPos = foregroundUI.anchoredPosition;
     }
 
@@ -26,7 +31,6 @@ public class VerticalParallax : MonoBehaviour
     {
         Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        // Start dragging if mouse is over any collider on dragZone
         if (Input.GetMouseButtonDown(0) && IsMouseOverDragZone(mouseWorld))
         {
             dragging = true;
@@ -43,19 +47,26 @@ public class VerticalParallax : MonoBehaviour
             Vector3 currentMouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float deltaY = currentMouseWorld.y - lastMouseWorldPos.y;
 
-            float targetY = background.position.y + deltaY;
-
-            // ✅ Clamp between top and bottom drag limits
+            float targetBgY = background.position.y + deltaY;
             float minY = bgStartPos.y - dragLimit;
             float maxY = bgStartPos.y;
-            targetY = Mathf.Clamp(targetY, minY, maxY);
+            targetBgY = Mathf.Clamp(targetBgY, minY, maxY);
 
-            float bgMove = targetY - background.position.y;
+            float bgMove = targetBgY - background.position.y;
 
-            // Move background
-            background.position = new Vector3(background.position.x, targetY, background.position.z);
+            // ✅ Background moves down (with drag)
+            background.position = new Vector3(background.position.x, targetBgY, background.position.z);
 
-            // Move UI foreground with parallax
+            // ✅ Middle layer moves UP when dragging DOWN
+            float middleDelta = -bgMove * middleParallaxMultiplier;
+            float newMiddleY = Mathf.Clamp(
+                middleLayer.position.y + middleDelta,
+                middleStartPos.y,
+                middleStartPos.y + middleLayerLimit // Limit upward movement only
+            );
+            middleLayer.position = new Vector3(middleLayer.position.x, newMiddleY, middleLayer.position.z);
+
+            // ✅ Foreground (UI) moves down
             foregroundUI.anchoredPosition += new Vector2(0, bgMove * foregroundParallaxMultiplier);
 
             lastMouseWorldPos = currentMouseWorld;
@@ -64,20 +75,18 @@ public class VerticalParallax : MonoBehaviour
         {
             // Smooth return to original positions
             background.position = Vector3.Lerp(background.position, bgStartPos, Time.deltaTime * returnSpeed);
+            middleLayer.position = Vector3.Lerp(middleLayer.position, middleStartPos, Time.deltaTime * returnSpeed);
             foregroundUI.anchoredPosition = Vector2.Lerp(foregroundUI.anchoredPosition, fgStartPos, Time.deltaTime * returnSpeed);
         }
     }
 
-    // ✅ Check all colliders on dragZone for mouse overlap
     private bool IsMouseOverDragZone(Vector2 mouseWorld)
     {
         Collider2D[] colliders = dragZone.GetComponents<Collider2D>();
         foreach (var col in colliders)
         {
             if (col.OverlapPoint(mouseWorld))
-            {
                 return true;
-            }
         }
         return false;
     }
