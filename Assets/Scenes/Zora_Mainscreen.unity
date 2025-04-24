@@ -481,6 +481,26 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 19.8
       objectReference: {fileID: 0}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: sendButton
+      value: 
+      objectReference: {fileID: 1125586826}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: infoDisplay
+      value: 
+      objectReference: {fileID: 447155338}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: statManager
+      value: 
+      objectReference: {fileID: 507051709}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: assignedItem
+      value: 
+      objectReference: {fileID: 860647705}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: slotOptionsPanel
+      value: 
+      objectReference: {fileID: 810288344}
     - target: {fileID: 5911562039262734213, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
       propertyPath: m_Name
       value: PossibleSolution_Slot
@@ -574,6 +594,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 263065608}
   m_CullTransparentMesh: 1
+--- !u!114 &270519986 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2226193489805496159, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+  m_PrefabInstance: {fileID: 589312405}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &302081465
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,6 +847,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3341651053859789758, guid: e183b9b4445cb3e4993759ac8a07537c, type: 3}
   m_PrefabInstance: {fileID: 404605852}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &447155338 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2226193489805496159, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+  m_PrefabInstance: {fileID: 249183020}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &463501281 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7546613250530681892, guid: 96ab1bf0bb7ff6d48a2af0f8127858c7, type: 3}
@@ -1283,6 +1325,26 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 18.9
       objectReference: {fileID: 0}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: sendButton
+      value: 
+      objectReference: {fileID: 1125586826}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: infoDisplay
+      value: 
+      objectReference: {fileID: 270519986}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: statManager
+      value: 
+      objectReference: {fileID: 507051709}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: assignedItem
+      value: 
+      objectReference: {fileID: 1647004188}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: slotOptionsPanel
+      value: 
+      objectReference: {fileID: 2139317258}
     - target: {fileID: 5911562039262734213, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
       propertyPath: m_Name
       value: Greeting_Slot
@@ -1536,6 +1598,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 594955157}
   m_CullTransparentMesh: 1
+--- !u!114 &635828961 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2226193489805496159, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+  m_PrefabInstance: {fileID: 1352744616}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &680408669 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2345891981100778530, guid: 96ab1bf0bb7ff6d48a2af0f8127858c7, type: 3}
@@ -1707,6 +1780,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 730637055}
   m_CullTransparentMesh: 1
+--- !u!114 &741157764 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2226193489805496159, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+  m_PrefabInstance: {fileID: 1627832895}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &757206011
 GameObject:
   m_ObjectHideFlags: 0
@@ -1975,6 +2059,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 793683744}
   m_CullTransparentMesh: 1
+--- !u!1 &810288344 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4934349922402633423, guid: e183b9b4445cb3e4993759ac8a07537c, type: 3}
+  m_PrefabInstance: {fileID: 891049964}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &860647705 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7672649591946750334, guid: e183b9b4445cb3e4993759ac8a07537c, type: 3}
@@ -2232,6 +2321,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f3a75af0d8a8c40a2c28dd7d1be123, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &909769861 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4934349922402633423, guid: e183b9b4445cb3e4993759ac8a07537c, type: 3}
+  m_PrefabInstance: {fileID: 1586331180}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &981630269
 GameObject:
   m_ObjectHideFlags: 0
@@ -3699,6 +3793,26 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 19.8
       objectReference: {fileID: 0}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: sendButton
+      value: 
+      objectReference: {fileID: 1125586826}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: infoDisplay
+      value: 
+      objectReference: {fileID: 635828961}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: statManager
+      value: 
+      objectReference: {fileID: 507051709}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: assignedItem
+      value: 
+      objectReference: {fileID: 30732832}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: slotOptionsPanel
+      value: 
+      objectReference: {fileID: 909769861}
     - target: {fileID: 5911562039262734213, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
       propertyPath: m_Name
       value: Opinion_Slot
@@ -4305,6 +4419,26 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 19.8
       objectReference: {fileID: 0}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: sendButton
+      value: 
+      objectReference: {fileID: 1125586826}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: infoDisplay
+      value: 
+      objectReference: {fileID: 741157764}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: statManager
+      value: 
+      objectReference: {fileID: 507051709}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: assignedItem
+      value: 
+      objectReference: {fileID: 2060007356}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: slotOptionsPanel
+      value: 
+      objectReference: {fileID: 1993329735}
     - target: {fileID: 5911562039262734213, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
       propertyPath: m_Name
       value: Goodbye_Slot
@@ -4843,6 +4977,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1927563342}
   m_CullTransparentMesh: 1
+--- !u!1 &1993329735 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4934349922402633423, guid: e183b9b4445cb3e4993759ac8a07537c, type: 3}
+  m_PrefabInstance: {fileID: 404605852}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2000269043 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4934349922402633423, guid: e183b9b4445cb3e4993759ac8a07537c, type: 3}
+  m_PrefabInstance: {fileID: 1171203790}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2012843128 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2226193489805496159, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+  m_PrefabInstance: {fileID: 8884858909630818997}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2060007356 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7672649591946750334, guid: e183b9b4445cb3e4993759ac8a07537c, type: 3}
@@ -4930,6 +5085,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2095347967}
   m_CullTransparentMesh: 1
+--- !u!1 &2139317258 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4934349922402633423, guid: e183b9b4445cb3e4993759ac8a07537c, type: 3}
+  m_PrefabInstance: {fileID: 6678855036335634921}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1935923355784276883
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5408,6 +5568,26 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 27.32
       objectReference: {fileID: 0}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: sendButton
+      value: 
+      objectReference: {fileID: 1125586826}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: infoDisplay
+      value: 
+      objectReference: {fileID: 2012843128}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: statManager
+      value: 
+      objectReference: {fileID: 507051709}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: assignedItem
+      value: 
+      objectReference: {fileID: 892133562}
+    - target: {fileID: 3397998620375139629, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
+      propertyPath: slotOptionsPanel
+      value: 
+      objectReference: {fileID: 2000269043}
     - target: {fileID: 5911562039262734213, guid: 9e25dbfd7a3e039469511a0ac59938ed, type: 3}
       propertyPath: m_Name
       value: Acknowledgement_Slot
