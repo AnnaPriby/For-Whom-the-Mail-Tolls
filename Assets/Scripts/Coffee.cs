@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 // This script allows a Coffee object to be clicked to restore stamina
@@ -17,6 +18,7 @@ public class Coffee : MonoBehaviour, IPointerClickHandler
         {
             // Apply a positive stamina change to the stat manager
             statManager.ApplyStaminaDelta(refillAmount);
+            GameLoop.Instance.Coffee();
 
             // Log a confirmation message
             Debug.Log($"☕ Coffee used! +{refillAmount} stamina.");

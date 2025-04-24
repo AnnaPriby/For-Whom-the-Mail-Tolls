@@ -12,13 +12,23 @@ public class RevealSlot : MonoBehaviour, IDropHandler
     public StatManager statManager;    // Reference to the StatManager that handles stamina/sanity
     public Button sendButton;          // Button that, when clicked, will apply the message's stat effects
 
-    private DraggableItem currentItem; // The item currently dropped into this slot
+    private DraggableItem currentItem;
+    // The item currently dropped into this slot
 
+    
+    private int sanityCost;
+    // sleduje niceness tveho kola - pro prvni cast gameloopu;
+    
     void Start()
     {
-        // Attach ApplyStatsFromItem() to the send button's OnClick event
+        // Konsekvence zmacknuti odeslani
         if (sendButton != null)
+        {
             sendButton.onClick.AddListener(ApplyStatsFromItem);
+            sendButton.onClick.AddListener(DrawNewCards);
+            sendButton.onClick.AddListener(TrackGameState);
+        }
+            
     }
 
     // Triggered when a draggable item is dropped onto this slot
@@ -37,6 +47,9 @@ public class RevealSlot : MonoBehaviour, IDropHandler
 
             Debug.Log("📥 Message dropped and waiting to be sent.");
         }
+
+        //pridava cost pouzite karty
+        sanityCost += currentItem.Sanity;
     }
 
     // Called when the send button is clicked
@@ -57,5 +70,20 @@ public class RevealSlot : MonoBehaviour, IDropHandler
         Debug.Log($"📬 Sent: {currentItem.name} → Stamina: {statManager.CurrentStamina}, Sanity: {statManager.CurrentSanity}");
 
         currentItem = null; // Clear the current item after it's used
+        Debug.Log("niceness:" + sanityCost);
+        sanityCost = 0; //vynuluje sanity cost kola
+    }
+
+    public void DrawNewCards()
+    {
+        //DraggableItem.Instance.DealHand();
+    }
+
+    //Posilani infa do gameloopu
+    public void TrackGameState()
+    {
+        //pridat ze posila kam to ma vest//
+        infoDisplay.text = null;
+        GameLoop.Instance.LogSend(sanityCost);
     }
 }
