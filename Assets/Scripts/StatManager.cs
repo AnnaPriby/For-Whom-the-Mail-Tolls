@@ -68,6 +68,7 @@ public class StatManager : MonoBehaviour
     // Update number and color visuals for sanity
     private void UpdateSanityVisuals()
     {
+        // 
         if (sanityValueText != null)
             sanityValueText.text = Mathf.RoundToInt(sanitySlider.value).ToString();
 

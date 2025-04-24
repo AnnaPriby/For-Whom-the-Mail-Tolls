@@ -13,7 +13,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [Header("UI References")]
     [SerializeField] private Image image; // The image component to disable raycasting during drag
     [SerializeField] private TextMeshProUGUI label; // Label that shows the name on the item
-
+    
+    [HideInInspector] public Transform originalParent;
     [HideInInspector] public Transform parentAfterDrag; // Where the item should return after drag ends
 
     private EmailData emailData; // The assigned email data from the table
@@ -25,6 +26,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public string MainTextOnly => emailData?.MainText ?? "";  // Just the main message text
     public int Stamina => emailData?.Stamina ?? 0;            // Stamina stat from the entry
     public int Sanity => emailData?.Sanity ?? 0;              // Sanity stat from the entry
+    
+    
 
     // Tooltip string format for hover display
     public string FullInfo => emailData != null
@@ -33,21 +36,48 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     void Awake()
     {
+        Debug.Log("Using database: " + emailDatabaseObject.name);
         canvasGroup = GetComponent<CanvasGroup>(); // Get the CanvasGroup used for drag behavior
+        originalParent = transform.parent;
     }
 
     void Start()
     {
-        AssignUniqueEmail(); // Assign a random, unused entry from the table
+        GameLoop gameLoop = FindObjectOfType<GameLoop>();
+        if (gameLoop != null && !gameLoop.allDraggables.Contains(this))
+            gameLoop.allDraggables.Add(this);
+    }
 
-        if (label != null && emailData != null)
+    public void DealHand()
+    {
+        
+        // Reactivate the GameObject and script
+        gameObject.SetActive(true);
+        this.enabled = true;
+
+        // Reactivate raycasts and dragging
+        if (canvasGroup != null)
         {
-            label.text = emailData.Name; // Display just the name on the label
+            canvasGroup.blocksRaycasts = true;
         }
+
+        if (image != null) image.raycastTarget = true;
+        if (label != null) label.raycastTarget = true;
+        
+        //Resets the position
+        transform.SetParent(originalParent);
+        transform.localPosition = Vector3.zero;
+
+        // Clear the previous entry (optional)
+        emailData = null;
+        
+        //RESETS USED EMAILS :
+        //ResetUsedEmails();
+        AssignUniqueEmail();
     }
 
     // Picks a unique entry from the assigned email database
-    private void AssignUniqueEmail()
+    public void AssignUniqueEmail()
     {
         List<EmailData> tableEntries = GetEmailEntriesFromObject();
 
@@ -81,6 +111,10 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         usedIndexes.Add(index);              // Remember this index so it’s not used again
         emailData = tableEntries[index];     // Assign the chosen data
+        if (label != null && emailData != null)
+        {
+            label.text = emailData.Name; // Display just the name on the label
+        }
     }
 
     // Returns the correct list of entries from the assigned ScriptableObject
@@ -140,6 +174,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         if (emailData != null)
         {
+            //maintext
             TooltipController.Instance.ShowTooltip(FullInfo);
         }
     }
