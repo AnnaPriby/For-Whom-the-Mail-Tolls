@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
 {
     [Header("Slot Rules")]
-    public DraggableItem assignedItem;
+    public DraggableItem assignedItem; // If set, only this item is allowed
 
     [Header("UI")]
     public TextMeshProUGUI infoDisplay;
@@ -38,10 +38,18 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
         if (item == null)
             return;
 
+        // Optional: restrict to one assigned item
         if (assignedItem != null && item != assignedItem)
         {
             Debug.Log($"⛔ {item.name} is not allowed in this RevealSlot.");
             return;
+        }
+
+        // ✅ Check the InventorySlot and hide if empty
+        InventorySlot inventorySlot = item.parentAfterDrag.GetComponent<InventorySlot>();
+        if (inventorySlot != null)
+        {
+            inventorySlot.CheckIfEmpty();
         }
 
         currentItem = item;
@@ -63,7 +71,11 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
 
     private void OnSendButtonClicked()
     {
-        Debug.Log("🟢 SendButton clicked inside RevealSlotPro");
+        if (currentItem == null)
+        {
+            Debug.LogWarning("❌ No message dropped into RevealSlot. Cannot send.");
+            return; // ✅ STOP here! Don't continue
+        }
 
         ApplyStatsFromItem();
         DrawNewCards();
@@ -92,17 +104,17 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
 
     private void DrawNewCards()
     {
-        // Example stub
+        // Example: you could trigger card drawing here if needed
         // DraggableItem.Instance.DealHand();
     }
 
     private void TrackGameState()
     {
         infoDisplay.text = null;
-
-        GameLoop.Instance.ChangeGameState(4); // Start parallax scrolling
+        GameLoop.Instance.LogSend(sanityCost);
     }
 
+    // ✅ Reset this RevealSlot for a new round
     public void PrepareForNewRound()
     {
         currentItem = null;

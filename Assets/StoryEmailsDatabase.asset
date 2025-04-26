@@ -58,7 +58,7 @@ MonoBehaviour:
         an opportunity to get the money needed? I like my chances personally, but
         thought it wouldn't hurt if I told you as well. :)\n\nKind regards,\nJessica"
       Stamina: 0
-      Sanity: 3
+      Sanity: -1
     - MainText: 'Linda,
 
 
@@ -95,7 +95,7 @@ MonoBehaviour:
         won't look at such behavior fondly once they find out one way or the other..\r\n\r\nKind
         regards,\r\nJessica"
       Stamina: 0
-      Sanity: 1
+      Sanity: -1
     - MainText: 'Linda,
 
 
@@ -131,7 +131,7 @@ MonoBehaviour:
         you after the break?\n\nJess"
       Stamina: 0
       Sanity: 6
-    - MainText: 
+    - MainText: X
       Stamina: 0
       Sanity: 6
     - MainText: 'Hello Linda..

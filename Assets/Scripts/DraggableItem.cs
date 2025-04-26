@@ -1,102 +1,99 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Scriptable Object Source (Any EmailDatabase)")]
-    [SerializeField] private ScriptableObject emailDatabaseObject; // A reference to the assigned table (e.g., GreetingDatabase)
+    [SerializeField] private ScriptableObject emailDatabaseObject;
 
     [Header("UI References")]
-    [SerializeField] private Image image; // The image component to disable raycasting during drag
-    [SerializeField] private TextMeshProUGUI label; // Label that shows the name on the item
-    
+    [SerializeField] private Image image;
+    [SerializeField] private TextMeshProUGUI label;
+
     [HideInInspector] public Transform originalParent;
-    [HideInInspector] public Transform parentAfterDrag; // Where the item should return after drag ends
+    [HideInInspector] public Transform parentAfterDrag;
 
-    private EmailData emailData; // The assigned email data from the table
-    private CanvasGroup canvasGroup; // For controlling interactivity and transparency
+    private EmailData emailData;
+    private CanvasGroup canvasGroup;
 
-    private static HashSet<int> usedIndexes = new HashSet<int>(); // Keeps track of which entries have been used across all items
+    private static HashSet<int> usedIndexes = new HashSet<int>();
 
-    // Public read-only properties for use by other scripts
-    public string MainTextOnly => emailData?.MainText ?? "";  // Just the main message text
-    public int Stamina => emailData?.Stamina ?? 0;            // Stamina stat from the entry
-    public int Sanity => emailData?.Sanity ?? 0;              // Sanity stat from the entry
-    
-    
+    public string MainTextOnly => emailData?.MainText ?? "";
+    public int Stamina => emailData?.Stamina ?? 0;
+    public int Sanity => emailData?.Sanity ?? 0;
 
-    // Tooltip string format for hover display
     public string FullInfo => emailData != null
         ? $"<b>{emailData.Name}</b>\n<i>\"{emailData.MainText}\"</i>\n\n<color=#f4c542>Stamina:</color> {emailData.Stamina}\n<color=#42b0f5>Sanity:</color> {emailData.Sanity}"
         : "";
 
-    void Awake()
+    private void Awake()
     {
-        Debug.Log("Using database: " + emailDatabaseObject.name);
-        canvasGroup = GetComponent<CanvasGroup>(); // Get the CanvasGroup used for drag behavior
+        canvasGroup = GetComponent<CanvasGroup>();
         originalParent = transform.parent;
     }
 
-    void Start()
+    private void Start()
     {
         GameLoop gameLoop = FindObjectOfType<GameLoop>();
         if (gameLoop != null && !gameLoop.allDraggables.Contains(this))
             gameLoop.allDraggables.Add(this);
+
+        AssignUniqueEmail();
+
+        if (label != null && emailData != null)
+            label.text = emailData.Name;
     }
 
     public void DealHand()
     {
-        
-        // Reactivate the GameObject and script
+        if (emailDatabaseObject == null)
+        {
+            Debug.LogWarning("⚠️ No database assigned to DraggableItem. Cannot deal new email.");
+            return;
+        }
+
+
         gameObject.SetActive(true);
         this.enabled = true;
 
-        // Reactivate raycasts and dragging
         if (canvasGroup != null)
-        {
             canvasGroup.blocksRaycasts = true;
-        }
 
         if (image != null) image.raycastTarget = true;
         if (label != null) label.raycastTarget = true;
-        
-        //Resets the position
+
         transform.SetParent(originalParent);
         transform.localPosition = Vector3.zero;
 
-        // Clear the previous entry (optional)
-        emailData = null;
-        
-        //RESETS USED EMAILS :
-        //ResetUsedEmails();
         AssignUniqueEmail();
+
+        if (label != null && emailData != null)
+            label.text = emailData.Name;
     }
 
-    // Picks a unique entry from the assigned email database
     public void AssignUniqueEmail()
     {
         List<EmailData> tableEntries = GetEmailEntriesFromObject();
 
         if (tableEntries == null || tableEntries.Count == 0)
         {
-            Debug.LogWarning("No entries found in assigned email database.");
+            Debug.LogWarning("⚠️ No entries found in the assigned email database.");
             return;
         }
 
         if (usedIndexes.Count >= tableEntries.Count)
         {
-            Debug.LogWarning("All email entries have already been used.");
+            Debug.LogWarning("⚠️ All email entries have already been used!");
             return;
         }
 
         int index;
-        int safety = 100; // Prevent infinite loop if something goes wrong
+        int safety = 100;
 
-        // Try picking a random index that hasn't been used yet
         do
         {
             index = Random.Range(0, tableEntries.Count);
@@ -105,19 +102,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         if (safety <= 0)
         {
-            Debug.LogError("Could not assign a unique entry (safety limit reached).");
+            Debug.LogError("❌ Could not assign unique entry (safety limit reached).");
             return;
         }
 
-        usedIndexes.Add(index);              // Remember this index so it’s not used again
-        emailData = tableEntries[index];     // Assign the chosen data
-        if (label != null && emailData != null)
-        {
-            label.text = emailData.Name; // Display just the name on the label
-        }
+        usedIndexes.Add(index);
+        emailData = tableEntries[index];
     }
 
-    // Returns the correct list of entries from the assigned ScriptableObject
     private List<EmailData> GetEmailEntriesFromObject()
     {
         switch (emailDatabaseObject)
@@ -129,63 +121,64 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             case GoodbyeDatabase gb: return gb.entries;
             case JessicaEmailsDatabase j: return j.entries;
             default:
-                Debug.LogError("Unsupported ScriptableObject type assigned to DraggableItem.");
+                Debug.LogError("❌ Unsupported ScriptableObject type assigned to DraggableItem.");
                 return null;
         }
     }
 
-    // Called when drag starts
     public void OnBeginDrag(PointerEventData eventData)
     {
-        parentAfterDrag = transform.parent;   // Remember where we came from
-        transform.SetParent(transform.root);  // Move to top-level so it overlays other UI
-        transform.SetAsLastSibling();         // Bring to front visually
+        parentAfterDrag = transform.parent;
 
-        canvasGroup.blocksRaycasts = false;   // Let it pass through raycasts during drag
+        // ✅ NEW: check if the InventorySlot should disappear
+        InventorySlot inventorySlot = parentAfterDrag.GetComponent<InventorySlot>();
+        if (inventorySlot != null)
+        {
+            inventorySlot.CheckIfEmpty();
+        }
+
+        transform.SetParent(transform.root);
+        transform.SetAsLastSibling();
+
+        canvasGroup.blocksRaycasts = false;
+
         if (image != null) image.raycastTarget = false;
         if (label != null) label.raycastTarget = false;
     }
 
-    // Called continuously while dragging
     public void OnDrag(PointerEventData eventData)
     {
-        transform.position = Input.mousePosition; // Follow the mouse
+        transform.position = Input.mousePosition;
     }
 
-    // Called when drag ends
     public void OnEndDrag(PointerEventData eventData)
     {
-        transform.SetParent(parentAfterDrag);      // Return to assigned parent
-        canvasGroup.blocksRaycasts = true;         // Reactivate raycast blocking
+        transform.SetParent(parentAfterDrag);
+
+        canvasGroup.blocksRaycasts = true;
 
         if (image != null) image.raycastTarget = true;
         if (label != null) label.raycastTarget = true;
     }
 
-    // Disables the dragging interaction completely
     public void DisableDragging()
     {
         this.enabled = false;
-        canvasGroup.blocksRaycasts = false;
+        if (canvasGroup != null)
+            canvasGroup.blocksRaycasts = false;
     }
 
-    // Tooltip appears on mouse hover
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (emailData != null)
-        {
-            //maintext
             TooltipController.Instance.ShowTooltip(FullInfo);
-        }
     }
 
-    // Tooltip disappears when mouse leaves
     public void OnPointerExit(PointerEventData eventData)
     {
         TooltipController.Instance.HideTooltip();
     }
 
-    // Resets all used indexes so entries can be reused (e.g. next round)
     public static void ResetUsedEmails()
     {
         usedIndexes.Clear();

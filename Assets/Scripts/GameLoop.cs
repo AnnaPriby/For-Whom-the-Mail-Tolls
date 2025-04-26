@@ -110,8 +110,15 @@ public class GameLoop : MonoBehaviour
         foreach (DraggableItem item in allDraggables)
         {
             item.DealHand();
+
+            // ✅ Hide the InventorySlot at Day start
+            if (item.originalParent != null)
+            {
+                item.originalParent.gameObject.SetActive(false);
+            }
         }
     }
+
 
     public void LogReceive()
     {
@@ -145,5 +152,8 @@ public class GameLoop : MonoBehaviour
         {
             slot.PrepareForNewRound();
         }
+
+        // ✅ Clear used emails so new random ones can appear again
+        DraggableItem.ResetUsedEmails();
     }
 }
