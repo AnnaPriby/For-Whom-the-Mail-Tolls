@@ -16,19 +16,15 @@ MonoBehaviour:
   - Name: Kind regards
     Stamina: 0
     Sanity: -2
-    MainText: Kind regards
-  - Name: Respectfully
-    Stamina: 0
-    Sanity: -2
-    MainText: Respectfully
+    MainText: 'Kind regards,
+
+      Respectfully,0,-2,Respectfully'
   - Name: Yours sincerely
     Stamina: 0
     Sanity: -2
-    MainText: Yours sincerely
-  - Name: Have a nice shift
-    Stamina: 0
-    Sanity: -1
-    MainText: Have a nice shift
+    MainText: 'Yours sincerely,
+
+      Have a nice shift,0,-1,Have a nice shift'
   - Name: xx
     Stamina: 0
     Sanity: -1
@@ -44,11 +40,11 @@ MonoBehaviour:
   - Name: Ciao
     Stamina: -1
     Sanity: 1
-    MainText: Ciao
+    MainText: Ciao,
   - Name: gl
     Stamina: -1
     Sanity: 1
-    MainText: gl
+    MainText: gl,
   - Name: '*Just name*'
     Stamina: -1
     Sanity: 1
@@ -56,7 +52,7 @@ MonoBehaviour:
   - Name: Choke on that coffee
     Stamina: -2
     Sanity: 2
-    MainText: Choke on that coffee
+    MainText: Choke on that coffee,
   - Name: "\U0001F44B"
     Stamina: -2
     Sanity: 2
@@ -64,11 +60,11 @@ MonoBehaviour:
   - Name: Your slave and enemy
     Stamina: -3
     Sanity: 3
-    MainText: Your slave and enemy
+    MainText: Your slave and enemy,
   - Name: Don't you dare message me ever again
     Stamina: -3
     Sanity: 3
-    MainText: Don't you dare message me ever again
+    MainText: Don't you dare message me ever again,
   - Name: See ya fuckeeeeeeer
     Stamina: -4
     Sanity: 4

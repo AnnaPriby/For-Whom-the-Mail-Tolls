@@ -40,7 +40,7 @@ MonoBehaviour:
   - Name: Jessica Jessica
     Stamina: -1
     Sanity: 1
-    MainText: Jessica
+    MainText: Jessica, Jessica
   - Name: Dear
     Stamina: -1
     Sanity: 1

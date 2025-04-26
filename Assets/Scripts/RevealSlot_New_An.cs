@@ -3,10 +3,10 @@ using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
 
-public class RevealSlotAdvanced : MonoBehaviour, IDropHandler, IPointerClickHandler
+public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
 {
     [Header("Slot Rules")]
-    public DraggableItem assignedItem; // ✅ This is the only item this slot accepts
+    public DraggableItem assignedItem;
 
     [Header("UI")]
     public TextMeshProUGUI infoDisplay;
@@ -17,11 +17,14 @@ public class RevealSlotAdvanced : MonoBehaviour, IDropHandler, IPointerClickHand
     public Button sendButton;
 
     private DraggableItem currentItem;
+    private int sanityCost;
 
-    void Start()
+    private void Start()
     {
         if (sendButton != null)
-            sendButton.onClick.AddListener(ApplyStatsFromItem);
+        {
+            sendButton.onClick.AddListener(OnSendButtonClicked);
+        }
 
         if (slotOptionsPanel != null)
             slotOptionsPanel.SetActive(false);
@@ -35,8 +38,7 @@ public class RevealSlotAdvanced : MonoBehaviour, IDropHandler, IPointerClickHand
         if (item == null)
             return;
 
-        // ✅ Only accept the specifically assigned item
-        if (item != assignedItem)
+        if (assignedItem != null && item != assignedItem)
         {
             Debug.Log($"⛔ {item.name} is not allowed in this RevealSlot.");
             return;
@@ -48,13 +50,24 @@ public class RevealSlotAdvanced : MonoBehaviour, IDropHandler, IPointerClickHand
         item.DisableDragging();
         dropped.SetActive(false);
 
-        Debug.Log($"📥 {item.name} accepted into slot.");
+        sanityCost += item.Sanity;
+
+        Debug.Log($"📥 {item.name} dropped into RevealSlotPro. Waiting to be sent.");
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (slotOptionsPanel != null)
             slotOptionsPanel.SetActive(!slotOptionsPanel.activeSelf);
+    }
+
+    private void OnSendButtonClicked()
+    {
+        Debug.Log("🟢 SendButton clicked inside RevealSlotPro");
+
+        ApplyStatsFromItem();
+        DrawNewCards();
+        TrackGameState();
     }
 
     private void ApplyStatsFromItem()
@@ -71,6 +84,29 @@ public class RevealSlotAdvanced : MonoBehaviour, IDropHandler, IPointerClickHand
         Debug.Log($"📬 Sent: {currentItem.name} → Stamina: {statManager.CurrentStamina}, Sanity: {statManager.CurrentSanity}");
 
         currentItem = null;
+        sanityCost = 0;
+
+        if (slotOptionsPanel != null)
+            slotOptionsPanel.SetActive(false);
+    }
+
+    private void DrawNewCards()
+    {
+        // Example stub
+        // DraggableItem.Instance.DealHand();
+    }
+
+    private void TrackGameState()
+    {
+        infoDisplay.text = null;
+
+        GameLoop.Instance.ChangeGameState(4); // Start parallax scrolling
+    }
+
+    public void PrepareForNewRound()
+    {
+        currentItem = null;
+        infoDisplay.text = "";
 
         if (slotOptionsPanel != null)
             slotOptionsPanel.SetActive(false);

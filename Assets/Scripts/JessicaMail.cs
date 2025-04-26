@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,18 +5,26 @@ using UnityEngine.UI;
 
 public class JessicaMail : MonoBehaviour
 {
+    [Header("Databases")]
     public JessicaEmailsDatabase jessicaEmailsDatabase;
-    private EmailData emailData;
-    public Button openButton;
-    public Button replyButton;
+    public StoryEmailsDatabase storyEmailsDatabase;
+
+    [Header("Email View")]
     public TextMeshProUGUI jessicaEmailText;
     public GameObject newMailUI;
     public GameObject readMailUI;
 
-    public void Start()
+    [Header("UI Buttons")]
+    public Button openButton;
+    public Button replyButton;
+
+    [Header("Story Variant Settings")]
+    [Range(0, 2)] public int variantIndex = 0;
+
+    private void Start()
     {
         readMailUI.SetActive(false);
-        openButton.onClick.AddListener(ShowJessicaEmail);
+        openButton.onClick.AddListener(ShowEmail);
         replyButton.onClick.AddListener(TrackGameState);
         NewMail();
     }
@@ -28,25 +34,37 @@ public class JessicaMail : MonoBehaviour
         newMailUI.SetActive(true);
     }
 
-    public void ShowJessicaEmail()
+    public void ShowEmail()
     {
         newMailUI.SetActive(false);
         readMailUI.SetActive(true);
-        List<EmailData> tableEntries = GetEmailEntriesFromObject();
-        int index = 1;
-        emailData = tableEntries[index];
-        jessicaEmailText.text = emailData.MainText;
+
+        if (storyEmailsDatabase != null && storyEmailsDatabase.entries.Count > 0)
+        {
+            StoryEmailData story = storyEmailsDatabase.entries[0]; // change index if needed
+
+            if (variantIndex >= 0 && variantIndex < story.variants.Count)
+            {
+                jessicaEmailText.text = story.variants[variantIndex].MainText;
+            }
+            else
+            {
+                Debug.LogWarning("Variant index is out of range.");
+            }
+        }
+        else if (jessicaEmailsDatabase != null && jessicaEmailsDatabase.entries.Count > 0)
+        {
+            EmailData email = jessicaEmailsDatabase.entries[0]; // change index if needed
+            jessicaEmailText.text = email.MainText;
+        }
+        else
+        {
+            Debug.LogWarning("No email database is assigned or it's empty.");
+        }
     }
-    
-    
-    private List<EmailData> GetEmailEntriesFromObject()
-    {
-       return jessicaEmailsDatabase.entries;
-    }
-    
+
     public void TrackGameState()
     {
-        //pridat ze posila kam to ma vest//
         newMailUI.SetActive(true);
         readMailUI.SetActive(false);
         GameLoop.Instance.LogReceive();

@@ -25,7 +25,7 @@ MonoBehaviour:
   - Name: bit overloaded
     Stamina: 0
     Sanity: -1
-    MainText: I'm a bit overloaded at the moment
+    MainText: I'm a bit overloaded at the moment, but
   - Name: Thank you for the reminder!
     Stamina: 0
     Sanity: -1
@@ -33,7 +33,8 @@ MonoBehaviour:
   - Name: Don't know if I'll have time for it
     Stamina: -1
     Sanity: 1
-    MainText: Don't know if I'll have time for it tho.. since
+    MainText: Don't know if I'll have time for it tho.. since, you know, you gave
+      me the toilet to fix..
   - Name: I wasn't involved
     Stamina: -1
     Sanity: 1
