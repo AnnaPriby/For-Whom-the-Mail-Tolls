@@ -2,11 +2,12 @@
 using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
 {
     [Header("Slot Rules")]
-    public DraggableItem assignedItem; // If set, only this item is allowed
+    public List<DraggableItem> assignedItems = new List<DraggableItem>();
 
     [Header("UI")]
     public TextMeshProUGUI infoDisplay;
@@ -18,6 +19,9 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
 
     private DraggableItem currentItem;
     private int sanityCost;
+
+    // ✅ Static tracker for open RevealSlot
+    private static RevealSlotPro currentlyOpenSlot;
 
     private void Start()
     {
@@ -33,19 +37,17 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
     public void OnDrop(PointerEventData eventData)
     {
         GameObject dropped = eventData.pointerDrag;
-        DraggableItem item = dropped.GetComponent<DraggableItem>();
+        DraggableItem item = dropped?.GetComponent<DraggableItem>();
 
         if (item == null)
             return;
 
-        // Optional: restrict to one assigned item
-        if (assignedItem != null && item != assignedItem)
+        if (assignedItems.Count > 0 && !assignedItems.Contains(item))
         {
             Debug.Log($"⛔ {item.name} is not allowed in this RevealSlot.");
             return;
         }
 
-        // ✅ Check the InventorySlot and hide if empty
         InventorySlot inventorySlot = item.parentAfterDrag.GetComponent<InventorySlot>();
         if (inventorySlot != null)
         {
@@ -65,8 +67,21 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        // ✅ Close previous open slot if clicking a different one
+        if (currentlyOpenSlot != null && currentlyOpenSlot != this)
+        {
+            currentlyOpenSlot.CloseOptionsPanel();
+        }
+
+        // ✅ Toggle this slot's panel
         if (slotOptionsPanel != null)
-            slotOptionsPanel.SetActive(!slotOptionsPanel.activeSelf);
+        {
+            bool newState = !slotOptionsPanel.activeSelf;
+            slotOptionsPanel.SetActive(newState);
+
+            // ✅ If opened, remember this as current open slot
+            currentlyOpenSlot = newState ? this : null;
+        }
     }
 
     private void OnSendButtonClicked()
@@ -74,7 +89,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
         if (currentItem == null)
         {
             Debug.LogWarning("❌ No message dropped into RevealSlot. Cannot send.");
-            return; // ✅ STOP here! Don't continue
+            return;
         }
 
         ApplyStatsFromItem();
@@ -100,12 +115,13 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
 
         if (slotOptionsPanel != null)
             slotOptionsPanel.SetActive(false);
+
+        currentlyOpenSlot = null; // Clear tracker after sending
     }
 
     private void DrawNewCards()
     {
-        // Example: you could trigger card drawing here if needed
-        // DraggableItem.Instance.DealHand();
+        // You can trigger card drawing here if needed
     }
 
     private void TrackGameState()
@@ -114,12 +130,20 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
         GameLoop.Instance.LogSend(sanityCost);
     }
 
-    // ✅ Reset this RevealSlot for a new round
     public void PrepareForNewRound()
     {
         currentItem = null;
         infoDisplay.text = "";
 
+        if (slotOptionsPanel != null)
+            slotOptionsPanel.SetActive(false);
+
+        currentlyOpenSlot = null;
+    }
+
+    // ✅ Helper to manually close panel (without toggling)
+    private void CloseOptionsPanel()
+    {
         if (slotOptionsPanel != null)
             slotOptionsPanel.SetActive(false);
     }

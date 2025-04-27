@@ -1,19 +1,21 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LoadSceneButton : MonoBehaviour
 {
     public string sceneName;
 
-    public void LoadScene()
+    public void StartNewGame()
     {
-        if (!string.IsNullOrEmpty(sceneName))
-        {
-            SceneManager.LoadScene(sceneName);
-        }
-        else
-        {
-            Debug.LogWarning("Scene name is empty!");
-        }
+        PlayerPrefs.DeleteAll(); // ✅ Clear everything
+        SceneManager.LoadScene(sceneName);
+    }
+
+
+    public void ContinueGame()
+    {
+        PlayerPrefs.SetInt("ContinueGame", 1);
+        PlayerPrefs.Save();
+        SceneManager.LoadScene(sceneName);
     }
 }

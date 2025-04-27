@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class GameLoop : MonoBehaviour
@@ -14,6 +13,9 @@ public class GameLoop : MonoBehaviour
     public Coffee coffee;
     public VerticalParallax verticalParallax;
 
+    [Header("Jessica Logic")]
+    public JessicaMail jessicaMail;
+
     [Header("State Management")]
     public int GameState;
     public int Day = 1;
@@ -22,7 +24,7 @@ public class GameLoop : MonoBehaviour
     public List<DraggableItem> allDraggables = new List<DraggableItem>();
 
     [Header("Reveal Slots")]
-    public List<RevealSlotPro> allRevealSlots = new List<RevealSlotPro>(); // ✅ NEW
+    public List<RevealSlotPro> allRevealSlots = new List<RevealSlotPro>();
 
     void Awake()
     {
@@ -32,7 +34,7 @@ public class GameLoop : MonoBehaviour
             playerTurnUI.gameObject.SetActive(true);
 
         if (jessicaUI != null)
-            jessicaUI.gameObject.SetActive(true);
+            jessicaUI.SetActive(true);
 
         if (playerTurnUI != null)
             playerTurnUI.localScale = Vector3.zero;
@@ -43,12 +45,28 @@ public class GameLoop : MonoBehaviour
         if (coffee != null)
             coffee.enabled = false;
 
-        GameState = 1; // Start reading Jessica mail
+        GameState = 1; // Start at New Mail
     }
 
     void Start()
     {
-        ChangeGameState(1);
+#if UNITY_EDITOR
+        Debug.Log("👨‍💻 Unity Editor detected. Forcing fresh start.");
+        ResetProgress();
+#endif
+
+        if (PlayerPrefs.HasKey("ContinueGame") && PlayerPrefs.GetInt("ContinueGame") == 1)
+        {
+            LoadGameProgress();
+            Debug.Log("📦 Continuing from saved game.");
+        }
+        else
+        {
+            ResetProgress();
+            Debug.Log("🆕 Starting fresh new game.");
+        }
+
+        ChangeGameState(GameState);
     }
 
     public void ChangeGameState(int stateSet)
@@ -57,7 +75,7 @@ public class GameLoop : MonoBehaviour
 
         switch (stateSet)
         {
-            case 1: // READING JESSICA
+            case 1: // Show New Mail UI
                 if (playerTurnUI != null)
                     playerTurnUI.localScale = Vector3.zero;
 
@@ -66,9 +84,26 @@ public class GameLoop : MonoBehaviour
 
                 if (coffee != null)
                     coffee.enabled = false;
+
+                if (jessicaMail != null)
+                    jessicaMail.ShowNewMail();
                 break;
 
-            case 2: // PLAYER TURN
+            case 2: // Show Read Mail UI
+                if (playerTurnUI != null)
+                    playerTurnUI.localScale = Vector3.zero;
+
+                if (jessicaUI != null)
+                    jessicaUI.transform.localScale = Vector3.one;
+
+                if (coffee != null)
+                    coffee.enabled = false;
+
+                if (jessicaMail != null)
+                    jessicaMail.ShowReadMail();
+                break;
+
+            case 3: // Player Turn (deal cards)
                 if (jessicaUI != null)
                     jessicaUI.transform.localScale = Vector3.zero;
 
@@ -78,10 +113,10 @@ public class GameLoop : MonoBehaviour
                 DealHand();
 
                 if (coffee != null)
-                    coffee.enabled = true;
+                    coffee.enabled = true; // ✅ Coffee now enabled during player turn
                 break;
 
-            case 3: // POST-COFFEE
+            case 4: // Post-Coffee reading
                 if (playerTurnUI != null)
                     playerTurnUI.localScale = Vector3.zero;
 
@@ -90,14 +125,20 @@ public class GameLoop : MonoBehaviour
 
                 if (coffee != null)
                     coffee.enabled = false;
+
+                if (jessicaMail != null)
+                    jessicaMail.ShowNewMail(); // Showing another email or same UI
                 break;
 
-            case 4: // PARALLAX SCROLL
+            case 5: // Parallax Scroll
                 if (playerTurnUI != null)
                     playerTurnUI.localScale = Vector3.zero;
 
                 if (jessicaUI != null)
                     jessicaUI.transform.localScale = Vector3.zero;
+
+                if (coffee != null)
+                    coffee.enabled = false;
 
                 if (verticalParallax != null)
                     verticalParallax.StartAutoScroll();
@@ -111,29 +152,25 @@ public class GameLoop : MonoBehaviour
         {
             item.DealHand();
 
-            // ✅ Hide the InventorySlot at Day start
             if (item.originalParent != null)
-            {
                 item.originalParent.gameObject.SetActive(false);
-            }
         }
     }
 
-
     public void LogReceive()
     {
-        ChangeGameState(2); // Reading Jessica -> Player Turn
+        ChangeGameState(3); // After mail → Player Turn
     }
 
     public void LogSend(int sanity)
     {
-        ChangeGameState(4); // Player Turn -> Parallax scroll
+        ChangeGameState(4); // After sending → Post Coffee Mail
         Debug.Log("sanity: " + sanity);
     }
 
     public void Coffee()
     {
-        ChangeGameState(3);
+        ChangeGameState(5); // After coffee → Parallax scroll
     }
 
     public void IncreaseDay()
@@ -145,15 +182,35 @@ public class GameLoop : MonoBehaviour
     public void OnScrollFinished()
     {
         IncreaseDay();
-        ChangeGameState(1); // After scrolling, back to Jessica mail
+        ChangeGameState(1); // After scrolling, back to Jessica New Mail
 
-        // ✅ Reset and re-prepare all RevealSlots
         foreach (RevealSlotPro slot in allRevealSlots)
         {
             slot.PrepareForNewRound();
         }
 
-        // ✅ Clear used emails so new random ones can appear again
         DraggableItem.ResetUsedEmails();
+    }
+
+    public void SaveGameProgress()
+    {
+        PlayerPrefs.SetInt("SavedDay", Day);
+        PlayerPrefs.SetInt("SavedGameState", GameState);
+        PlayerPrefs.SetInt("ContinueGame", 1);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadGameProgress()
+    {
+        Day = PlayerPrefs.GetInt("SavedDay", 1);
+        GameState = PlayerPrefs.GetInt("SavedGameState", 1);
+    }
+
+    public void ResetProgress()
+    {
+        Day = 1;
+        GameState = 1;
+        PlayerPrefs.SetInt("ContinueGame", 0);
+        PlayerPrefs.Save();
     }
 }

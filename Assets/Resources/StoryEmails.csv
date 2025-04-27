@@ -1,4 +1,4 @@
-name,Variant1Text,Variant1Stamina,Variant1Sanity,Variant2Text,Variant2Stamina,Variant2Sanity,Variant3Text,Variant3Stamina,Variant3Sanity
+name,Variant1Text,Variant1Stamina,Variant1Sanity,Variant2Text,Variant2Stamina,Variant2Sanity,Variant3Text,Variant3Stamina,Variant3Sanity,Variant4Text,Variant4Stamina,Variant4Sanity,Variant5Text,Variant5Stamina,Variant5Sanity
 1,x,0,-1,"Hello Linda,
 
 I'm writing you because I've been going through our schedules and I haven't seen your availability written down yet. Is it a mistake on my end or have you not set it again? x)
@@ -6,7 +6,7 @@ I'm writing you because I've been going through our schedules and I haven't seen
 Also, I'm so sorry about that photo of your puppster. I have no idea what happened to it or why others always hated looking at it to begin with. I mean, I've almost come to enjoy that hideousness of his lol.
 
 Anyway, have a nice day,
-Jessica xx",0,-1,x,0,-1
+Jessica xx",0,-1,x,0,-1,X,0,0,X,0,0
 2,"Hi Linda,
 
 thank you for the brisk reply (for once😁). I just remembered, have you heard about the project that management is about to give out tomorrow?
@@ -16,14 +16,14 @@ I thought it would be right up your alley since how you've been talking about th
 Time to work hard, eh? Only one of us can get it afterall. ;)
 
 Kind regards,
-Jessica",0,3,"Dear Linda,
+Jessica",0,-3,"Dear Linda,
 
 I understand your frustrations. Your puppy is in a bad state and needs that surgery, and something's got to give... We can't all pretend to be an angel.😇
 
 Come to think of it, our management has been talking about a project they might give out to one of us. Maybe an opportunity to get the money needed? I like my chances personally, but thought it wouldn't hurt if I told you as well. :)
 
 Kind regards,
-Jessica",0,3,"Linda,
+Jessica",0,-3,"Linda,
 
 I see how it is. Well in that case you surely won't mind once I get the project that management is gonna be giving out to one of us tomorrow.
 
@@ -32,7 +32,7 @@ Such a shame that you won't be able to afford the surgery you wanted so much for
 Do as you think. x)
 
 See ya,
-Jess",0,3
+Jess",0,-3,X,0,,X,0,0
 3,"Hey L,
 
 just a friendly reminder that you still haven't filled in your availability.😅 I think it's safe to assume the management could be looking at stuff like this while deciding who to give the project to. This inconsistency isn't a great look. (just helping you out here!)
@@ -40,14 +40,14 @@ just a friendly reminder that you still haven't filled in your availability.😅
 This break can't come soon enough though right.😁
 
 Hang in there!✊
-Jess",0,1,"Dear Linda,
+Jess",0,-1,"Dear Linda,
 
 as per my first email today, I still need you to fill the availability. As per your eccentric behaviour, I still don't have any idea what the fuck is going on. 
 
 But rest assured the management won't look at such behavior fondly once they find out one way or the other..
 
 Kind regards,
-Jessica",0,1,"Linda,
+Jessica",0,-1,"Linda,
 
 the availability is still not done. Your lazy ass will once again be your undoing, like the Panama debacle. Management is still shaking off the damages you've done there, 10 years later...
 
@@ -56,7 +56,21 @@ If you for once tried something more than being useless and tending to that abom
 You've always been a sucker.
 
 See ya from the top,
-Jess",0,1
+Jess",0,-1,"Dear Linda,
+
+as per my first email today, I still need you to fill the availability. As per your eccentric behaviour, I don't have any idea what the fuck is going on. 
+
+But rest assured the management won't look at such behavior fondly once they find out one way or the other..
+
+Kind regards,
+Jessica",1,1,"Dear Linda,
+
+it seems like sense can be kicked into someone afterall. This erradic behaviour sure won't win you the project. As a matter of fact I should be thanking you, only if I wasn't so bitter.
+
+Just to reiterate, now would be a good time to fill those availability sheets, if you ever want your dog to have a normal life.
+
+Regards,
+Jessica",1,1
 4,"Hiii L,
 
 I wanted to tell you that I REALLY appreciate having you as a new friend.😊 We had some problems in the past, but mature people get past those! And I'm glad we did. x)
@@ -65,7 +79,7 @@ Anyway, I've registered some rumors that management really might be considering 
 
 I'm gonna go for lunch, I'm STARVING. I know you probably won't, I've seen you munching on something the whole day in front of those videos haha. So see you after the break?
 
-Jess",0,6,,0,6,"Hello Linda..
+Jess",0,-1,X,0,-1,"Hello Linda..
 
 I've thought about your outbursts in the last few minutes and I've come to realize, that they are beneath us both.
 
@@ -74,4 +88,4 @@ I'd like to extend my hand and give you the opportunity to squash this superfluo
 What do you think? Would that be possible for you? If so let me know after the lunch.
 
 Kind regards,
-Jessica",0,6
+Jessica",0,-1,X,0,0,X,0,0

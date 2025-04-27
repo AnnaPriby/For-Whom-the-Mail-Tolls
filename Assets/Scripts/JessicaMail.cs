@@ -24,33 +24,63 @@ public class JessicaMail : MonoBehaviour
     public int emailIndex = 0;
 
     [Header("References")]
-    public StatManager statManager; // ✅ Reference to apply stamina/sanity
+    public StatManager statManager;
 
     private void Start()
     {
-        readMailUI.SetActive(false);
-        openButton.onClick.AddListener(ShowEmail);
-        replyButton.onClick.AddListener(TrackGameState);
+        if (openButton != null)
+            openButton.onClick.AddListener(OpenEmail);
+
+        if (replyButton != null)
+            replyButton.onClick.AddListener(TrackGameState);
+
         NewMail();
-        variantIndex = 1; // Start with 1 at start
+        variantIndex = 1; // Start variant
     }
 
     public void NewMail()
     {
-        newMailUI.SetActive(true);
+        if (newMailUI != null)
+            newMailUI.SetActive(true);
+
+        if (readMailUI != null)
+            readMailUI.SetActive(false);
     }
 
-    public void ShowEmail()
+    public void OpenEmail()
     {
-        newMailUI.SetActive(false);
-        readMailUI.SetActive(true);
+        GameLoop.Instance.ChangeGameState(2); // NewMail → ReadMail
+        ShowEmail();
+    }
 
+    public void ShowNewMail()
+    {
+        if (newMailUI != null)
+            newMailUI.SetActive(true);
+
+        if (readMailUI != null)
+            readMailUI.SetActive(false);
+    }
+
+    public void ShowReadMail()
+    {
+        if (newMailUI != null)
+            newMailUI.SetActive(false);
+
+        if (readMailUI != null)
+            readMailUI.SetActive(true);
+
+        ShowEmail(); // Also display the text
+    }
+
+    private void ShowEmail()
+    {
         if (storyEmailsDatabase != null && storyEmailsDatabase.entries.Count > 0)
         {
             if (emailIndex >= storyEmailsDatabase.entries.Count)
             {
                 emailIndex = storyEmailsDatabase.entries.Count - 1;
-                Debug.LogWarning("Reached the end of available Story Emails.");
+                Debug.LogWarning("Reached end of Story Emails!");
             }
 
             StoryEmailData story = storyEmailsDatabase.entries[emailIndex];
@@ -59,48 +89,46 @@ public class JessicaMail : MonoBehaviour
             {
                 EmailVariant selectedVariant = story.variants[variantIndex];
 
-                jessicaEmailText.text = selectedVariant.MainText;
+                if (jessicaEmailText != null)
+                    jessicaEmailText.text = selectedVariant.MainText;
 
                 ApplyVariantStats(selectedVariant);
             }
             else
             {
-                Debug.LogWarning("Variant index is out of range for this email.");
+                Debug.LogWarning("Variant index out of range.");
             }
         }
         else
         {
-            Debug.LogWarning("StoryEmailsDatabase is empty or missing.");
+            Debug.LogWarning("StoryEmailsDatabase missing or empty.");
         }
     }
 
     private void ApplyVariantStats(EmailVariant variant)
     {
-        if (statManager == null)
+        if (statManager != null)
         {
-            Debug.LogWarning("⚠️ StatManager is missing. Please assign it in the Inspector!");
-            return;
+            statManager.ApplyStaminaDelta(variant.Stamina);
+            statManager.ApplySanityDelta(variant.Sanity);
+            Debug.Log($"✅ Applied Variant Stats: Stamina {variant.Stamina}, Sanity {variant.Sanity}");
         }
-
-        statManager.ApplyStaminaDelta(variant.Stamina);
-        statManager.ApplySanityDelta(variant.Sanity);
-
-        Debug.Log($"✅ Applied Variant Stats: Stamina {variant.Stamina}, Sanity {variant.Sanity}");
+        else
+        {
+            Debug.LogWarning("⚠️ No StatManager assigned!");
+        }
     }
 
     public void TrackGameState()
     {
-        newMailUI.SetActive(true);
-        readMailUI.SetActive(false);
-
+        NewMail(); // Show new mail UI again
         IncreaseEmailIndex();
-
-        GameLoop.Instance.LogReceive();
+        GameLoop.Instance.LogReceive(); // Move to Player Turn
     }
 
     private void IncreaseEmailIndex()
     {
         emailIndex += 1;
-        Debug.Log("➡️ Moving to next Story Email. Now at index: " + emailIndex);
+        Debug.Log("➡️ Moving to next Story Email. Index now: " + emailIndex);
     }
 }

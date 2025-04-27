@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: StorySolutionDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::StorySolutionDatabase
+  entries:
+  - Name: 1
+    variants:
+    - MainText: I think I might get one of those dog-detectives. Not a detective
+        who's a dog. But you know what I mean.
+      Stamina: 0
+      Sanity: -2
+    - MainText: I will make sure to work twice as hard now. x)
+      Stamina: 0
+      Sanity: -2
+    - MainText: I shall deal with the issue immediately!
+      Stamina: 0
+      Sanity: -2
+  - Name: 2
+    variants:
+    - MainText: I will make sure to fill in the availibility as soon as possible.
+      Stamina: 0
+      Sanity: -2
+    - MainText: X
+      Stamina: 0
+      Sanity: -2
+    - MainText: I will make sure to fill in the availibility as soon as possible.
+      Stamina: 0
+      Sanity: -2
+  - Name: 3
+    variants:
+    - MainText: I will try to fix it.
+      Stamina: 0
+      Sanity: -1
+    - MainText: I hoped that maybe you could tell me where to find the cheapest surgeons?
+        x)
+      Stamina: 0
+      Sanity: -1
+    - MainText: I will try to fix it.
+      Stamina: 0
+      Sanity: -1
+  - Name: 4
+    variants:
+    - MainText: I will have to scour the Interweb first to find how to fill it. x)
+      Stamina: 0
+      Sanity: -1
+    - MainText: It would be probably for the best to get rid of the competition,
+        what do you think. ^^
+      Stamina: 0
+      Sanity: -1
+    - MainText: I have no idea what to do but I'll try my best. :)
+      Stamina: 0
+      Sanity: -1
+  - Name: 5
+    variants:
+    - MainText: I will devote to this issue absolute all of my possible available
+        time. :)
+      Stamina: 0
+      Sanity: -1
+    - MainText: I will help my dog.
+      Stamina: 0
+      Sanity: -1
+    - MainText: I will devote to this issue all my possible available time. :)
+      Stamina: 0
+      Sanity: -1
+  - Name: 6
+    variants:
+    - MainText: Give it to your good-for-nothing husband to do.
+      Stamina: -1
+      Sanity: 1
+    - MainText: X
+      Stamina: -1
+      Sanity: 1
+    - MainText: X
+      Stamina: -1
+      Sanity: 1
+  - Name: 7
+    variants:
+    - MainText: I think that I will just not fill it, actually. Thanks.
+      Stamina: -1
+      Sanity: 1
+    - MainText: X
+      Stamina: -1
+      Sanity: 1
+    - MainText: I think that I will just not fill it again. Thanks.
+      Stamina: -1
+      Sanity: 1
+  - Name: 8
+    variants:
+    - MainText: Next time you should maybe more care about yourself.
+      Stamina: -2
+      Sanity: 2
+    - MainText: (I swear I'm gonna kill your ass if you only think about taking the
+        project.)
+      Stamina: -2
+      Sanity: 2
+    - MainText: Now I gotta take a shit on someone's desk.
+      Stamina: -2
+      Sanity: 2
+  - Name: 9
+    variants:
+    - MainText: Try going through the schedules again.
+      Stamina: -2
+      Sanity: 2
+    - MainText: X
+      Stamina: -2
+      Sanity: 2
+    - MainText: I'll rip the project out of their cold dead hands if I have to.
+      Stamina: -2
+      Sanity: 2

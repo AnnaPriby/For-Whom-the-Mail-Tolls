@@ -12,12 +12,12 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     [Header("UI References")]
     [SerializeField] private Image image;
-    [SerializeField] private TextMeshProUGUI label;
+    [SerializeField] protected TextMeshProUGUI label;
 
     [HideInInspector] public Transform originalParent;
     [HideInInspector] public Transform parentAfterDrag;
 
-    private EmailData emailData;
+    protected EmailData emailData; // protected for subclass access
     private CanvasGroup canvasGroup;
 
     private static HashSet<int> usedIndexes = new HashSet<int>();
@@ -36,11 +36,17 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         originalParent = transform.parent;
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         GameLoop gameLoop = FindObjectOfType<GameLoop>();
         if (gameLoop != null && !gameLoop.allDraggables.Contains(this))
             gameLoop.allDraggables.Add(this);
+
+        if (usedIndexes.Count >= GetTotalAvailableEntries())
+        {
+            Debug.LogWarning("⚠️ No available entries, skipping assignment at start.");
+            return;
+        }
 
         AssignUniqueEmail();
 
@@ -48,14 +54,13 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             label.text = emailData.Name;
     }
 
-    public void DealHand()
+    public virtual void DealHand()
     {
         if (emailDatabaseObject == null)
         {
             Debug.LogWarning("⚠️ No database assigned to DraggableItem. Cannot deal new email.");
             return;
         }
-
 
         gameObject.SetActive(true);
         this.enabled = true;
@@ -110,7 +115,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         emailData = tableEntries[index];
     }
 
-    private List<EmailData> GetEmailEntriesFromObject()
+    protected virtual List<EmailData> GetEmailEntriesFromObject()
     {
         switch (emailDatabaseObject)
         {
@@ -126,11 +131,16 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
     }
 
+    private int GetTotalAvailableEntries()
+    {
+        var entries = GetEmailEntriesFromObject();
+        return entries != null ? entries.Count : 0;
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         parentAfterDrag = transform.parent;
 
-        // ✅ NEW: check if the InventorySlot should disappear
         InventorySlot inventorySlot = parentAfterDrag.GetComponent<InventorySlot>();
         if (inventorySlot != null)
         {

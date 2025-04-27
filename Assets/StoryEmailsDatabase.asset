@@ -50,7 +50,7 @@ MonoBehaviour:
         needs it. :(\n\nTime to work hard, eh? Only one of us can get it afterall.
         ;)\n\nKind regards,\nJessica"
       Stamina: 0
-      Sanity: 3
+      Sanity: -3
     - MainText: "Dear Linda,\n\nI understand your frustrations. Your puppy is in
         a bad state and needs that surgery, and something's got to give... We can't
         all pretend to be an angel.\U0001F607\n\nCome to think of it, our management
@@ -58,7 +58,7 @@ MonoBehaviour:
         an opportunity to get the money needed? I like my chances personally, but
         thought it wouldn't hurt if I told you as well. :)\n\nKind regards,\nJessica"
       Stamina: 0
-      Sanity: -1
+      Sanity: -3
     - MainText: 'Linda,
 
 
@@ -79,7 +79,7 @@ MonoBehaviour:
 
         Jess'
       Stamina: 0
-      Sanity: 3
+      Sanity: -3
   - Name: 3
     variants:
     - MainText: "Hey L,\n\njust a friendly reminder that you still haven't filled
@@ -88,7 +88,7 @@ MonoBehaviour:
         to. This inconsistency isn't a great look. (just helping you out here!)\n\nThis
         break can't come soon enough though right.\U0001F601\n\nHang in there!\u270A\nJess"
       Stamina: 0
-      Sanity: 1
+      Sanity: -1
     - MainText: "Dear Linda,\r\n\r\nas per my first email today, I still need you
         to fill the availability. As per your eccentric behaviour, I still don't
         have any idea what the fuck is going on. \r\n\r\nBut rest assured the management
@@ -118,7 +118,7 @@ MonoBehaviour:
 
         Jess'
       Stamina: 0
-      Sanity: 1
+      Sanity: -1
   - Name: 4
     variants:
     - MainText: "Hiii L,\n\nI wanted to tell you that I REALLY appreciate having
@@ -130,10 +130,10 @@ MonoBehaviour:
         munching on something the whole day in front of those videos haha. So see
         you after the break?\n\nJess"
       Stamina: 0
-      Sanity: 6
+      Sanity: -1
     - MainText: X
       Stamina: 0
-      Sanity: 6
+      Sanity: -1
     - MainText: 'Hello Linda..
 
 
@@ -155,4 +155,4 @@ MonoBehaviour:
 
         Jessica'
       Stamina: 0
-      Sanity: 6
+      Sanity: -1

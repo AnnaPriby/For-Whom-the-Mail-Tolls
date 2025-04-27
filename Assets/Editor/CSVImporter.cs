@@ -10,16 +10,19 @@ public class EmailCSVImporter : EditorWindow
         ImportSimpleTable<GreetingDatabase>("Greeting", "GreetingDatabase.asset");
         ImportSimpleTable<AcknowledgementDatabase>("Acknowledgement", "AcknowledgementDatabase.asset");
         ImportSimpleTable<OpinionDatabase>("Opinion", "OpinionDatabase.asset");
-        ImportSimpleTable<SolutionDatabase>("PossibleSolution", "SolutionDatabase.asset");
+        ImportSimpleTable<SolutionDatabase>("PossibleSolution", "PossibleSolutionDatabase.asset");
         ImportSimpleTable<GoodbyeDatabase>("Goodbye", "GoodbyeDatabase.asset");
         ImportSimpleTable<JessicaEmailsDatabase>("JessicaEmails", "JessicaEmailsDatabase.asset");
 
-        ImportStoryTable<StoryEmailsDatabase>("StoryEmails", "StoryEmailsDatabase.asset");
+        ImportStoryTable<StoryEmailsDatabase, StoryEmailData>("StoryEmails", "StoryEmailsDatabase.asset");
+        ImportStoryTable<StoryAcknowledgementDatabase, StoryAcknowledgementData>("StoryAcknowledgement", "StoryAcknowledgementDatabase.asset");
+        ImportStoryTable<StoryOpinionDatabase, StoryOpinionData>("StoryOpinion", "StoryOpinionDatabase.asset");
+        ImportStoryTable<StorySolutionDatabase, StorySolutionData>("StorySolution", "StorySolutionDatabase.asset");
 
-        Debug.Log("✅ All email tables imported and updated.");
+        Debug.Log("✅ All email tables imported and updated!");
     }
 
-    // ✅ For Greeting, Opinion, Jessica, etc. — simple emails
+    // ✅ Importer for simple (non-variant) tables
     private static void ImportSimpleTable<T>(string csvFileName, string assetFileName) where T : ScriptableObject
     {
         TextAsset csv = Resources.Load<TextAsset>(csvFileName);
@@ -35,7 +38,6 @@ public class EmailCSVImporter : EditorWindow
         for (int i = 1; i < parsedCSV.Count; i++) // Skip header
         {
             string[] row = parsedCSV[i];
-
             if (row.Length < 4)
             {
                 Debug.LogWarning($"⚠️ Skipped line {i + 1} (not enough columns): {string.Join(",", row)}");
@@ -43,8 +45,10 @@ public class EmailCSVImporter : EditorWindow
             }
 
             string name = row[0].Trim();
-            int stamina = int.Parse(row[1].Trim());
-            int sanity = int.Parse(row[2].Trim());
+            int stamina = 0;
+            int sanity = 0;
+            int.TryParse(row[1].Trim(), out stamina);
+            int.TryParse(row[2].Trim(), out sanity);
             string text = row[3].Trim('"').Trim();
 
             EmailData data = new EmailData
@@ -80,8 +84,10 @@ public class EmailCSVImporter : EditorWindow
         Debug.Log($"✅ Imported {newEntries.Count} simple emails into {typeof(T).Name}.");
     }
 
-    // ✅ For StoryEmailsDatabase — emails with 3 variants
-    private static void ImportStoryTable<T>(string csvFileName, string assetFileName) where T : ScriptableObject
+    // ✅ Importer for Story tables (with variants)
+    private static void ImportStoryTable<TDatabase, TData>(string csvFileName, string assetFileName)
+        where TDatabase : ScriptableObject
+        where TData : new()
     {
         TextAsset csv = Resources.Load<TextAsset>(csvFileName);
         if (csv == null)
@@ -91,70 +97,73 @@ public class EmailCSVImporter : EditorWindow
         }
 
         List<string[]> parsedCSV = ParseCSV(csv.text);
-        List<StoryEmailData> newEntries = new List<StoryEmailData>();
+        List<TData> newEntries = new List<TData>();
 
         for (int i = 1; i < parsedCSV.Count; i++) // Skip header
         {
             string[] row = parsedCSV[i];
-
-            if (row.Length < 10)
+            if (row.Length < 10) // 1 Name + (3 variants × 3 columns)
             {
-                Debug.LogWarning($"⚠️ Skipped line {i + 1} (not enough columns for StoryEmails): {string.Join(",", row)}");
+                Debug.LogWarning($"⚠️ Skipped line {i + 1} (not enough columns for story table): {string.Join(",", row)}");
                 continue;
             }
 
-            StoryEmailData storyEmail = new StoryEmailData
-            {
-                Name = row[0].Trim(),
-                variants = new List<EmailVariant>()
-                {
-                    new EmailVariant
-                    {
-                        MainText = row[1].Trim('"'),
-                        Stamina = int.Parse(row[2].Trim()),
-                        Sanity = int.Parse(row[3].Trim())
-                    },
-                    new EmailVariant
-                    {
-                        MainText = row[4].Trim('"'),
-                        Stamina = int.Parse(row[5].Trim()),
-                        Sanity = int.Parse(row[6].Trim())
-                    },
-                    new EmailVariant
-                    {
-                        MainText = row[7].Trim('"'),
-                        Stamina = int.Parse(row[8].Trim()),
-                        Sanity = int.Parse(row[9].Trim())
-                    }
-                }
-            };
+            var entry = new TData();
+            var nameField = typeof(TData).GetField("Name");
+            var variantsField = typeof(TData).GetField("variants");
 
-            newEntries.Add(storyEmail);
+            if (nameField != null && variantsField != null)
+            {
+                nameField.SetValue(entry, row[0].Trim());
+                List<EmailVariant> variants = new List<EmailVariant>();
+
+                for (int v = 0; v < 3; v++) // 3 variants
+                {
+                    string mainText = row[1 + v * 3].Trim('"').Trim();
+                    int stamina = 0;
+                    int sanity = 0;
+                    int.TryParse(row[2 + v * 3].Trim(), out stamina);
+                    int.TryParse(row[3 + v * 3].Trim(), out sanity);
+
+                    EmailVariant variant = new EmailVariant
+                    {
+                        MainText = mainText,
+                        Stamina = stamina,
+                        Sanity = sanity
+                    };
+
+                    variants.Add(variant);
+                }
+
+                variantsField.SetValue(entry, variants);
+            }
+
+            newEntries.Add(entry);
         }
 
         string path = $"Assets/{assetFileName}";
-        T db = AssetDatabase.LoadAssetAtPath<T>(path);
+        TDatabase db = AssetDatabase.LoadAssetAtPath<TDatabase>(path);
 
         if (db == null)
         {
-            db = ScriptableObject.CreateInstance<T>();
+            db = ScriptableObject.CreateInstance<TDatabase>();
             AssetDatabase.CreateAsset(db, path);
         }
 
-        var field = typeof(T).GetField("entries");
-        if (field != null)
+        var entriesField = typeof(TDatabase).GetField("entries");
+        if (entriesField != null)
         {
-            field.SetValue(db, newEntries);
+            entriesField.SetValue(db, newEntries);
         }
 
         EditorUtility.SetDirty(db);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log($"✅ Imported {newEntries.Count} story emails into {typeof(T).Name}.");
+        Debug.Log($"✅ Imported {newEntries.Count} story emails into {typeof(TDatabase).Name}.");
     }
 
-    // ✅ MINI CSV PARSER — handles quotes, commas, line breaks
+    // ✅ Basic CSV parser that handles quotes and commas correctly
     private static List<string[]> ParseCSV(string csvText)
     {
         List<string[]> rows = new List<string[]>();
@@ -191,7 +200,7 @@ public class EmailCSVImporter : EditorWindow
             }
         }
 
-        // Add the last line if file doesn't end with newline
+        // Add last row
         if (currentField.Length > 0 || currentRow.Count > 0)
         {
             currentRow.Add(currentField);
