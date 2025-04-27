@@ -105,7 +105,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         if (usedIndexes.Count >= tableEntries.Count)
         {
-            Debug.LogWarning($"⚠️ All email entries used for {dbType.Name}. Resetting...");
+            Debug.Log($"⚠️ All email entries used for {dbType.Name}. Resetting...");
             usedIndexes.Clear(); // ✅ Just reset THIS TYPE, not everything
         }
 
@@ -120,7 +120,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         if (safety <= 0)
         {
-            Debug.LogError("❌ Could not assign a unique entry (safety limit reached).");
+            Debug.Log("❌ Could not assign a unique entry (safety limit reached).");
             return;
         }
 
@@ -139,7 +139,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             case GoodbyeDatabase gb: return gb.entries;
             case JessicaEmailsDatabase j: return j.entries;
             default:
-                Debug.LogError("❌ Unsupported ScriptableObject type assigned to DraggableItem.");
+                Debug.Log("❌ Unsupported ScriptableObject type assigned to DraggableItem.");
                 return null;
         }
     }
@@ -194,7 +194,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (emailData != null)
-            TooltipController.Instance.ShowTooltip(FullInfo);
+        {
+            TooltipController.Instance.ShowTooltip(emailData.Stamina, emailData.Sanity);
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)

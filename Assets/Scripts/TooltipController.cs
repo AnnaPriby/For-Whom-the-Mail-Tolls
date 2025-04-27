@@ -1,42 +1,38 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 
 public class TooltipController : MonoBehaviour
 {
-    public static TooltipController Instance; // Singleton instance for easy global access
+    public static TooltipController Instance; // Singleton
 
-    public GameObject tooltipObject;          // The tooltip UI panel (enabled/disabled to show/hide)
-    public TextMeshProUGUI tooltipText;       // Text component that displays the tooltip content
-    public Vector3 offset = new Vector3(10f, -10f, 0f); // Offset from mouse position to position tooltip
+    public GameObject tooltipObject;
+    public TextMeshProUGUI tooltipText;
+    public Vector3 offset = new Vector3(10f, -10f, 0f);
 
     void Awake()
     {
-        // Set this instance as the global reference
         Instance = this;
-
-        // Hide the tooltip on start
         HideTooltip();
     }
 
     void Update()
     {
-        // If tooltip is active, follow the mouse position with an offset
         if (tooltipObject.activeSelf)
         {
             tooltipObject.transform.position = Input.mousePosition + offset;
         }
     }
 
-    // Show the tooltip with a specific text
-    public void ShowTooltip(string text)
+    // ✅ NEW ShowTooltip: Accepts stamina and sanity separately
+    public void ShowTooltip(int stamina, int sanity)
     {
-        tooltipText.text = text;
-        tooltipObject.SetActive(true); // Make the tooltip visible
+        tooltipText.text = $"<color=#f4c542>Stamina:</color> {stamina}\n<color=#42b0f5>Sanity:</color> {sanity}";
+        tooltipObject.SetActive(true);
     }
 
-    // Hide the tooltip UI
+    // Hide
     public void HideTooltip()
     {
-        tooltipObject.SetActive(false); // Disable tooltip visibility
+        tooltipObject.SetActive(false);
     }
 }

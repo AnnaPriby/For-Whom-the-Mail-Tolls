@@ -8,6 +8,7 @@ public class GameLoop : MonoBehaviour
     [Header("UI References")]
     public Transform playerTurnUI;
     public GameObject jessicaUI;
+    public GameObject lunchImageUI; // 🍽️ ✅ Added Lunch UI reference here
 
     [Header("Game Objects")]
     public Coffee coffee;
@@ -26,6 +27,8 @@ public class GameLoop : MonoBehaviour
 
     [Header("Reveal Slots")]
     public List<RevealSlotPro> allRevealSlots = new List<RevealSlotPro>();
+
+    public SpriteChanger spriteChanger;
 
 
     private void PrepareDraggables()
@@ -77,6 +80,9 @@ public class GameLoop : MonoBehaviour
         if (coffee != null)
             coffee.enabled = false;
 
+        if (lunchImageUI != null)
+            lunchImageUI.SetActive(false); // 🍽️ ✅ Hide lunch at start
+
         GameState = 1;
     }
 
@@ -109,6 +115,10 @@ public class GameLoop : MonoBehaviour
     {
         GameState = stateSet;
 
+        // 🍽️ Always hide lunch when changing state normally
+        if (lunchImageUI != null)
+            lunchImageUI.SetActive(false);
+
         switch (stateSet)
         {
             case 1:
@@ -123,6 +133,13 @@ public class GameLoop : MonoBehaviour
                 if (jessicaUI != null) jessicaUI.transform.localScale = Vector3.one;
                 if (coffee != null) coffee.enabled = false;
                 if (jessicaMail != null) jessicaMail.ShowReadMail();
+
+                // 🍽️ ✅ Special: If Day 5 and reading email, show Lunch
+                if (Day == 4 && lunchImageUI != null)
+                {
+                    lunchImageUI.SetActive(true);
+                }
+
                 break;
 
             case 3:
@@ -169,8 +186,8 @@ public class GameLoop : MonoBehaviour
     public void LogSend(int sanity)
     {
         totalSanityDamage = sanity;
-        ChooseVariantBasedOnSanity();
-        SaveGameProgress(); // ✅ Save whenever you send!!
+        ChooseVariant(); // 👈 Now calls the unified function
+        SaveGameProgress();
         ChangeGameState(5);
     }
 
@@ -179,17 +196,71 @@ public class GameLoop : MonoBehaviour
         ChangeGameState(5);
     }
 
-    private void ChooseVariantBasedOnSanity()
+    private void ChooseVariant()
+    {
+        // 🌟 Day 3 → use Sanity Damage
+        if (Day == 3)
+        {
+            ChooseVariantBasedOnSanityDamage();
+        }
+        else // 🌟 All other Days (Day 1, 2, 4, 5, etc.) → use Remaining Sanity
+        {
+            ChooseVariantBasedOnRemainingSanity();
+        }
+    }
+    // ✅ First system — based on DAMAGE dealt this turn
+    private void ChooseVariantBasedOnSanityDamage()
     {
         int variant = 0;
 
         if (totalSanityDamage <= 2)
+        {
             variant = 2;
+            Debug.Log("🩸 Damage small → Be Evil");
+        }
         else if (totalSanityDamage <= 4)
+        {
             variant = 1;
+            Debug.Log("🩸 Damage medium → Be Neutral");
+        }
         else
+        {
             variant = 0;
+            Debug.Log("🩸 Damage high → Be Nice");
+        }
 
+        ApplyVariantToGame(variant);
+    }
+
+    private void ChooseVariantBasedOnRemainingSanity()
+    {
+        int variant = 0;
+        int maxSanity = StatManager.Instance.MaxSanity;
+        int currentSanity = StatManager.Instance.CurrentSanity;
+
+        if (currentSanity >= 18)
+        {
+            variant = 2;
+            Debug.Log("🧠 Remaining Sanity High → Be Evil");
+        }
+        else if (currentSanity >= 15)
+        {
+            variant = 1;
+            Debug.Log("🧠 Remaining Sanity Mid → Be Neutral");
+        }
+        else
+        {
+            variant = 0;
+            Debug.Log("🧠 Remaining Sanity Low → Be Nice");
+        }
+
+        // 🌟 THIS WAS MISSING!
+        ApplyVariantToGame(variant);
+    }
+
+    // ✨ Apply the variant to Jessica + Story Draggables
+    private void ApplyVariantToGame(int variant)
+    {
         if (jessicaMail != null)
         {
             jessicaMail.SetVariant(variant);
@@ -203,7 +274,13 @@ public class GameLoop : MonoBehaviour
             }
         }
 
-        Debug.Log($"🔵 Chose Variant {variant} based on {totalSanityDamage} sanity damage.");
+        // ✅ Update sprite based on current Sanity
+        if (spriteChanger != null)
+        {
+            spriteChanger.UpdateSpriteBasedOnVariant(variant);
+        }
+
+
     }
 
     public void IncreaseDay()
@@ -224,6 +301,8 @@ public class GameLoop : MonoBehaviour
     {
         IncreaseDay();
         ChangeGameState(1);
+
+     
 
         foreach (RevealSlotPro slot in allRevealSlots)
         {

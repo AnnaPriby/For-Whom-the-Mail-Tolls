@@ -43,7 +43,7 @@ public class StoryDraggableItem : DraggableItem
             case StorySolutionDatabase ss: return ConvertStoryToSimple(ss.entries);
             case StoryEmailsDatabase se: return ConvertStoryToSimple(se.entries);
             default:
-                Debug.LogError("❌ Unsupported Story ScriptableObject assigned to StoryDraggableItem.");
+                Debug.Log("❌ Unsupported Story ScriptableObject assigned to StoryDraggableItem.");
                 return null;
         }
     }

@@ -18,7 +18,7 @@ MonoBehaviour:
     Sanity: -2
     MainText: 'Kind regards,
 
-'
+      Respectfully,0,-2,Respectfully'
   - Name: Yours sincerely
     Stamina: 0
     Sanity: -2
