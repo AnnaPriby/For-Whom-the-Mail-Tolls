@@ -4,7 +4,7 @@ using UnityEngine;
 public class StoryDraggableItem : DraggableItem
 {
     [Header("Story Database Reference")]
-    [SerializeField] private ScriptableObject storyDatabaseObject;
+    [SerializeField] public ScriptableObject storyDatabaseObject;
 
     [Header("Variant Settings")]
     [Range(0, 4)]

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
 {
     [Header("Slot Rules")]
-    public List<DraggableItem> assignedItems = new List<DraggableItem>();
+    public List<DraggableItem> assignedItems = new List<DraggableItem>(); // The allowed original templates
 
     [Header("UI")]
     public TextMeshProUGUI infoDisplay;
@@ -42,7 +42,8 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
         if (item == null)
             return;
 
-        if (assignedItems.Count > 0 && !assignedItems.Contains(item))
+        // ✅ Allow clones: check if the original prefab is assigned
+        if (assignedItems.Count > 0 && !IsItemAllowed(item))
         {
             Debug.Log($"⛔ {item.name} is not allowed in this RevealSlot.");
             return;
@@ -65,21 +66,31 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
         Debug.Log($"📥 {item.name} dropped into RevealSlotPro. Waiting to be sent.");
     }
 
+    // ✅ NEW: Check by prefab identity
+    private bool IsItemAllowed(DraggableItem item)
+    {
+        foreach (var allowed in assignedItems)
+        {
+            if (item.emailDatabaseObject == allowed.emailDatabaseObject)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        // ✅ Close previous open slot if clicking a different one
         if (currentlyOpenSlot != null && currentlyOpenSlot != this)
         {
             currentlyOpenSlot.CloseOptionsPanel();
         }
 
-        // ✅ Toggle this slot's panel
         if (slotOptionsPanel != null)
         {
             bool newState = !slotOptionsPanel.activeSelf;
             slotOptionsPanel.SetActive(newState);
 
-            // ✅ If opened, remember this as current open slot
             currentlyOpenSlot = newState ? this : null;
         }
     }
@@ -116,12 +127,12 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
         if (slotOptionsPanel != null)
             slotOptionsPanel.SetActive(false);
 
-        currentlyOpenSlot = null; // Clear tracker after sending
+        currentlyOpenSlot = null;
     }
 
     private void DrawNewCards()
     {
-        // You can trigger card drawing here if needed
+        // Future card drawing logic if needed
     }
 
     private void TrackGameState()
@@ -141,7 +152,6 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
         currentlyOpenSlot = null;
     }
 
-    // ✅ Helper to manually close panel (without toggling)
     private void CloseOptionsPanel()
     {
         if (slotOptionsPanel != null)

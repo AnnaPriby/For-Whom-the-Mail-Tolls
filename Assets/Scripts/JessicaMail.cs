@@ -125,10 +125,15 @@ public class JessicaMail : MonoBehaviour
         IncreaseEmailIndex();
         GameLoop.Instance.LogReceive(); // Move to Player Turn
     }
-
-    private void IncreaseEmailIndex()
+    public void IncreaseEmailIndex()
     {
         emailIndex += 1;
-        Debug.Log("➡️ Moving to next Story Email. Index now: " + emailIndex);
+        Debug.Log("➡️ Moving to next Story Email. Now at index: " + emailIndex);
     }
+
+    public void SetVariant(int variant)
+    {
+        variantIndex = variant;
+    }
+
 }

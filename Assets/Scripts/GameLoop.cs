@@ -19,12 +19,44 @@ public class GameLoop : MonoBehaviour
     [Header("State Management")]
     public int GameState;
     public int Day = 1;
+    private int totalSanityDamage = 0;
 
     [Header("Draggables")]
     public List<DraggableItem> allDraggables = new List<DraggableItem>();
 
     [Header("Reveal Slots")]
     public List<RevealSlotPro> allRevealSlots = new List<RevealSlotPro>();
+
+
+    private void PrepareDraggables()
+    {
+        List<DraggableItem> preparedDraggables = new List<DraggableItem>();
+
+        foreach (var original in allDraggables)
+        {
+            if (original == null) continue;
+
+            original.gameObject.SetActive(false); // Hide original
+
+            for (int i = 0; i < 5; i++) // Create 5 clones
+            {
+                DraggableItem clone = Instantiate(original, original.originalParent);
+
+                clone.gameObject.SetActive(true);
+                clone.enabled = true;
+
+                if (clone.TryGetComponent<CanvasGroup>(out CanvasGroup cg))
+                    cg.blocksRaycasts = true;
+
+                clone.transform.localPosition = Vector3.zero;
+
+                preparedDraggables.Add(clone);
+            }
+        }
+
+        allDraggables = preparedDraggables; // Replace list with clones only
+    }
+
 
     void Awake()
     {
@@ -45,26 +77,30 @@ public class GameLoop : MonoBehaviour
         if (coffee != null)
             coffee.enabled = false;
 
-        GameState = 1; // Start at New Mail
+        GameState = 1;
     }
 
     void Start()
     {
+
+
+
 #if UNITY_EDITOR
-        Debug.Log("👨‍💻 Unity Editor detected. Forcing fresh start.");
         ResetProgress();
 #endif
 
         if (PlayerPrefs.HasKey("ContinueGame") && PlayerPrefs.GetInt("ContinueGame") == 1)
         {
             LoadGameProgress();
-            Debug.Log("📦 Continuing from saved game.");
+            Debug.Log($"🔄 Loaded saved Day {Day} and State {GameState}");
         }
         else
         {
             ResetProgress();
             Debug.Log("🆕 Starting fresh new game.");
         }
+
+        PrepareDraggables(); // ✅ << add this line here
 
         ChangeGameState(GameState);
     }
@@ -75,73 +111,39 @@ public class GameLoop : MonoBehaviour
 
         switch (stateSet)
         {
-            case 1: // Show New Mail UI
-                if (playerTurnUI != null)
-                    playerTurnUI.localScale = Vector3.zero;
-
-                if (jessicaUI != null)
-                    jessicaUI.transform.localScale = Vector3.one;
-
-                if (coffee != null)
-                    coffee.enabled = false;
-
-                if (jessicaMail != null)
-                    jessicaMail.ShowNewMail();
+            case 1:
+                if (playerTurnUI != null) playerTurnUI.localScale = Vector3.zero;
+                if (jessicaUI != null) jessicaUI.transform.localScale = Vector3.one;
+                if (coffee != null) coffee.enabled = false;
+                if (jessicaMail != null) jessicaMail.ShowNewMail();
                 break;
 
-            case 2: // Show Read Mail UI
-                if (playerTurnUI != null)
-                    playerTurnUI.localScale = Vector3.zero;
-
-                if (jessicaUI != null)
-                    jessicaUI.transform.localScale = Vector3.one;
-
-                if (coffee != null)
-                    coffee.enabled = false;
-
-                if (jessicaMail != null)
-                    jessicaMail.ShowReadMail();
+            case 2:
+                if (playerTurnUI != null) playerTurnUI.localScale = Vector3.zero;
+                if (jessicaUI != null) jessicaUI.transform.localScale = Vector3.one;
+                if (coffee != null) coffee.enabled = false;
+                if (jessicaMail != null) jessicaMail.ShowReadMail();
                 break;
 
-            case 3: // Player Turn (deal cards)
-                if (jessicaUI != null)
-                    jessicaUI.transform.localScale = Vector3.zero;
-
-                if (playerTurnUI != null)
-                    playerTurnUI.localScale = Vector3.one;
-
+            case 3:
+                if (jessicaUI != null) jessicaUI.transform.localScale = Vector3.zero;
+                if (playerTurnUI != null) playerTurnUI.localScale = Vector3.one;
                 DealHand();
-
-                if (coffee != null)
-                    coffee.enabled = true; // ✅ Coffee now enabled during player turn
+                if (coffee != null) coffee.enabled = true;
                 break;
 
-            case 4: // Post-Coffee reading
-                if (playerTurnUI != null)
-                    playerTurnUI.localScale = Vector3.zero;
-
-                if (jessicaUI != null)
-                    jessicaUI.transform.localScale = Vector3.one;
-
-                if (coffee != null)
-                    coffee.enabled = false;
-
-                if (jessicaMail != null)
-                    jessicaMail.ShowNewMail(); // Showing another email or same UI
+            case 4:
+                if (playerTurnUI != null) playerTurnUI.localScale = Vector3.zero;
+                if (jessicaUI != null) jessicaUI.transform.localScale = Vector3.one;
+                if (coffee != null) coffee.enabled = false;
+                if (jessicaMail != null) jessicaMail.ShowNewMail();
                 break;
 
-            case 5: // Parallax Scroll
-                if (playerTurnUI != null)
-                    playerTurnUI.localScale = Vector3.zero;
-
-                if (jessicaUI != null)
-                    jessicaUI.transform.localScale = Vector3.zero;
-
-                if (coffee != null)
-                    coffee.enabled = false;
-
-                if (verticalParallax != null)
-                    verticalParallax.StartAutoScroll();
+            case 5:
+                if (playerTurnUI != null) playerTurnUI.localScale = Vector3.zero;
+                if (jessicaUI != null) jessicaUI.transform.localScale = Vector3.zero;
+                if (coffee != null) coffee.enabled = false;
+                if (verticalParallax != null) verticalParallax.StartAutoScroll();
                 break;
         }
     }
@@ -157,32 +159,71 @@ public class GameLoop : MonoBehaviour
         }
     }
 
+
+
     public void LogReceive()
     {
-        ChangeGameState(3); // After mail → Player Turn
+        ChangeGameState(3);
     }
 
     public void LogSend(int sanity)
     {
-        ChangeGameState(4); // After sending → Post Coffee Mail
-        Debug.Log("sanity: " + sanity);
+        totalSanityDamage = sanity;
+        ChooseVariantBasedOnSanity();
+        SaveGameProgress(); // ✅ Save whenever you send!!
+        ChangeGameState(5);
     }
 
     public void Coffee()
     {
-        ChangeGameState(5); // After coffee → Parallax scroll
+        ChangeGameState(5);
+    }
+
+    private void ChooseVariantBasedOnSanity()
+    {
+        int variant = 0;
+
+        if (totalSanityDamage <= 2)
+            variant = 2;
+        else if (totalSanityDamage <= 4)
+            variant = 1;
+        else
+            variant = 0;
+
+        if (jessicaMail != null)
+        {
+            jessicaMail.SetVariant(variant);
+        }
+
+        foreach (var draggable in allDraggables)
+        {
+            if (draggable is StoryDraggableItem storyDraggable)
+            {
+                storyDraggable.SetVariantIndex(variant);
+            }
+        }
+
+        Debug.Log($"🔵 Chose Variant {variant} based on {totalSanityDamage} sanity damage.");
     }
 
     public void IncreaseDay()
     {
         Day += 1;
         Debug.Log("🌞 New Day Started: " + Day);
+
+        if (jessicaMail != null)
+        {
+            jessicaMail.IncreaseEmailIndex();
+            Debug.Log($"📧 Email Index is now {jessicaMail.emailIndex}");
+        }
+
+        SaveGameProgress(); // ✅ Save Day when it increases
     }
 
     public void OnScrollFinished()
     {
         IncreaseDay();
-        ChangeGameState(1); // After scrolling, back to Jessica New Mail
+        ChangeGameState(1);
 
         foreach (RevealSlotPro slot in allRevealSlots)
         {
@@ -198,6 +239,8 @@ public class GameLoop : MonoBehaviour
         PlayerPrefs.SetInt("SavedGameState", GameState);
         PlayerPrefs.SetInt("ContinueGame", 1);
         PlayerPrefs.Save();
+
+        Debug.Log($"💾 Saved Day {Day} and State {GameState}");
     }
 
     public void LoadGameProgress()

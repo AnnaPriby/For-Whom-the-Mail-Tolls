@@ -8,19 +8,22 @@ using UnityEngine.UI;
 public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Scriptable Object Source (Any EmailDatabase)")]
-    [SerializeField] private ScriptableObject emailDatabaseObject;
+    [SerializeField] public ScriptableObject emailDatabaseObject;
 
     [Header("UI References")]
-    [SerializeField] private Image image;
+    [SerializeField] protected Image image;
     [SerializeField] protected TextMeshProUGUI label;
 
     [HideInInspector] public Transform originalParent;
     [HideInInspector] public Transform parentAfterDrag;
 
-    protected EmailData emailData; // protected for subclass access
+    protected EmailData emailData; // ✅ Protected still
     private CanvasGroup canvasGroup;
 
     private static HashSet<int> usedIndexes = new HashSet<int>();
+
+    // ✅ ADD public getter!
+    public EmailData EmailData => emailData;
 
     public string MainTextOnly => emailData?.MainText ?? "";
     public int Stamina => emailData?.Stamina ?? 0;
@@ -80,20 +83,30 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             label.text = emailData.Name;
     }
 
+    private static Dictionary<System.Type, HashSet<int>> usedIndexesPerType = new Dictionary<System.Type, HashSet<int>>();
+
     public void AssignUniqueEmail()
     {
         List<EmailData> tableEntries = GetEmailEntriesFromObject();
-
         if (tableEntries == null || tableEntries.Count == 0)
         {
             Debug.LogWarning("⚠️ No entries found in the assigned email database.");
             return;
         }
 
+        System.Type dbType = emailDatabaseObject.GetType();
+
+        if (!usedIndexesPerType.ContainsKey(dbType))
+        {
+            usedIndexesPerType[dbType] = new HashSet<int>();
+        }
+
+        HashSet<int> usedIndexes = usedIndexesPerType[dbType];
+
         if (usedIndexes.Count >= tableEntries.Count)
         {
-            Debug.LogWarning("⚠️ All email entries have already been used!");
-            return;
+            Debug.LogWarning($"⚠️ All email entries used for {dbType.Name}. Resetting...");
+            usedIndexes.Clear(); // ✅ Just reset THIS TYPE, not everything
         }
 
         int index;
@@ -107,7 +120,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         if (safety <= 0)
         {
-            Debug.LogError("❌ Could not assign unique entry (safety limit reached).");
+            Debug.LogError("❌ Could not assign a unique entry (safety limit reached).");
             return;
         }
 
@@ -192,5 +205,11 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public static void ResetUsedEmails()
     {
         usedIndexes.Clear();
+    }
+
+    public void SetLabel(string text)
+    {
+        if (label != null)
+            label.text = text;
     }
 }
