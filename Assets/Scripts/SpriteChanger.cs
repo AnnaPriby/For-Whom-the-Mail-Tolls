@@ -1,57 +1,37 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 public class SpriteChanger : MonoBehaviour
 {
-    [Header("Sprites")]
-    [SerializeField] private Sprite niceSprite;     // 😀 Be Nice (Variant 0)
-    [SerializeField] private Sprite neutralSprite;  // 😐 Be Neutral (Variant 1)
-    [SerializeField] private Sprite evilSprite;     // 😈 Be Evil (Variant 2)
+    [SerializeField] private Sprite[] variantSprites; // 0 = nice, 1 = neutral, 2 = evil
 
-    private Image image;
+    private SpriteRenderer spriteRenderer;
 
-    void Start()
+    void Awake()
     {
-        image = GetComponent<Image>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
-        if (image == null)
-            Debug.LogError("❌ No Image component found on SpriteChanger!");
+        if (spriteRenderer == null)
+        {
+            Debug.LogError("❌ No SpriteRenderer component found on this GameObject!");
+        }
     }
 
-    // Call this and pass the variant number (0 = Nice, 1 = Neutral, 2 = Evil)
-    public void UpdateSpriteBasedOnVariant(int variant)
+    public void UpdateJessicaSpriteByVariant(int variant)
     {
-        if (image == null) return;
-
-        switch (variant)
+        if (spriteRenderer == null || variantSprites.Length < 3)
         {
-            case 0: // Be Nice
-                if (niceSprite != null)
-                {
-                    image.sprite = niceSprite;
-                    Debug.Log("😀 Sprite set to NICE (Variant 0)");
-                }
-                break;
-
-            case 1: // Be Neutral
-                if (neutralSprite != null)
-                {
-                    image.sprite = neutralSprite;
-                    Debug.Log("😐 Sprite set to NEUTRAL (Variant 1)");
-                }
-                break;
-
-            case 2: // Be Evil
-                if (evilSprite != null)
-                {
-                    image.sprite = evilSprite;
-                    Debug.Log("😈 Sprite set to EVIL (Variant 2)");
-                }
-                break;
-
-            default:
-                Debug.LogWarning($"⚠️ Unknown variant {variant} given to SpriteChanger!");
-                break;
+            Debug.LogWarning("⚠️ SpriteRenderer missing or not enough sprites assigned.");
+            return;
         }
+
+        if (variant < 0 || variant >= variantSprites.Length)
+        {
+            Debug.LogWarning($"⚠️ Invalid variant index: {variant}");
+            return;
+        }
+
+        spriteRenderer.sprite = variantSprites[variant];
+
+        Debug.Log($"🧠 Sprite updated to: {variantSprites[variant].name} (Variant {variant})");
     }
 }

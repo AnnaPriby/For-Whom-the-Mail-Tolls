@@ -57,7 +57,7 @@ public class JessicaMail : MonoBehaviour
     public void OpenEmail()
     {
         GameLoop.Instance.ChangeGameState(2); // NewMail → ReadMail
-        ShowEmail();
+       // ShowEmail();
     }
 
     public void ShowNewMail()
