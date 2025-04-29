@@ -10,6 +10,7 @@ public class JessicaMail : MonoBehaviour
 
     [Header("Email View")]
     public TextMeshProUGUI jessicaEmailText;
+    public GameObject noMailUI;    // ✅ New - NoMail screen
     public GameObject newMailUI;
     public GameObject readMailUI;
 
@@ -34,12 +35,18 @@ public class JessicaMail : MonoBehaviour
         if (replyButton != null)
             replyButton.onClick.AddListener(TrackGameState);
 
-        NewMail();
-        variantIndex = 1; // Start variant
+        if (GameLoop.Instance != null)
+        {
+            emailIndex = Mathf.Max(0, GameLoop.Instance.Day - 1);
+        }
+        // NewMail(); // Show new mail UI at first
     }
 
     public void NewMail()
     {
+        if (noMailUI != null)
+            noMailUI.SetActive(false);
+
         if (newMailUI != null)
             newMailUI.SetActive(true);
 
@@ -55,6 +62,9 @@ public class JessicaMail : MonoBehaviour
 
     public void ShowNewMail()
     {
+        if (noMailUI != null)
+            noMailUI.SetActive(false);
+
         if (newMailUI != null)
             newMailUI.SetActive(true);
 
@@ -64,13 +74,30 @@ public class JessicaMail : MonoBehaviour
 
     public void ShowReadMail()
     {
+        if (noMailUI != null)
+            noMailUI.SetActive(false);
+
         if (newMailUI != null)
             newMailUI.SetActive(false);
 
         if (readMailUI != null)
             readMailUI.SetActive(true);
 
-        ShowEmail(); // Also display the text
+        ShowEmail(); // Also update the email content
+    }
+
+    public void ShowNoMail()
+    {
+        if (newMailUI != null)
+            newMailUI.SetActive(false);
+
+        if (readMailUI != null)
+            readMailUI.SetActive(false);
+
+        if (noMailUI != null)
+            noMailUI.SetActive(true);
+
+        Debug.Log("📭 Showing NO MAIL screen");
     }
 
     private void ShowEmail()
@@ -125,6 +152,7 @@ public class JessicaMail : MonoBehaviour
         IncreaseEmailIndex();
         GameLoop.Instance.LogReceive(); // Move to Player Turn
     }
+
     public void IncreaseEmailIndex()
     {
         emailIndex += 1;
@@ -135,5 +163,4 @@ public class JessicaMail : MonoBehaviour
     {
         variantIndex = variant;
     }
-
 }

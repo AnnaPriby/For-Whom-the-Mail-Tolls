@@ -16,6 +16,8 @@ public class StoryDraggableItem : DraggableItem
     {
         base.Start(); // Standard base initialization
 
+
+
         currentVariantIndex = variantIndex; // ✅ Use the Inspector value at start
         ForceMainTextLabel();
     }
@@ -83,14 +85,18 @@ public class StoryDraggableItem : DraggableItem
         return simpleList;
     }
 
-    public void SetVariantIndex(int variant)
+    public void UpdateVariantBasedOnDay()
     {
+        int day = GameLoop.Instance != null ? GameLoop.Instance.Day : 1;
+        int variant = Mathf.Clamp(day - 1, 0, 4);
         variantIndex = Mathf.Clamp(variant, 0, 4);
-        currentVariantIndex = variantIndex; // ✅ Update both
+        currentVariantIndex = variantIndex;
 
-        Debug.Log($"🔄 StoryDraggableItem: Now using Variant {currentVariantIndex}");
+        Debug.Log($"📆 [StoryDraggableItem] Day {day} → Variant {variantIndex}");
 
         AssignUniqueEmail();
         ForceMainTextLabel();
     }
+
+
 }

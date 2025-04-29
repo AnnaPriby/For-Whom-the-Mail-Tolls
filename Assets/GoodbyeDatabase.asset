@@ -18,13 +18,13 @@ MonoBehaviour:
     Sanity: -2
     MainText: 'Kind regards,
 
-      Respectfully,0,-2,Respectfully'
+'
   - Name: Yours sincerely
     Stamina: 0
     Sanity: -2
     MainText: 'Yours sincerely,
 
-      Have a nice shift,0,-1,Have a nice shift'
+      Have a nice shift'
   - Name: xx
     Stamina: 0
     Sanity: -1

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameLoop : MonoBehaviour
@@ -8,7 +9,8 @@ public class GameLoop : MonoBehaviour
     [Header("UI References")]
     public Transform playerTurnUI;
     public GameObject jessicaUI;
-    public GameObject lunchImageUI; // 🍽️ ✅ Added Lunch UI reference here
+    public GameObject lunchImageUI;
+    public GameObject noMailUI; // 🍽️ ✅ New: NoMail Screen UI!
 
     [Header("Game Objects")]
     public Coffee coffee;
@@ -22,6 +24,16 @@ public class GameLoop : MonoBehaviour
     public int Day = 1;
     private int totalSanityDamage = 0;
 
+    [Header("Stats numbers")]
+    
+    public int angry = 18;
+    public int neutral = 15;
+    public int demagelow = 2;
+    public int demagehigh = 4;
+
+    [Header("Original Draggables")]
+    public List<DraggableItem> originalDraggables = new List<DraggableItem>();
+
     [Header("Draggables")]
     public List<DraggableItem> allDraggables = new List<DraggableItem>();
 
@@ -30,21 +42,22 @@ public class GameLoop : MonoBehaviour
 
     public SpriteChanger spriteChanger;
 
-
     private void PrepareDraggables()
     {
         List<DraggableItem> preparedDraggables = new List<DraggableItem>();
 
-        foreach (var original in allDraggables)
+        // Backup original list
+        originalDraggables = new List<DraggableItem>(allDraggables);
+
+        foreach (var original in originalDraggables)
         {
             if (original == null) continue;
 
-            original.gameObject.SetActive(false); // Hide original
+            original.gameObject.SetActive(false); // Hide original prefab
 
-            for (int i = 0; i < 5; i++) // Create 5 clones
+            for (int i = 0; i < 5; i++) // Clone 5 times
             {
                 DraggableItem clone = Instantiate(original, original.originalParent);
-
                 clone.gameObject.SetActive(true);
                 clone.enabled = true;
 
@@ -53,13 +66,16 @@ public class GameLoop : MonoBehaviour
 
                 clone.transform.localPosition = Vector3.zero;
 
+                // ✅ Force variant
+                if (clone is StoryDraggableItem storyClone)
+                    storyClone.UpdateVariantBasedOnDay();
+
                 preparedDraggables.Add(clone);
             }
         }
 
-        allDraggables = preparedDraggables; // Replace list with clones only
+        allDraggables = preparedDraggables; // Only clones here!
     }
-
 
     void Awake()
     {
@@ -67,30 +83,24 @@ public class GameLoop : MonoBehaviour
 
         if (playerTurnUI != null)
             playerTurnUI.gameObject.SetActive(true);
-
         if (jessicaUI != null)
             jessicaUI.SetActive(true);
-
         if (playerTurnUI != null)
             playerTurnUI.localScale = Vector3.zero;
-
         if (jessicaUI != null)
             jessicaUI.transform.localScale = Vector3.one;
-
         if (coffee != null)
             coffee.enabled = false;
-
         if (lunchImageUI != null)
-            lunchImageUI.SetActive(false); // 🍽️ ✅ Hide lunch at start
+            lunchImageUI.SetActive(false);
+        if (noMailUI != null)
+            noMailUI.SetActive(false); // 🍽️ ✅ Hide no mail initially
 
-        GameState = 1;
+        GameState = 0; // 🍽️ ✅ START IN STATE 0
     }
 
     void Start()
     {
-
-
-
 #if UNITY_EDITOR
         ResetProgress();
 #endif
@@ -106,8 +116,7 @@ public class GameLoop : MonoBehaviour
             Debug.Log("🆕 Starting fresh new game.");
         }
 
-        PrepareDraggables(); // ✅ << add this line here
-
+        PrepareDraggables();
         ChangeGameState(GameState);
     }
 
@@ -115,31 +124,44 @@ public class GameLoop : MonoBehaviour
     {
         GameState = stateSet;
 
-        // 🍽️ Always hide lunch when changing state normally
         if (lunchImageUI != null)
             lunchImageUI.SetActive(false);
+        if (noMailUI != null)
+            noMailUI.SetActive(false);
 
         switch (stateSet)
         {
+            case 0:
+                if (playerTurnUI != null) playerTurnUI.localScale = Vector3.zero;
+                if (jessicaUI != null) jessicaUI.transform.localScale = Vector3.one;
+                if (jessicaMail != null) jessicaMail.ShowNoMail();
+
+                
+
+                StartCoroutine(WaitThenGoToNewMail());
+                break;
+
             case 1:
                 if (playerTurnUI != null) playerTurnUI.localScale = Vector3.zero;
                 if (jessicaUI != null) jessicaUI.transform.localScale = Vector3.one;
                 if (coffee != null) coffee.enabled = false;
-                if (jessicaMail != null) jessicaMail.ShowNewMail();
+
+                if (jessicaMail != null)
+                    jessicaMail.ShowNewMail();
                 break;
 
             case 2:
                 if (playerTurnUI != null) playerTurnUI.localScale = Vector3.zero;
                 if (jessicaUI != null) jessicaUI.transform.localScale = Vector3.one;
                 if (coffee != null) coffee.enabled = false;
-                if (jessicaMail != null) jessicaMail.ShowReadMail();
 
-                // 🍽️ ✅ Special: If Day 5 and reading email, show Lunch
+                if (jessicaMail != null)
+                    jessicaMail.ShowReadMail();
+
                 if (Day == 4 && lunchImageUI != null)
                 {
                     lunchImageUI.SetActive(true);
                 }
-
                 break;
 
             case 3:
@@ -153,16 +175,26 @@ public class GameLoop : MonoBehaviour
                 if (playerTurnUI != null) playerTurnUI.localScale = Vector3.zero;
                 if (jessicaUI != null) jessicaUI.transform.localScale = Vector3.one;
                 if (coffee != null) coffee.enabled = false;
-                if (jessicaMail != null) jessicaMail.ShowNewMail();
+
+                if (jessicaMail != null)
+                    jessicaMail.ShowNewMail();
                 break;
 
             case 5:
                 if (playerTurnUI != null) playerTurnUI.localScale = Vector3.zero;
                 if (jessicaUI != null) jessicaUI.transform.localScale = Vector3.zero;
                 if (coffee != null) coffee.enabled = false;
-                if (verticalParallax != null) verticalParallax.StartAutoScroll();
+
+                if (verticalParallax != null)
+                    verticalParallax.StartAutoScroll();
                 break;
         }
+    }
+
+    private IEnumerator WaitThenGoToNewMail()
+    {
+        yield return new WaitForSeconds(5f); // 🕰️ wait 5 seconds
+        ChangeGameState(1); // ➡️ go to NewMail automatically
     }
 
     public void DealHand()
@@ -170,13 +202,10 @@ public class GameLoop : MonoBehaviour
         foreach (DraggableItem item in allDraggables)
         {
             item.DealHand();
-
             if (item.originalParent != null)
                 item.originalParent.gameObject.SetActive(false);
         }
     }
-
-
 
     public void LogReceive()
     {
@@ -186,7 +215,7 @@ public class GameLoop : MonoBehaviour
     public void LogSend(int sanity)
     {
         totalSanityDamage = sanity;
-        ChooseVariant(); // 👈 Now calls the unified function
+        ChooseVariant();
         SaveGameProgress();
         ChangeGameState(5);
     }
@@ -198,37 +227,34 @@ public class GameLoop : MonoBehaviour
 
     private void ChooseVariant()
     {
-        // 🌟 Day 3 → use Sanity Damage
         if (Day == 3)
         {
             ChooseVariantBasedOnSanityDamage();
         }
-        else // 🌟 All other Days (Day 1, 2, 4, 5, etc.) → use Remaining Sanity
+        else
         {
             ChooseVariantBasedOnRemainingSanity();
         }
     }
-    // ✅ First system — based on DAMAGE dealt this turn
+
     private void ChooseVariantBasedOnSanityDamage()
     {
         int variant = 0;
-
-        if (totalSanityDamage <= 2)
+        if (totalSanityDamage <= demagelow)
         {
             variant = 2;
-            Debug.Log("🩸 Damage small → Be Evil");
+            Debug.Log(" Damage small → Be Evil");
         }
-        else if (totalSanityDamage <= 4)
+        else if (totalSanityDamage <= demagehigh)
         {
             variant = 1;
-            Debug.Log("🩸 Damage medium → Be Neutral");
+            Debug.Log(" Damage medium → Be Neutral");
         }
         else
         {
             variant = 0;
-            Debug.Log("🩸 Damage high → Be Nice");
+            Debug.Log(" Damage high → Be Nice");
         }
-
         ApplyVariantToGame(variant);
     }
 
@@ -238,49 +264,29 @@ public class GameLoop : MonoBehaviour
         int maxSanity = StatManager.Instance.MaxSanity;
         int currentSanity = StatManager.Instance.CurrentSanity;
 
-        if (currentSanity >= 18)
-        {
+        if (currentSanity >= angry)
             variant = 2;
-            Debug.Log("🧠 Remaining Sanity High → Be Evil");
-        }
-        else if (currentSanity >= 15)
-        {
+        else if (currentSanity >= neutral)
             variant = 1;
-            Debug.Log("🧠 Remaining Sanity Mid → Be Neutral");
-        }
         else
-        {
             variant = 0;
-            Debug.Log("🧠 Remaining Sanity Low → Be Nice");
-        }
 
-        // 🌟 THIS WAS MISSING!
         ApplyVariantToGame(variant);
     }
 
-    // ✨ Apply the variant to Jessica + Story Draggables
     private void ApplyVariantToGame(int variant)
     {
         if (jessicaMail != null)
-        {
             jessicaMail.SetVariant(variant);
-        }
 
         foreach (var draggable in allDraggables)
         {
             if (draggable is StoryDraggableItem storyDraggable)
-            {
-                storyDraggable.SetVariantIndex(variant);
-            }
+                storyDraggable.UpdateVariantBasedOnDay();
         }
 
-        // ✅ Update sprite based on current Sanity
         if (spriteChanger != null)
-        {
             spriteChanger.UpdateSpriteBasedOnVariant(variant);
-        }
-
-
     }
 
     public void IncreaseDay()
@@ -288,26 +294,29 @@ public class GameLoop : MonoBehaviour
         Day += 1;
         Debug.Log("🌞 New Day Started: " + Day);
 
-        if (jessicaMail != null)
+        SaveGameProgress();
+
+        foreach (var draggable in allDraggables)
         {
-            jessicaMail.IncreaseEmailIndex();
-            Debug.Log($"📧 Email Index is now {jessicaMail.emailIndex}");
+            if (draggable is StoryDraggableItem storyClone)
+                storyClone.UpdateVariantBasedOnDay();
         }
 
-        SaveGameProgress(); // ✅ Save Day when it increases
+        foreach (var original in originalDraggables)
+        {
+            if (original is StoryDraggableItem storyOriginal)
+                storyOriginal.UpdateVariantBasedOnDay();
+        }
+
     }
 
     public void OnScrollFinished()
     {
         IncreaseDay();
-        ChangeGameState(1);
-
-     
+        ChangeGameState(0); // 🌟 After Parallax → go to No Mail State (0)
 
         foreach (RevealSlotPro slot in allRevealSlots)
-        {
             slot.PrepareForNewRound();
-        }
 
         DraggableItem.ResetUsedEmails();
     }
@@ -318,7 +327,6 @@ public class GameLoop : MonoBehaviour
         PlayerPrefs.SetInt("SavedGameState", GameState);
         PlayerPrefs.SetInt("ContinueGame", 1);
         PlayerPrefs.Save();
-
         Debug.Log($"💾 Saved Day {Day} and State {GameState}");
     }
 
@@ -331,7 +339,7 @@ public class GameLoop : MonoBehaviour
     public void ResetProgress()
     {
         Day = 1;
-        GameState = 1;
+        GameState = 0;
         PlayerPrefs.SetInt("ContinueGame", 0);
         PlayerPrefs.Save();
     }
