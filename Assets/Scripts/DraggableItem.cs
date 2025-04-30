@@ -23,6 +23,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     protected EmailData emailData;
     private CanvasGroup canvasGroup;
 
+    private bool isUsable = true; // Updated dynamically
+
     private static Dictionary<System.Type, HashSet<int>> usedIndexesPerType = new();
 
     public EmailData EmailData => emailData;
@@ -164,6 +166,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
+
         canvasGroup.blocksRaycasts = false;
 
         if (image != null) image.raycastTarget = false;
@@ -228,4 +231,41 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         Debug.LogError($"❌ No database found in Resources at path '{path}'");
         return null;
     }
+
+
+    public void EnableDragging()
+    {
+        this.enabled = true;
+
+        if (TryGetComponent(out CanvasGroup cg))
+            cg.blocksRaycasts = true;
+
+        if (image != null) image.raycastTarget = true;
+        if (label != null) label.raycastTarget = true;
+    }
+
+    private void SetAlpha(float alpha)
+    {
+        if (TryGetComponent(out CanvasGroup cg))
+            cg.alpha = alpha;
+    }
+
+    public void ValidateAgainstStats()
+    {
+        if (StatManager.Instance == null) return;
+
+        bool wouldExceedStamina = StatManager.Instance.CurrentStamina + this.Stamina < 0;
+        bool wouldExceedSanity = StatManager.Instance.CurrentSanity + this.Sanity < 0;
+
+        isUsable = !(wouldExceedStamina || wouldExceedSanity);
+
+        if (TryGetComponent(out CanvasGroup cg))
+        {
+            cg.blocksRaycasts = isUsable; // ✅ This blocks all pointer input if false
+            cg.alpha = isUsable ? 1f : 0.5f;
+        }
+    }
+
+
+
 }

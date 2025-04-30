@@ -160,13 +160,15 @@ public class GameLoop : MonoBehaviour
                 coffee.enabled = true;
                 DealHand();
 
-                // ✨ Play animation
-                // When entering GameState 3
                 handsAnimator.SetBool("IsWriting", true);
 
-
-
+                // 🟡 Start coroutine to validate all draggables
+                StartCoroutine(LiveValidateDraggables());
                 break;
+
+
+
+            
             case 4:
 
                 SetUI(playerTurn: false, jessica: true);
@@ -348,6 +350,18 @@ public class GameLoop : MonoBehaviour
         Resources.Load<StoryEmailsDatabase>("StoryEmailsDatabase");
     }
 
+    private IEnumerator LiveValidateDraggables()
+    {
+        while (GameState == 3)
+        {
+            foreach (var item in allDraggables)
+            {
+                item?.ValidateAgainstStats();
+            }
+
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
 
 #if UNITY_EDITOR
     private void ResetEditorProgress()

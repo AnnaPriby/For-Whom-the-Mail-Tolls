@@ -59,6 +59,14 @@ public class StatManager : MonoBehaviour
         UpdateSanityVisuals();
     }
 
+    public void ApplySanityDeltaSilently(int delta)
+    {
+        if (sanitySlider == null) return;
+
+        sanitySlider.value = Mathf.Clamp(sanitySlider.value + delta, 0, maxSanity);
+        // ❌ Do NOT call UpdateSanityVisuals()
+    }
+
     private void UpdateStaminaVisuals()
     {
         if (staminaValueText != null)
