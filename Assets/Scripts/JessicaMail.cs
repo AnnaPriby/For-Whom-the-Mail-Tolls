@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +14,18 @@ public class JessicaMail : MonoBehaviour
     public GameObject noMailUI;    // ✅ New - NoMail screen
     public GameObject newMailUI;
     public GameObject readMailUI;
+
+    [Header("Coffee Mail UI")]
+    public GameObject CoffeeNewMailUI;
+    public GameObject CoffeeReadMailUI;
+    public GameObject CoffeeReplyUI;
+    public TextMeshProUGUI CoffeeMailText;
+
+    [Header("Coffee Mail Buttons")]
+    public Button CoffeeOpenButton;
+    public Button CoffeeReplyButton;
+    public Button CoffeeSendButton;
+
 
     [Header("UI Buttons")]
     public Button openButton;
@@ -98,6 +111,80 @@ public class JessicaMail : MonoBehaviour
             noMailUI.SetActive(true);
 
         Debug.Log("📭 Showing NO MAIL screen");
+    }
+
+    public void ShowCoffeeMailIntro()
+    {
+        CloseAllMailUI();
+
+        if (CoffeeNewMailUI != null)
+            CoffeeNewMailUI.SetActive(true);
+
+        SetupCoffeeMailButtons(); // ✅ Make buttons work
+    }
+
+    private IEnumerator GoToCoffeeReading()
+    {
+        yield return new WaitForSeconds(1f); // Optional delay
+        GameLoop.Instance.ChangeGameState(91); // COFFEE_STATE_READING
+    }
+
+    public void ShowCoffeeMailContent()
+    {
+        CloseAllMailUI();
+
+        if (CoffeeReadMailUI != null)
+        {
+            CoffeeReadMailUI.SetActive(true);
+        }
+
+        if (CoffeeMailText != null)
+        {
+            CoffeeMailText.text = "Hey, just wanted to say… don’t forget to hydrate ☕"; // or pick randomly
+        }
+
+        StartCoroutine(GoToCoffeeReply());
+    }
+
+    private IEnumerator GoToCoffeeReply()
+    {
+        yield return new WaitForSeconds(3f);
+        GameLoop.Instance.ChangeGameState(92); // COFFEE_STATE_WRITING
+    }
+
+    public void ShowCoffeeReplyUI()
+    {
+        CloseAllMailUI();
+        if (CoffeeReplyUI != null)
+            CoffeeReplyUI.SetActive(true);
+    }
+
+    public void SetupCoffeeMailButtons()
+    {
+        if (CoffeeOpenButton != null)
+            CoffeeOpenButton.onClick.AddListener(() => GameLoop.Instance.ChangeGameState(91)); // Go to ReadMailUI
+
+        if (CoffeeReplyButton != null)
+            CoffeeReplyButton.onClick.AddListener(() => GameLoop.Instance.ChangeGameState(92)); // Go to Reply UI
+
+
+        if (CoffeeSendButton != null)
+            CoffeeSendButton.onClick.AddListener(() =>
+            {
+                Debug.Log("☕ Coffee email sent, returning to previous state.");
+                GameLoop.Instance.ReturnFromCoffee();
+            });
+    }
+
+    public void CloseAllMailUI()
+    {
+        noMailUI?.SetActive(false);
+        newMailUI?.SetActive(false);
+        readMailUI?.SetActive(false);
+
+        CoffeeNewMailUI?.SetActive(false);
+        CoffeeReadMailUI?.SetActive(false);
+        CoffeeReplyUI?.SetActive(false);
     }
 
     private void ShowEmail()

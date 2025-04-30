@@ -110,6 +110,12 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
         ApplyStatsFromItem();
         DrawNewCards();
         TrackGameState();
+
+        // Return to regular game
+        if (GameLoop.Instance.GameState == 92)
+        {
+            GameLoop.Instance.ReturnFromCoffee();
+        }
     }
 
     private void ApplyStatsFromItem()
@@ -160,6 +166,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
             slotOptionsPanel.SetActive(false);
     }
 
+  
 
 
     private void ReturnOldItemToInventory()

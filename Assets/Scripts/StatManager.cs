@@ -43,6 +43,14 @@ public class StatManager : MonoBehaviour
         UpdateAllVisuals();
     }
 
+    public void ResetStaminaOnly()
+    {
+        if (staminaSlider != null)
+            staminaSlider.value = maxStamina;
+
+        UpdateStaminaVisuals();
+    }
+
     public void ApplyStaminaDelta(int delta)
     {
         if (staminaSlider == null) return;
