@@ -3,30 +3,44 @@ using UnityEngine;
 
 public class StoryDraggableItem : DraggableItem
 {
-    [Header("Story Database Reference")]
+    [Header("Story Database Reference (if using story emails)")]
     [SerializeField] public ScriptableObject storyDatabaseObject;
 
     [Header("Variant Settings")]
-    [Range(0, 4)]
-    public int variantIndex = 0; // ✅ Selectable in Inspector!
+    [Range(0, 4)] public int variantIndex = 0;
 
     private int currentVariantIndex = 0;
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        if (storyDatabaseObject == null && !string.IsNullOrEmpty(resourcePath))
+        {
+            ScriptableObject loaded = LoadStoryDatabaseFromResources(resourcePath);
+            if (loaded != null)
+            {
+                storyDatabaseObject = loaded;
+                Debug.Log($"✅ Loaded story database from Resources: {loaded.name}");
+            }
+            else
+            {
+                Debug.LogError($"❌ Failed to load story database from Resources/{resourcePath}");
+            }
+        }
+    }
+
     protected override void Start()
     {
-        base.Start(); // Standard base initialization
-
-
-
-        currentVariantIndex = variantIndex; // ✅ Use the Inspector value at start
+        base.Start();
+        currentVariantIndex = variantIndex;
         ForceMainTextLabel();
     }
 
     public override void DealHand()
     {
-        base.DealHand(); // Standard deal behavior
-
-        currentVariantIndex = variantIndex; // ✅ Refresh variant in case it was changed
+        base.DealHand();
+        currentVariantIndex = variantIndex;
         ForceMainTextLabel();
     }
 
@@ -38,16 +52,14 @@ public class StoryDraggableItem : DraggableItem
 
     protected override List<EmailData> GetEmailEntriesFromObject()
     {
-        switch (storyDatabaseObject)
+        return storyDatabaseObject switch
         {
-            case StoryAcknowledgementDatabase sa: return ConvertStoryToSimple(sa.entries);
-            case StoryOpinionDatabase so: return ConvertStoryToSimple(so.entries);
-            case StorySolutionDatabase ss: return ConvertStoryToSimple(ss.entries);
-            case StoryEmailsDatabase se: return ConvertStoryToSimple(se.entries);
-            default:
-                Debug.Log("❌ Unsupported Story ScriptableObject assigned to StoryDraggableItem.");
-                return null;
-        }
+            StoryAcknowledgementDatabase sa => ConvertStoryToSimple(sa.entries),
+            StoryOpinionDatabase so => ConvertStoryToSimple(so.entries),
+            StorySolutionDatabase ss => ConvertStoryToSimple(ss.entries),
+            StoryEmailsDatabase se => ConvertStoryToSimple(se.entries),
+            _ => base.GetEmailEntriesFromObject() // fallback to base (regular databases)
+        };
     }
 
     private List<EmailData> ConvertStoryToSimple<T>(List<T> storyEntries)
@@ -67,18 +79,18 @@ public class StoryDraggableItem : DraggableItem
 
             if (variants != null && variants.Count > currentVariantIndex)
             {
-                EmailVariant selectedVariant = variants[currentVariantIndex];
+                EmailVariant selected = variants[currentVariantIndex];
                 simpleList.Add(new EmailData
                 {
                     Name = name,
-                    Stamina = selectedVariant.Stamina,
-                    Sanity = selectedVariant.Sanity,
-                    MainText = selectedVariant.MainText
+                    Stamina = selected.Stamina,
+                    Sanity = selected.Sanity,
+                    MainText = selected.MainText
                 });
             }
             else
             {
-                Debug.LogWarning($"⚠️ Story entry '{name}' does not have enough variants!");
+                Debug.LogWarning($"⚠️ Story entry '{name}' missing variant {currentVariantIndex}");
             }
         }
 
@@ -89,14 +101,27 @@ public class StoryDraggableItem : DraggableItem
     {
         int day = GameLoop.Instance != null ? GameLoop.Instance.Day : 1;
         int variant = Mathf.Clamp(day - 1, 0, 4);
-        variantIndex = Mathf.Clamp(variant, 0, 4);
-        currentVariantIndex = variantIndex;
+        variantIndex = variant;
+        currentVariantIndex = variant;
 
-        Debug.Log($"📆 [StoryDraggableItem] Day {day} → Variant {variantIndex}");
+        Debug.Log($"📆 Updated StoryDraggableItem to variant {variantIndex} (Day {day})");
 
         AssignUniqueEmail();
         ForceMainTextLabel();
     }
 
+    private ScriptableObject LoadStoryDatabaseFromResources(string path)
+    {
+        ScriptableObject obj;
 
+        Debug.Log($"🔎 Trying to load story database from Resources/{path}");
+
+        obj = Resources.Load<StoryAcknowledgementDatabase>(path); if (obj != null) return obj;
+        obj = Resources.Load<StoryOpinionDatabase>(path); if (obj != null) return obj;
+        obj = Resources.Load<StorySolutionDatabase>(path); if (obj != null) return obj;
+        obj = Resources.Load<StoryEmailsDatabase>(path); if (obj != null) return obj;
+
+        Debug.LogError($"❌ No story database found in Resources at path '{path}'");
+        return null;
+    }
 }

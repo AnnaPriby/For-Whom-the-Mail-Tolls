@@ -110,7 +110,8 @@ public class JessicaMail : MonoBehaviour
                 Debug.LogWarning("Reached end of Story Emails!");
             }
 
-            StoryEmailData story = storyEmailsDatabase.entries[emailIndex];
+            // ✅ FIXED: changed from StoryEmailDatabase to StoryDataTypes
+            StoryDataTypes story = storyEmailsDatabase.entries[emailIndex];
 
             if (variantIndex >= 0 && variantIndex < story.variants.Count)
             {

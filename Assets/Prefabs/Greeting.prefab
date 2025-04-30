@@ -90,7 +90,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f3a75af0d8a8c40a2c28dd7d1be123, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emailDatabaseObject: {fileID: 11400000, guid: 2b39e8f6cd7bada41bf64af71330b38f, type: 2}
+  emailDatabaseObject: {fileID: 11400000, guid: 1ff7e8455cbebd641aa2f8023cc115d3, type: 2}
+  resourcePath: GreetingDatabase
   image: {fileID: 7284469875905243986}
   label: {fileID: 2854628068979139629}
   originalParent: {fileID: 0}

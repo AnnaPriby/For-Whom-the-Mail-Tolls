@@ -10,6 +10,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [Header("Scriptable Object Source (Any EmailDatabase)")]
     [SerializeField] public ScriptableObject emailDatabaseObject;
 
+    [Header("Recovery Path (Resources only)")]
+    [SerializeField] protected string resourcePath;
+
     [Header("UI References")]
     [SerializeField] protected Image image;
     [SerializeField] protected TextMeshProUGUI label;
@@ -17,14 +20,12 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [HideInInspector] public Transform originalParent;
     [HideInInspector] public Transform parentAfterDrag;
 
-    protected EmailData emailData; // ✅ Protected still
+    protected EmailData emailData;
     private CanvasGroup canvasGroup;
 
-    private static HashSet<int> usedIndexes = new HashSet<int>();
+    private static Dictionary<System.Type, HashSet<int>> usedIndexesPerType = new();
 
-    // ✅ ADD public getter!
     public EmailData EmailData => emailData;
-
     public string MainTextOnly => emailData?.MainText ?? "";
     public int Stamina => emailData?.Stamina ?? 0;
     public int Sanity => emailData?.Sanity ?? 0;
@@ -33,10 +34,25 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         ? $"<b>{emailData.Name}</b>\n<i>\"{emailData.MainText}\"</i>\n\n<color=#f4c542>Stamina:</color> {emailData.Stamina}\n<color=#42b0f5>Sanity:</color> {emailData.Sanity}"
         : "";
 
-    private void Awake()
+    protected virtual void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
         originalParent = transform.parent;
+
+        // Runtime fallback if no object assigned in inspector
+        if (emailDatabaseObject == null && !string.IsNullOrEmpty(resourcePath))
+        {
+            ScriptableObject loaded = LoadDatabaseFromResources(resourcePath);
+            if (loaded != null)
+            {
+                emailDatabaseObject = loaded;
+                Debug.Log($"✅ Loaded database from Resources: {loaded.name}");
+            }
+            else
+            {
+                Debug.LogError($"❌ Failed to load database from Resources/{resourcePath}");
+            }
+        }
     }
 
     protected virtual void Start()
@@ -45,9 +61,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (gameLoop != null && !gameLoop.allDraggables.Contains(this))
             gameLoop.allDraggables.Add(this);
 
-        if (usedIndexes.Count >= GetTotalAvailableEntries())
+        if (GetTotalAvailableEntries() <= 0)
         {
-            Debug.LogWarning("⚠️ No available entries, skipping assignment at start.");
+            Debug.LogWarning("⚠️ No entries available. Skipping assignment.");
             return;
         }
 
@@ -61,16 +77,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         if (emailDatabaseObject == null)
         {
-            Debug.LogWarning("⚠️ No database assigned to DraggableItem. Cannot deal new email.");
+            Debug.LogWarning("⚠️ No database assigned to DraggableItem.");
             return;
         }
 
         gameObject.SetActive(true);
         this.enabled = true;
 
-        if (canvasGroup != null)
-            canvasGroup.blocksRaycasts = true;
-
+        canvasGroup.blocksRaycasts = true;
         if (image != null) image.raycastTarget = true;
         if (label != null) label.raycastTarget = true;
 
@@ -83,35 +97,27 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             label.text = emailData.Name;
     }
 
-    private static Dictionary<System.Type, HashSet<int>> usedIndexesPerType = new Dictionary<System.Type, HashSet<int>>();
-
     public void AssignUniqueEmail()
     {
         List<EmailData> tableEntries = GetEmailEntriesFromObject();
         if (tableEntries == null || tableEntries.Count == 0)
         {
-            Debug.LogWarning("⚠️ No entries found in the assigned email database.");
+            Debug.LogWarning("⚠️ No entries found in email database.");
             return;
         }
 
         System.Type dbType = emailDatabaseObject.GetType();
-
         if (!usedIndexesPerType.ContainsKey(dbType))
-        {
             usedIndexesPerType[dbType] = new HashSet<int>();
-        }
 
         HashSet<int> usedIndexes = usedIndexesPerType[dbType];
-
         if (usedIndexes.Count >= tableEntries.Count)
         {
-            Debug.Log($"⚠️ All email entries used for {dbType.Name}. Resetting...");
-            usedIndexes.Clear(); // ✅ Just reset THIS TYPE, not everything
+            usedIndexes.Clear();
         }
 
         int index;
         int safety = 100;
-
         do
         {
             index = Random.Range(0, tableEntries.Count);
@@ -120,7 +126,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         if (safety <= 0)
         {
-            Debug.Log("❌ Could not assign a unique entry (safety limit reached).");
+            Debug.Log("❌ Could not assign unique entry (safety limit reached).");
             return;
         }
 
@@ -130,18 +136,16 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     protected virtual List<EmailData> GetEmailEntriesFromObject()
     {
-        switch (emailDatabaseObject)
+        return emailDatabaseObject switch
         {
-            case GreetingDatabase g: return g.entries;
-            case AcknowledgementDatabase a: return a.entries;
-            case OpinionDatabase o: return o.entries;
-            case SolutionDatabase s: return s.entries;
-            case GoodbyeDatabase gb: return gb.entries;
-            case JessicaEmailsDatabase j: return j.entries;
-            default:
-                Debug.Log("❌ Unsupported ScriptableObject type assigned to DraggableItem.");
-                return null;
-        }
+            GreetingDatabase g => g.entries,
+            AcknowledgementDatabase a => a.entries,
+            OpinionDatabase o => o.entries,
+            SolutionDatabase s => s.entries,
+            GoodbyeDatabase gb => gb.entries,
+            JessicaEmailsDatabase j => j.entries,
+            _ => null
+        };
     }
 
     private int GetTotalAvailableEntries()
@@ -156,28 +160,21 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         InventorySlot inventorySlot = parentAfterDrag.GetComponent<InventorySlot>();
         if (inventorySlot != null)
-        {
             inventorySlot.CheckIfEmpty();
-        }
 
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
-
         canvasGroup.blocksRaycasts = false;
 
         if (image != null) image.raycastTarget = false;
         if (label != null) label.raycastTarget = false;
     }
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        transform.position = Input.mousePosition;
-    }
+    public void OnDrag(PointerEventData eventData) => transform.position = Input.mousePosition;
 
     public void OnEndDrag(PointerEventData eventData)
     {
         transform.SetParent(parentAfterDrag);
-
         canvasGroup.blocksRaycasts = true;
 
         if (image != null) image.raycastTarget = true;
@@ -187,16 +184,13 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void DisableDragging()
     {
         this.enabled = false;
-        if (canvasGroup != null)
-            canvasGroup.blocksRaycasts = false;
+        canvasGroup.blocksRaycasts = false;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (emailData != null)
-        {
             TooltipController.Instance.ShowTooltip(emailData.Stamina, emailData.Sanity);
-        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -204,14 +198,34 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         TooltipController.Instance.HideTooltip();
     }
 
-    public static void ResetUsedEmails()
-    {
-        usedIndexes.Clear();
-    }
+    public static void ResetUsedEmails() => usedIndexesPerType.Clear();
 
     public void SetLabel(string text)
     {
         if (label != null)
             label.text = text;
+    }
+
+    protected ScriptableObject LoadDatabaseFromResources(string path)
+    {
+        ScriptableObject obj;
+
+        Debug.Log($"🔎 Trying to load from Resources/{path}");
+
+        obj = Resources.Load<GreetingDatabase>(path); if (obj != null) return obj;
+        obj = Resources.Load<AcknowledgementDatabase>(path); if (obj != null) return obj;
+        obj = Resources.Load<OpinionDatabase>(path); if (obj != null) return obj;
+        obj = Resources.Load<SolutionDatabase>(path); if (obj != null) return obj;
+        obj = Resources.Load<GoodbyeDatabase>(path); if (obj != null) return obj;
+        obj = Resources.Load<JessicaEmailsDatabase>(path); if (obj != null) return obj;
+
+        // Optional: allow loading of story databases (if reused here)
+        obj = Resources.Load<StoryAcknowledgementDatabase>(path); if (obj != null) return obj;
+        obj = Resources.Load<StoryOpinionDatabase>(path); if (obj != null) return obj;
+        obj = Resources.Load<StorySolutionDatabase>(path); if (obj != null) return obj;
+        obj = Resources.Load<StoryEmailsDatabase>(path); if (obj != null) return obj;
+
+        Debug.LogError($"❌ No database found in Resources at path '{path}'");
+        return null;
     }
 }

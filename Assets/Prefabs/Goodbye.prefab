@@ -224,7 +224,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f3a75af0d8a8c40a2c28dd7d1be123, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emailDatabaseObject: {fileID: 11400000, guid: 65436eec993b18d4d8a357513dc816fc, type: 2}
+  emailDatabaseObject: {fileID: 11400000, guid: 0c0f6d1144c8953418e8d58adcca98fc, type: 2}
+  resourcePath: GoodbyeDatabase
   image: {fileID: 6543304895744856959}
   label: {fileID: 4121558750084731783}
   originalParent: {fileID: 0}

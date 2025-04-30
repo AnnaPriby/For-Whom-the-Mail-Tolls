@@ -236,9 +236,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b758efea537c9e44982118c8b7357b2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emailDatabaseObject: {fileID: 11400000, guid: 122172bb059ec7f40b57ec71d0690582, type: 2}
+  emailDatabaseObject: {fileID: 11400000, guid: 51552b2a16c646d48a005c6562b2d91e, type: 2}
+  resourcePath: StoryOpinionDatabase
   image: {fileID: 8446536406911118002}
   label: {fileID: 8404659511378873210}
   originalParent: {fileID: 0}
   parentAfterDrag: {fileID: 0}
-  storyDatabaseObject: {fileID: 11400000, guid: 122172bb059ec7f40b57ec71d0690582, type: 2}
+  storyDatabaseObject: {fileID: 11400000, guid: 51552b2a16c646d48a005c6562b2d91e, type: 2}
+  variantIndex: 0

@@ -1,0 +1,158 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c30d2e6ef75fd04ca6522da9c6c7e79, type: 3}
+  m_Name: StoryAcknowledgementDatabase
+  m_EditorClassIdentifier: 
+  entries:
+  - Name: 1
+    variants:
+    - MainText: Thank you for your concern.
+      Stamina: 0
+      Sanity: -2
+    - MainText: Thank you for your concern.
+      Stamina: 0
+      Sanity: -2
+    - MainText: Thank you for your concern.
+      Stamina: 0
+      Sanity: -2
+  - Name: 2
+    variants:
+    - MainText: I have received your email and want to tell you that I'm looking
+        into the matter immediately!
+      Stamina: 0
+      Sanity: -2
+    - MainText: I have received your email and want to tell you that I'm looking
+        into the matter immediately!
+      Stamina: 0
+      Sanity: -2
+    - MainText: I have received your email and want to tell you that I'm looking
+        into the matter immediately!
+      Stamina: 0
+      Sanity: -2
+  - Name: 3
+    variants:
+    - MainText: Oh I'm so sorry. I must have forgot.
+      Stamina: 0
+      Sanity: -2
+    - MainText: Oh I'm so sorry. I must have forgot.
+      Stamina: 0
+      Sanity: -2
+    - MainText: Oh I'm so sorry. I must have forgot.
+      Stamina: 0
+      Sanity: -2
+  - Name: 4
+    variants:
+    - MainText: How considerate of you.
+      Stamina: 0
+      Sanity: -1
+    - MainText: How considerate of you.
+      Stamina: 0
+      Sanity: -1
+    - MainText: I have received your email.
+      Stamina: 0
+      Sanity: -1
+  - Name: 5
+    variants:
+    - MainText: I see.
+      Stamina: 0
+      Sanity: -1
+    - MainText: I see.
+      Stamina: 0
+      Sanity: -1
+    - MainText: I see.
+      Stamina: 0
+      Sanity: -1
+  - Name: 6
+    variants:
+    - MainText: I don't think it will be a problem.
+      Stamina: 0
+      Sanity: -1
+    - MainText: I don't think it will be a problem.
+      Stamina: 0
+      Sanity: -1
+    - MainText: I don't think this will be a problem.
+      Stamina: 0
+      Sanity: -1
+  - Name: 7
+    variants:
+    - MainText: Are you sure this isn't a you problem?
+      Stamina: -1
+      Sanity: 1
+    - MainText: Are you sure this isn't a you problem?
+      Stamina: -1
+      Sanity: 1
+    - MainText: Are you sure this isn't a you problem?
+      Stamina: -1
+      Sanity: 1
+  - Name: 8
+    variants:
+    - MainText: I have received your email and want to tell you that that's basically
+        as much as I'm gonna do with it.
+      Stamina: -1
+      Sanity: 1
+    - MainText: I have received your email and want to tell you that that's basically
+        as much as I'm gonna do with it.
+      Stamina: -1
+      Sanity: 1
+    - MainText: I have received your email and want to tell you that that's basically
+        as much as I'm gonna do with it.
+      Stamina: -1
+      Sanity: 1
+  - Name: 9
+    variants:
+    - MainText: It is a shame indeed, he always reminded me of you. You know, just
+        in case you wouldn't be in your cubicle.
+      Stamina: -1
+      Sanity: 1
+    - MainText: It is a shame indeed, he always reminded me of you. You know, just
+        in case you wouldn't be in your cubicle.
+      Stamina: -1
+      Sanity: 1
+    - MainText: It is a shame indeed, he always reminded me of you. You know, just
+        in case you wouldn't be in your cubicle.
+      Stamina: -1
+      Sanity: 1
+  - Name: 10
+    variants:
+    - MainText: That's horrible. We wouldn't want to be in the dark on when I have
+        a free time now, would we?
+      Stamina: -1
+      Sanity: 1
+    - MainText: That's horrible. We wouldn't want to be in the dark on when I have
+        a free time now, would we?
+      Stamina: -1
+      Sanity: 1
+    - MainText: The Killer Croc back at it again.
+      Stamina: -1
+      Sanity: 1
+  - Name: 11
+    variants:
+    - MainText: You had a problem with that picture the second I put it on my desk.
+      Stamina: -2
+      Sanity: 2
+    - MainText: You had a problem with that picture the second I put it on my desk.
+      Stamina: -2
+      Sanity: 2
+    - MainText: You had a problem with that picture the second I put it on my desk.
+      Stamina: -2
+      Sanity: 2
+  - Name: 12
+    variants:
+    - MainText: I'm available right now. Come here and do something about it!
+      Stamina: -2
+      Sanity: 2
+    - MainText: I'm available right now. Come here and do something about it!
+      Stamina: -2
+      Sanity: 2
+    - MainText: I'm available right now. Come here and do something about it!
+      Stamina: -2
+      Sanity: 2

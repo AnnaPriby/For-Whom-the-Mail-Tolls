@@ -1,0 +1,158 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a4ba384cc768b744aadcc17022969c1, type: 3}
+  m_Name: StoryEmailsDatabase
+  m_EditorClassIdentifier: 
+  entries:
+  - Name: 1
+    variants:
+    - MainText: x
+      Stamina: 0
+      Sanity: -1
+    - MainText: 'Hello Linda,
+
+
+        I''m writing you because I''ve been going
+        through our schedules and I haven''t seen your availability written down
+        yet. Is it a mistake on my end or have you not set it again? x)
+
+
+        Also,
+        I''m so sorry about that photo of your puppster. I have no idea what happened
+        to it or why others always hated looking at it to begin with. I mean, I''ve
+        almost come to enjoy that hideousness of his lol.
+
+
+        Anyway, have
+        a nice day,
+
+        Jessica xx'
+      Stamina: 0
+      Sanity: -1
+    - MainText: x
+      Stamina: 0
+      Sanity: -1
+  - Name: 2
+    variants:
+    - MainText: "Hi Linda,\n\nthank you for the brisk reply (for once\U0001F601).
+        I just remembered, have you heard about the project that management is about
+        to give out tomorrow?\n\nI thought it would be right up your alley since
+        how you've been talking about the surgery your pup needs. And God knows he
+        needs it. :(\n\nTime to work hard, eh? Only one of us can get it afterall.
+        ;)\n\nKind regards,\nJessica"
+      Stamina: 0
+      Sanity: -3
+    - MainText: "Dear Linda,\n\nI understand your frustrations. Your puppy is in
+        a bad state and needs that surgery, and something's got to give... We can't
+        all pretend to be an angel.\U0001F607\n\nCome to think of it, our management
+        has been talking about a project they might give out to one of us. Maybe
+        an opportunity to get the money needed? I like my chances personally, but
+        thought it wouldn't hurt if I told you as well. :)\n\nKind regards,\nJessica"
+      Stamina: 0
+      Sanity: -3
+    - MainText: 'Linda,
+
+
+        I see how it is. Well in that case you surely won''t
+        mind once I get the project that management is gonna be giving out to one
+        of us tomorrow.
+
+
+        Such a shame that you won''t be able to afford
+        the surgery you wanted so much for that rat. You can''t even go outside with
+        him anymore... But alas.
+
+
+        Do as you think. x)
+
+
+        See ya,
+
+        Jess'
+      Stamina: 0
+      Sanity: -3
+  - Name: 3
+    variants:
+    - MainText: "Hey L,\n\njust a friendly reminder that you still haven't filled
+        in your availability.\U0001F605 I think it's safe to assume the management
+        could be looking at stuff like this while deciding who to give the project
+        to. This inconsistency isn't a great look. (just helping you out here!)\n\nThis
+        break can't come soon enough though right.\U0001F601\n\nHang in there!\u270A\nJess"
+      Stamina: 0
+      Sanity: -1
+    - MainText: "Dear Linda,\r\n\r\nas per my first email today, I still need you
+        to fill the availability. As per your eccentric behaviour, I still don't
+        have any idea what the fuck is going on. \r\n\r\nBut rest assured the management
+        won't look at such behavior fondly once they find out one way or the other..\r\n\r\nKind
+        regards,\r\nJessica"
+      Stamina: 0
+      Sanity: -1
+    - MainText: 'Linda,
+
+
+        the availability is still not done. Your lazy ass
+        will once again be your undoing, like the Panama debacle. Management is still
+        shaking off the damages you''ve done there, 10 years later...
+
+
+        If
+        you for once tried something more than being useless and tending to that
+        abomination that you call a dog, then maybe you''d be well off by now. Can''t
+        let you slow me down now.
+
+
+        You''ve always been a sucker.
+
+
+        See
+        ya from the top,
+
+        Jess'
+      Stamina: 0
+      Sanity: -1
+  - Name: 4
+    variants:
+    - MainText: "Hiii L,\n\nI wanted to tell you that I REALLY appreciate having
+        you as a new friend.\U0001F60A We had some problems in the past, but mature
+        people get past those! And I'm glad we did. x)\n\nAnyway, I've registered
+        some rumors that management really might be considering ME??! Omg I can't
+        believe it. The hard work finally seems to have paid off.\U0001F60C\n\nI'm
+        gonna go for lunch, I'm STARVING. I know you probably won't, I've seen you
+        munching on something the whole day in front of those videos haha. So see
+        you after the break?\n\nJess"
+      Stamina: 0
+      Sanity: -1
+    - MainText: X
+      Stamina: 0
+      Sanity: -1
+    - MainText: 'Hello Linda..
+
+
+        I''ve thought about your outbursts in the
+        last few minutes and I''ve come to realize, that they are beneath us both.
+
+
+        I''d
+        like to extend my hand and give you the opportunity to squash this superfluous
+        beef between us. I think it will benefit us both if we both act like adults.
+
+
+        What
+        do you think? Would that be possible for you? If so let me know after the
+        lunch.
+
+
+        Kind regards,
+
+        Jessica'
+      Stamina: 0
+      Sanity: -1

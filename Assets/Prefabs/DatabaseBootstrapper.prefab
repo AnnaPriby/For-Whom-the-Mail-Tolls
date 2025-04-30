@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5255819582385667486
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1219024817077453780}
+  - component: {fileID: 77377449365333136}
+  m_Layer: 0
+  m_Name: DatabaseBootstrapper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1219024817077453780
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5255819582385667486}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 980.0856, y: 418.81458, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &77377449365333136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5255819582385667486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cba2f7645ed02104fb3bfa03f914caad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  greeting: {fileID: 11400000, guid: 1ff7e8455cbebd641aa2f8023cc115d3, type: 2}
+  acknowledgement: {fileID: 11400000, guid: 7640a5f9983dd3c4090db4244a1ea02e, type: 2}
+  opinion: {fileID: 11400000, guid: 7c584ea17c36d5a46996c57597009865, type: 2}
+  solution: {fileID: 11400000, guid: f59775601f2cc4e4e9e785e882fb9884, type: 2}
+  goodbye: {fileID: 11400000, guid: 0c0f6d1144c8953418e8d58adcca98fc, type: 2}
+  jessicaEmails: {fileID: 11400000, guid: 554777efac437cc4794dd10a382b66e1, type: 2}
+  storyEmails: {fileID: 11400000, guid: 5453f70dbc62ffd4c888aa7c6f72ed7d, type: 2}
+  storyAcknowledgement: {fileID: 11400000, guid: 865927e88ac8e93489d06989e9d13bb5, type: 2}
+  storyOpinion: {fileID: 11400000, guid: 51552b2a16c646d48a005c6562b2d91e, type: 2}
+  storySolution: {fileID: 11400000, guid: 0f32c9089356fc24b8709865b4cfc9c0, type: 2}

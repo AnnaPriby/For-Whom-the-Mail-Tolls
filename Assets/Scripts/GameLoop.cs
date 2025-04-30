@@ -72,9 +72,7 @@ public class GameLoop : MonoBehaviour
 
     void Start()
     {
-#if UNITY_EDITOR
-        ResetProgress();
-#endif
+        PreloadStoryDatabases();
 
         if (PlayerPrefs.HasKey("ContinueGame") && PlayerPrefs.GetInt("ContinueGame") == 1)
         {
@@ -333,5 +331,13 @@ public class GameLoop : MonoBehaviour
         GameState = 0;
         PlayerPrefs.SetInt("ContinueGame", 0);
         PlayerPrefs.Save();
+    }
+
+    private void PreloadStoryDatabases()
+    {
+        Resources.Load<StoryAcknowledgementDatabase>("StoryAcknowledgementDatabase");
+        Resources.Load<StoryOpinionDatabase>("StoryOpinionDatabase");
+        Resources.Load<StorySolutionDatabase>("StorySolutionDatabase");
+        Resources.Load<StoryEmailsDatabase>("StoryEmailsDatabase");
     }
 }
