@@ -14,8 +14,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [SerializeField] protected string resourcePath;
 
     [Header("UI References")]
-    [SerializeField] protected Image image;
-    [SerializeField] protected TextMeshProUGUI label;
+    [SerializeField] public Image image;
+    [SerializeField] public TextMeshProUGUI label;
 
     [HideInInspector] public Transform originalParent;
     [HideInInspector] public Transform parentAfterDrag;

@@ -37,33 +37,37 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
     public void OnDrop(PointerEventData eventData)
     {
         GameObject dropped = eventData.pointerDrag;
-        DraggableItem item = dropped?.GetComponent<DraggableItem>();
+        DraggableItem newItem = dropped?.GetComponent<DraggableItem>();
 
-        if (item == null)
+        if (newItem == null)
             return;
 
-        // ✅ Allow clones: check if the original prefab is assigned
-        if (assignedItems.Count > 0 && !IsItemAllowed(item))
+        if (assignedItems.Count > 0 && !IsItemAllowed(newItem))
         {
-            Debug.Log($"⛔ {item.name} is not allowed in this RevealSlot.");
+            Debug.Log($"⛔ {newItem.name} is not allowed in this RevealSlot.");
             return;
         }
 
-        InventorySlot inventorySlot = item.parentAfterDrag.GetComponent<InventorySlot>();
-        if (inventorySlot != null)
+        // ✅ Return old item to inventory and revert effects
+        if (currentItem != null)
         {
-            inventorySlot.CheckIfEmpty();
+            ReturnOldItemToInventory();
         }
 
-        currentItem = item;
-        infoDisplay.text = item.MainTextOnly;
+        // ✅ Store the new item
+        currentItem = newItem;
+        infoDisplay.text = newItem.MainTextOnly;
 
-        item.DisableDragging();
+        newItem.DisableDragging();
         dropped.SetActive(false);
 
-        sanityCost += item.Sanity;
+        // ✅ Track only sanity (not applied)
+        sanityCost += newItem.Sanity;
 
-        Debug.Log($"📥 {item.name} dropped into RevealSlotPro. Waiting to be sent.");
+        // ✅ Apply stamina immediately
+        statManager.ApplyStaminaDelta(newItem.Stamina);
+
+        Debug.Log($"📥 {newItem.name} dropped into RevealSlotPro. Tracked Sanity: {sanityCost}, Applied Stamina: {newItem.Stamina}");
     }
 
     // ✅ NEW: Check by prefab identity
@@ -116,11 +120,12 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
             return;
         }
 
-        statManager.ApplyStaminaDelta(currentItem.Stamina);
+        // ✅ Apply only sanity now — stamina was already applied on drop
         statManager.ApplySanityDelta(currentItem.Sanity);
 
-        Debug.Log($"📬 Sent: {currentItem.name} → Stamina: {statManager.CurrentStamina}, Sanity: {statManager.CurrentSanity}");
+        Debug.Log($"📬 Sent: {currentItem.name} → Final Sanity: {statManager.CurrentSanity}");
 
+        // ✅ Reset state
         currentItem = null;
         sanityCost = 0;
 
@@ -129,6 +134,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
 
         currentlyOpenSlot = null;
     }
+
 
     private void DrawNewCards()
     {
@@ -156,5 +162,40 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
     {
         if (slotOptionsPanel != null)
             slotOptionsPanel.SetActive(false);
+    }
+
+
+
+    private void ReturnOldItemToInventory()
+    {
+        if (currentItem == null)
+            return;
+
+        // ⛔ Remove old item's stat effects
+        sanityCost -= currentItem.Sanity;
+        statManager.ApplyStaminaDelta(-currentItem.Stamina);
+
+        // ✅ Reactivate the item
+        currentItem.gameObject.SetActive(true);
+        currentItem.transform.SetParent(currentItem.originalParent);
+        currentItem.transform.localPosition = Vector3.zero;
+
+        // ✅ Fully re-enable dragging behavior
+        currentItem.enabled = true;
+
+        // Restore raycasting
+        if (currentItem.TryGetComponent(out CanvasGroup cg))
+            cg.blocksRaycasts = true;
+
+        if (currentItem.image != null)
+            currentItem.image.raycastTarget = true;
+
+        if (currentItem.label != null)
+            currentItem.label.raycastTarget = true;
+
+        Debug.Log($"♻️ Returned {currentItem.name} to inventory. SanityCost now: {sanityCost}");
+
+        // Important: clear the slot’s reference so it can hold the new item
+        currentItem = null;
     }
 }

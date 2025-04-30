@@ -46,11 +46,16 @@ public class GameLoop : MonoBehaviour
     [Header("Reveal Slots")]
     public List<RevealSlotPro> allRevealSlots = new List<RevealSlotPro>();
 
-   
+
 
     void Awake()
     {
         Instance = this;
+
+#if UNITY_EDITOR
+        ResetEditorProgress();
+#endif
+
 
         if (playerTurnUI != null)
             playerTurnUI.gameObject.SetActive(true);
@@ -72,6 +77,8 @@ public class GameLoop : MonoBehaviour
 
     void Start()
     {
+
+
         PreloadStoryDatabases();
 
         if (PlayerPrefs.HasKey("ContinueGame") && PlayerPrefs.GetInt("ContinueGame") == 1)
@@ -166,7 +173,7 @@ public class GameLoop : MonoBehaviour
                 coffee.enabled = false;
                 jessicaMail?.ShowNewMail();
 
-               
+
 
                 break;
             case 5:
@@ -340,4 +347,20 @@ public class GameLoop : MonoBehaviour
         Resources.Load<StorySolutionDatabase>("StorySolutionDatabase");
         Resources.Load<StoryEmailsDatabase>("StoryEmailsDatabase");
     }
+
+
+#if UNITY_EDITOR
+    private void ResetEditorProgress()
+    {
+        Debug.Log("🧪 Editor detected — resetting progress to Day 1 and GameState 0.");
+        PlayerPrefs.DeleteKey("SavedDay");
+        PlayerPrefs.DeleteKey("SavedGameState");
+        PlayerPrefs.DeleteKey("ContinueGame");
+        PlayerPrefs.Save();
+
+        Day = 1;
+        GameState = 0;
+    }
+#endif
+
 }
