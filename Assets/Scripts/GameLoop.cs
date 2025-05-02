@@ -37,14 +37,15 @@ public class GameLoop : MonoBehaviour
     public int damagehigh = 4;
 
     [Header("Visuals")]
-    public SpriteChanger spriteChanger;
+    public SpriteChanger JessicaReaction;
+    public SpriteChanger stickyReaction;
 
     [Header("Animations")]
     public Animator handsAnimator;
 
     [Header("Draggables")]
     public List<DraggableItem> originalDraggables = new List<DraggableItem>();
-    public List<DraggableItem> allDraggables = new List<DraggableItem>();
+    [HideInInspector] public List<DraggableItem> allDraggables = new List<DraggableItem>();
 
     [Header("Reveal Slots")]
     public List<RevealSlotPro> allRevealSlots = new List<RevealSlotPro>();
@@ -286,7 +287,10 @@ public class GameLoop : MonoBehaviour
             if (item is StoryDraggableItem sdi) sdi.UpdateVariantBasedOnDay();
         foreach (var original in originalDraggables)
             if (original is StoryDraggableItem sdo) sdo.UpdateVariantBasedOnDay();
-        spriteChanger?.UpdateJessicaSpriteByVariant(variant);
+
+
+        JessicaReaction?.UpdateJessicaSpriteByVariant(variant);
+        stickyReaction?.UpdateJessicaSpriteByVariant(variant);
     }
 
     public int GetCurrentVariant() => currentVariant;
@@ -346,7 +350,19 @@ public class GameLoop : MonoBehaviour
             foreach (var item in allDraggables)
                 item?.ValidateAgainstStats();
             yield return new WaitForSeconds(0.2f);
+            UpdateStickyReaction(); // 🆕 React immediately to change
         }
+    }
+
+
+    public void UpdateStickyReaction()
+    {
+        if (stickyReaction == null) return;
+
+        int sanity = StatManager.Instance.CurrentSanity;
+
+        int variant = sanity >= angry ? 2 : sanity >= neutral ? 1 : 0;
+        stickyReaction.UpdateJessicaSpriteByVariant(variant);
     }
 
 #if UNITY_EDITOR
