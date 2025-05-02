@@ -8,6 +8,7 @@ public class JessicaMail : MonoBehaviour
 {
     [Header("Databases")]
     public StoryEmailsDatabase storyEmailsDatabase;
+    public CoffeeEmailsDatabase coffeeEmailsDatabase;
 
     [Header("Email View")]
     public TextMeshProUGUI jessicaEmailText;
@@ -70,7 +71,7 @@ public class JessicaMail : MonoBehaviour
     public void OpenEmail()
     {
         GameLoop.Instance.ChangeGameState(2); // NewMail → ReadMail
-       // ShowEmail();
+                                              // ShowEmail();
     }
 
     public void ShowNewMail()
@@ -134,13 +135,40 @@ public class JessicaMail : MonoBehaviour
         CloseAllMailUI();
 
         if (CoffeeReadMailUI != null)
-        {
             CoffeeReadMailUI.SetActive(true);
-        }
 
-        if (CoffeeMailText != null)
+        if (coffeeEmailsDatabase != null && coffeeEmailsDatabase.entries.Count > 0)
         {
-            CoffeeMailText.text = "Hey, just wanted to say… don’t forget to hydrate ☕"; // or pick randomly
+            int coffeeIndex = Mathf.Clamp(emailIndex, 0, coffeeEmailsDatabase.entries.Count - 1);
+            StoryDataTypes coffeeEntry = coffeeEmailsDatabase.entries[coffeeIndex];
+
+            // ✅ Filter out empty variants
+            List<EmailVariant> validVariants = new List<EmailVariant>();
+            foreach (var variant in coffeeEntry.variants)
+            {
+                if (!string.IsNullOrWhiteSpace(variant.MainText))
+                    validVariants.Add(variant);
+            }
+
+            if (validVariants.Count == 0)
+            {
+                CoffeeMailText.text = "☕ (No valid coffee email found)";
+                Debug.LogWarning("☕ No valid variants found in Coffee email.");
+            }
+            else
+            {
+                int safeVariantIndex = Mathf.Clamp(variantIndex, 0, validVariants.Count - 1);
+                EmailVariant selectedVariant = validVariants[safeVariantIndex];
+
+                if (CoffeeMailText != null)
+                    CoffeeMailText.text = selectedVariant.MainText;
+
+                ApplyVariantStats(selectedVariant);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("☕ CoffeeEmailsDatabase is missing or empty.");
         }
 
         StartCoroutine(GoToCoffeeReply());

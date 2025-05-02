@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87c2f2364f7efb443b223371cf614c0a, type: 3}
+  m_Name: CoffeeResponsesDatabase
+  m_EditorClassIdentifier: 
+  entries:
+  - Name: 1
+    variants:
+    - MainText: Linda calling Houston, Linda calling Houston. Let me spacewalk yo.
+      Stamina: 0
+      Sanity: 0
+    - MainText: 'Hello Jess,
+
+
+
+        it was the opposite direction of you. So
+        I took it.
+
+
+
+        Linda'
+      Stamina: 0
+      Sanity: 0
+    - MainText: I do, so much.
+      Stamina: 0
+      Sanity: 0
+  - Name: 2
+    variants:
+    - MainText: Linda calling Houston, Linda calling Houston. Shut the fuck up yo.
+      Stamina: 0
+      Sanity: 0
+    - MainText: 'Hello Jessica,
+
+
+
+        I am a an addict, what can I say. That''s
+        why I have no money all the time. I get these twitches when I''m without
+        it for longer periods of time and it gets difficult typing with them. My
+        doctor has assured me, however, that I need not to fear that much, for now.
+
+
+
+        :D
+
+        Linda'
+      Stamina: 0
+      Sanity: 0
+    - MainText: No.
+      Stamina: 0
+      Sanity: 0
+  - Name: 3
+    variants:
+    - MainText: 
+      Stamina: 0
+      Sanity: 0
+    - MainText: No you don't.
+      Stamina: 0
+      Sanity: 0
+    - MainText: Care to shut up?
+      Stamina: 0
+      Sanity: 0
+  - Name: 4
+    variants:
+    - MainText: 
+      Stamina: 0
+      Sanity: 0
+    - MainText: I'll go further behind the corner next time.
+      Stamina: 0
+      Sanity: 0
+    - MainText: Right onnn.
+      Stamina: 0
+      Sanity: 0
+  - Name: 5
+    variants:
+    - MainText: 
+      Stamina: 0
+      Sanity: 0
+    - MainText: 
+      Stamina: 0
+      Sanity: 0
+    - MainText: Thank you for your blessing. <3
+      Stamina: 0
+      Sanity: 0
+  - Name: 6
+    variants:
+    - MainText: 
+      Stamina: 0
+      Sanity: 0
+    - MainText: 
+      Stamina: 0
+      Sanity: 0
+    - MainText: X
+      Stamina: 0
+      Sanity: 0

@@ -58,7 +58,9 @@ public class StoryDraggableItem : DraggableItem
             StoryOpinionDatabase so => ConvertStoryToSimple(so.entries),
             StorySolutionDatabase ss => ConvertStoryToSimple(ss.entries),
             StoryEmailsDatabase se => ConvertStoryToSimple(se.entries),
-            _ => base.GetEmailEntriesFromObject() // fallback to base (regular databases)
+            CoffeeEmailsDatabase ce => ConvertStoryToSimple(ce.entries),
+            CoffeeResponsesDatabase cr => ConvertStoryToSimple(cr.entries), // ✅ Add this line
+            _ => base.GetEmailEntriesFromObject()
         };
     }
 
@@ -80,6 +82,14 @@ public class StoryDraggableItem : DraggableItem
             if (variants != null && variants.Count > currentVariantIndex)
             {
                 EmailVariant selected = variants[currentVariantIndex];
+
+                // ✅ SKIP empty or invalid variants
+                if (string.IsNullOrWhiteSpace(selected.MainText))
+                {
+                    Debug.LogWarning($"⚠️ Skipping empty variant in '{name}' (index {currentVariantIndex})");
+                    continue;
+                }
+
                 simpleList.Add(new EmailData
                 {
                     Name = name,
@@ -96,6 +106,7 @@ public class StoryDraggableItem : DraggableItem
 
         return simpleList;
     }
+
 
     public void UpdateVariantBasedOnDay()
     {
@@ -114,14 +125,14 @@ public class StoryDraggableItem : DraggableItem
     {
         ScriptableObject obj;
 
-        Debug.Log($"🔎 Trying to load story database from Resources/{path}");
-
         obj = Resources.Load<StoryAcknowledgementDatabase>(path); if (obj != null) return obj;
         obj = Resources.Load<StoryOpinionDatabase>(path); if (obj != null) return obj;
         obj = Resources.Load<StorySolutionDatabase>(path); if (obj != null) return obj;
         obj = Resources.Load<StoryEmailsDatabase>(path); if (obj != null) return obj;
+        obj = Resources.Load<CoffeeResponsesDatabase>(path); if (obj != null) return obj; // ✅ ADD THIS
 
         Debug.LogError($"❌ No story database found in Resources at path '{path}'");
         return null;
     }
+
 }

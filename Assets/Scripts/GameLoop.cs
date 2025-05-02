@@ -27,6 +27,9 @@ public class GameLoop : MonoBehaviour
     private int previousGameState = -1;
     private int currentGameState = -1;
 
+    [Header("Coffee Settings")]
+    public int coffeeDraggablesCount = 2; // 🔧 Set this in Inspector
+
     [Header("Stats")]
     public int angry = 18;
     public int neutral = 15;
@@ -87,11 +90,20 @@ public class GameLoop : MonoBehaviour
     {
         List<DraggableItem> prepared = new List<DraggableItem>();
         originalDraggables = new List<DraggableItem>(allDraggables);
+
         foreach (var original in originalDraggables)
         {
             if (original == null) continue;
-            original.gameObject.SetActive(false);
-            for (int i = 0; i < 5; i++)
+
+            // ✅ Only hide non-coffee originals
+            if (!(original.emailDatabaseObject is CoffeeResponsesDatabase))
+                original.gameObject.SetActive(false);
+
+            int cloneCount = 5;
+            if (original.emailDatabaseObject is CoffeeResponsesDatabase || original.name.Contains("Coffee"))
+                cloneCount = coffeeDraggablesCount;
+
+            for (int i = 0; i < cloneCount; i++)
             {
                 DraggableItem clone = Instantiate(original, original.originalParent);
                 clone.gameObject.SetActive(true);
@@ -99,11 +111,15 @@ public class GameLoop : MonoBehaviour
                 if (clone.TryGetComponent(out CanvasGroup cg))
                     cg.blocksRaycasts = true;
                 clone.transform.localPosition = Vector3.zero;
+
                 if (clone is StoryDraggableItem storyClone)
                     storyClone.UpdateVariantBasedOnDay();
-                prepared.Add(clone);
+
+                allDraggables.Add(clone);
             }
         }
+
+
         allDraggables = prepared;
     }
 
@@ -163,6 +179,7 @@ public class GameLoop : MonoBehaviour
                 SetUI(false, true);
                 jessicaMail.CloseAllMailUI();
                 jessicaMail.CoffeeReadMailUI?.SetActive(true);
+                jessicaMail.ShowCoffeeMailContent(); // ✅ ADD THIS LINE
                 break;
             case COFFEE_STATE_WRITING:
                 SetUI(false, true);
@@ -203,17 +220,19 @@ public class GameLoop : MonoBehaviour
         {
             if (item == null) continue;
 
-            // Only activate the first 5 unique email draggables
-            if (count < 5 && item.gameObject.activeSelf == false)
+            // 💡 Only allow items from CoffeeResponsesDatabase or matching name
+            if (!(item.emailDatabaseObject is CoffeeResponsesDatabase) && !item.name.Contains("Coffee")) continue;
+
+            if (count < coffeeDraggablesCount)
             {
                 item.DealHand();
-                item.originalParent?.gameObject.SetActive(true); // 💡 Ensure parent is visible
+                item.originalParent?.gameObject.SetActive(true);
                 item.gameObject.SetActive(true);
                 count++;
             }
             else
             {
-                item.gameObject.SetActive(false); // Hide others
+                item.gameObject.SetActive(false);
             }
         }
     }

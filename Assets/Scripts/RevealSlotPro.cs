@@ -75,7 +75,9 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
     {
         foreach (var allowed in assignedItems)
         {
-            if (item.emailDatabaseObject == allowed.emailDatabaseObject)
+            if (item.emailDatabaseObject == allowed.emailDatabaseObject ||
+                (item is StoryDraggableItem sdi1 && allowed is StoryDraggableItem sdi2 &&
+                 sdi1.storyDatabaseObject == sdi2.storyDatabaseObject))
             {
                 return true;
             }
@@ -166,7 +168,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler, IPointerClickHandler
             slotOptionsPanel.SetActive(false);
     }
 
-  
+
 
 
     private void ReturnOldItemToInventory()

@@ -15,6 +15,9 @@ public class DatabaseBootstrapper : MonoBehaviour
     public StoryOpinionDatabase storyOpinion;
     public StorySolutionDatabase storySolution;
 
+    public CoffeeEmailsDatabase CoffeeEmails;
+    public CoffeeResponsesDatabase CoffeeResponses;
+
     void Awake()
     {
         DontDestroyOnLoad(gameObject); // Optional: persist through scenes

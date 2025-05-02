@@ -21,6 +21,10 @@ public class EmailCSVImporter : EditorWindow
         ImportStoryTable<StoryOpinionDatabase>("StoryOpinion", "StoryOpinionDatabase.asset");
         ImportStoryTable<StorySolutionDatabase>("StorySolution", "StorySolutionDatabase.asset");
 
+        //coffee Tables (with variants)
+        ImportStoryTable<CoffeeEmailsDatabase>("CoffeeEmails", "CoffeeEmailsDatabase.asset");
+        ImportStoryTable<CoffeeResponsesDatabase>("CoffeeResponses", "CoffeeResponsesDatabase.asset");
+
         Debug.Log("✅ All email tables imported.");
     }
 
@@ -135,6 +139,8 @@ public class EmailCSVImporter : EditorWindow
         else if (db is StoryOpinionDatabase opinionDb) opinionDb.entries = newEntries;
         else if (db is StorySolutionDatabase solutionDb) solutionDb.entries = newEntries;
         else if (db is StoryAcknowledgementDatabase ackDb) ackDb.entries = newEntries;
+        else if (db is CoffeeEmailsDatabase coffeeEmailDb) coffeeEmailDb.entries = newEntries;
+        else if (db is CoffeeResponsesDatabase coffeeResponseDb) coffeeResponseDb.entries = newEntries;
         else Debug.LogWarning($"❓ Unknown database type: {typeof(TDatabase).Name}");
 
         EditorUtility.SetDirty(db);

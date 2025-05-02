@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc25b145c38e9094c884d2d82687e4de, type: 3}
+  m_Name: CoffeeEmailsDatabase
+  m_EditorClassIdentifier: 
+  entries:
+  - Name: 1
+    variants:
+    - MainText: Houston calling Linda. Houston calling Linda. Where are you you spacewalker.
+        ^^
+      Stamina: 0
+      Sanity: -1
+    - MainText: 'Helloo Linda,
+
+
+        I saw you walking in the coffee direction.
+        That''s a good direction to go to, generally ^^'', but I would appreciate
+        an answer.
+
+
+        Get back to me,
+
+        Jess'
+      Stamina: 0
+      Sanity: -1
+    - MainText: Care to answer?
+      Stamina: 0
+      Sanity: -1
+  - Name: 2
+    variants:
+    - MainText: 
+      Stamina: 0
+      Sanity: 0
+    - MainText: 'Helloo Linda,
+
+
+        I saw you walking in the coffee direction.
+        That''s a good direction to go to, generally ^^'', but I would appreciate
+        an answer.
+
+
+        Get back to me,
+
+        Jess'
+      Stamina: 0
+      Sanity: -3
+    - MainText: Go ahead. Ignore me.
+      Stamina: 0
+      Sanity: -3

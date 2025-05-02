@@ -23,7 +23,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     protected EmailData emailData;
     private CanvasGroup canvasGroup;
 
-    private bool isUsable = true; // Updated dynamically
+    private bool isUsable = true;
 
     private static Dictionary<System.Type, HashSet<int>> usedIndexesPerType = new();
 
@@ -41,7 +41,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         canvasGroup = GetComponent<CanvasGroup>();
         originalParent = transform.parent;
 
-        // Runtime fallback if no object assigned in inspector
         if (emailDatabaseObject == null && !string.IsNullOrEmpty(resourcePath))
         {
             ScriptableObject loaded = LoadDatabaseFromResources(resourcePath);
@@ -63,9 +62,15 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (gameLoop != null && !gameLoop.allDraggables.Contains(this))
             gameLoop.allDraggables.Add(this);
 
+        if (emailDatabaseObject == null)
+        {
+            Debug.LogError($"❌ [Start] emailDatabaseObject is null on {name}");
+            return;
+        }
+
         if (GetTotalAvailableEntries() <= 0)
         {
-            Debug.LogWarning("⚠️ No entries available. Skipping assignment.");
+            Debug.LogWarning($"⚠️ No entries in database for {name}");
             return;
         }
 
@@ -79,7 +84,15 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         if (emailDatabaseObject == null)
         {
-            Debug.LogWarning("⚠️ No database assigned to DraggableItem.");
+            Debug.LogError($"❌ [DealHand] emailDatabaseObject is NULL on {name}");
+            return;
+        }
+
+        AssignUniqueEmail();
+
+        if (emailData == null)
+        {
+            Debug.LogError($"❌ [DealHand] emailData is NULL on {name}");
             return;
         }
 
@@ -88,15 +101,18 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         canvasGroup.blocksRaycasts = true;
         if (image != null) image.raycastTarget = true;
-        if (label != null) label.raycastTarget = true;
+        if (label != null)
+        {
+            label.raycastTarget = true;
+            label.text = emailData.Name;
+        }
+        else
+        {
+            Debug.LogWarning($"⚠️ [DealHand] label is null on {name}");
+        }
 
         transform.SetParent(originalParent);
         transform.localPosition = Vector3.zero;
-
-        AssignUniqueEmail();
-
-        if (label != null && emailData != null)
-            label.text = emailData.Name;
     }
 
     public void AssignUniqueEmail()
@@ -104,7 +120,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         List<EmailData> tableEntries = GetEmailEntriesFromObject();
         if (tableEntries == null || tableEntries.Count == 0)
         {
-            Debug.LogWarning("⚠️ No entries found in email database.");
+            Debug.LogWarning($"⚠️ No entries found in database for {name}");
             return;
         }
 
@@ -113,8 +129,13 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             usedIndexesPerType[dbType] = new HashSet<int>();
 
         HashSet<int> usedIndexes = usedIndexesPerType[dbType];
-        if (usedIndexes.Count >= tableEntries.Count)
+
+        // ✅ NEW: Allow reuse when entry count is 2 or fewer
+        bool allowDuplicates = tableEntries.Count <= 2;
+
+        if (!allowDuplicates && usedIndexes.Count >= tableEntries.Count)
         {
+            Debug.Log($"🔁 All entries used for {dbType.Name}, clearing used list.");
             usedIndexes.Clear();
         }
 
@@ -124,18 +145,19 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             index = Random.Range(0, tableEntries.Count);
             safety--;
-        } while (usedIndexes.Contains(index) && safety > 0);
+        } while (!allowDuplicates && usedIndexes.Contains(index) && safety > 0);
+
+        if (!allowDuplicates) usedIndexes.Add(index);
 
         if (safety <= 0)
         {
-            Debug.Log("❌ Could not assign unique entry (safety limit reached).");
+            Debug.LogError($"❌ Could not assign unique entry to {name} (safety loop exhausted)");
             return;
         }
 
-        usedIndexes.Add(index);
         emailData = tableEntries[index];
+        Debug.Log($"✅ [{name}] Assigned email: {emailData.Name}");
     }
-
     protected virtual List<EmailData> GetEmailEntriesFromObject()
     {
         return emailDatabaseObject switch
@@ -146,6 +168,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             SolutionDatabase s => s.entries,
             GoodbyeDatabase gb => gb.entries,
             JessicaEmailsDatabase j => j.entries,
+            // If using Coffee or Story Emails, override in StoryDraggableItem
             _ => null
         };
     }
@@ -168,7 +191,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetAsLastSibling();
 
         canvasGroup.blocksRaycasts = false;
-
         if (image != null) image.raycastTarget = false;
         if (label != null) label.raycastTarget = false;
     }
@@ -188,6 +210,17 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         this.enabled = false;
         canvasGroup.blocksRaycasts = false;
+    }
+
+    public void EnableDragging()
+    {
+        this.enabled = true;
+
+        if (TryGetComponent(out CanvasGroup cg))
+            cg.blocksRaycasts = true;
+
+        if (image != null) image.raycastTarget = true;
+        if (label != null) label.raycastTarget = true;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -213,8 +246,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         ScriptableObject obj;
 
-        Debug.Log($"🔎 Trying to load from Resources/{path}");
-
         obj = Resources.Load<GreetingDatabase>(path); if (obj != null) return obj;
         obj = Resources.Load<AcknowledgementDatabase>(path); if (obj != null) return obj;
         obj = Resources.Load<OpinionDatabase>(path); if (obj != null) return obj;
@@ -222,32 +253,13 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         obj = Resources.Load<GoodbyeDatabase>(path); if (obj != null) return obj;
         obj = Resources.Load<JessicaEmailsDatabase>(path); if (obj != null) return obj;
 
-        // Optional: allow loading of story databases (if reused here)
         obj = Resources.Load<StoryAcknowledgementDatabase>(path); if (obj != null) return obj;
         obj = Resources.Load<StoryOpinionDatabase>(path); if (obj != null) return obj;
         obj = Resources.Load<StorySolutionDatabase>(path); if (obj != null) return obj;
         obj = Resources.Load<StoryEmailsDatabase>(path); if (obj != null) return obj;
 
-        Debug.LogError($"❌ No database found in Resources at path '{path}'");
+        Debug.LogError($"❌ No database found at Resources/{path}");
         return null;
-    }
-
-
-    public void EnableDragging()
-    {
-        this.enabled = true;
-
-        if (TryGetComponent(out CanvasGroup cg))
-            cg.blocksRaycasts = true;
-
-        if (image != null) image.raycastTarget = true;
-        if (label != null) label.raycastTarget = true;
-    }
-
-    private void SetAlpha(float alpha)
-    {
-        if (TryGetComponent(out CanvasGroup cg))
-            cg.alpha = alpha;
     }
 
     public void ValidateAgainstStats()
@@ -261,11 +273,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         if (TryGetComponent(out CanvasGroup cg))
         {
-            cg.blocksRaycasts = isUsable; // ✅ This blocks all pointer input if false
+            cg.blocksRaycasts = isUsable;
             cg.alpha = isUsable ? 1f : 0.5f;
         }
     }
 
-
-
+    private void SetAlpha(float alpha)
+    {
+        if (TryGetComponent(out CanvasGroup cg))
+            cg.alpha = alpha;
+    }
 }
