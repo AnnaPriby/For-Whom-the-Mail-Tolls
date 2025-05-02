@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.Image;
 
 public class GameLoop : MonoBehaviour
 {
@@ -45,7 +46,7 @@ public class GameLoop : MonoBehaviour
 
     [Header("Draggables")]
     public List<DraggableItem> originalDraggables = new List<DraggableItem>();
-    [HideInInspector] public List<DraggableItem> allDraggables = new List<DraggableItem>();
+    public List<DraggableItem> allDraggables = new List<DraggableItem>();
 
     [Header("Reveal Slots")]
     public List<RevealSlotPro> allRevealSlots = new List<RevealSlotPro>();
@@ -89,39 +90,55 @@ public class GameLoop : MonoBehaviour
 
     private void PrepareDraggables()
     {
+        // Optional: clean up previous runtime clones if this might be called more than once
+        foreach (var item in allDraggables)
+        {
+            if (item != null && !originalDraggables.Contains(item))
+                Destroy(item.gameObject);
+        }
+
         List<DraggableItem> prepared = new List<DraggableItem>();
         originalDraggables = new List<DraggableItem>(allDraggables);
 
+        
         foreach (var original in originalDraggables)
         {
             if (original == null) continue;
+
+            // Make sure the parent is set before clone
+            if (original.originalParent == null)
+            {
+                original.originalParent = original.transform.parent; // 👈 This sets it once
+            }
+
 
             // ✅ Only hide non-coffee originals
             if (!(original.emailDatabaseObject is CoffeeResponsesDatabase))
                 original.gameObject.SetActive(false);
 
-            int cloneCount = 5;
-            if (original.emailDatabaseObject is CoffeeResponsesDatabase || original.name.Contains("Coffee"))
-                cloneCount = coffeeDraggablesCount;
+            int cloneCount = (original.emailDatabaseObject is CoffeeResponsesDatabase || original.name.Contains("Coffee"))
+                ? coffeeDraggablesCount
+                : 5;
 
             for (int i = 0; i < cloneCount; i++)
             {
                 DraggableItem clone = Instantiate(original, original.originalParent);
                 clone.gameObject.SetActive(true);
                 clone.enabled = true;
+
                 if (clone.TryGetComponent(out CanvasGroup cg))
                     cg.blocksRaycasts = true;
+
                 clone.transform.localPosition = Vector3.zero;
 
                 if (clone is StoryDraggableItem storyClone)
                     storyClone.UpdateVariantBasedOnDay();
 
-                allDraggables.Add(clone);
+                prepared.Add(clone); // ✅ safe temp list
             }
         }
 
-
-        allDraggables = prepared;
+        allDraggables = prepared; // ✅ assign once at the end
     }
 
     public void ChangeGameState(int stateSet)
@@ -175,12 +192,15 @@ public class GameLoop : MonoBehaviour
                 SetUI(false, true);
                 jessicaMail.CloseAllMailUI();
                 jessicaMail.ShowCoffeeMailIntro();
+                
+
                 break;
             case COFFEE_STATE_READING:
                 SetUI(false, true);
+                handsAnimator.SetBool("CoffeeDrink", false);
                 jessicaMail.CloseAllMailUI();
                 jessicaMail.CoffeeReadMailUI?.SetActive(true);
-                jessicaMail.ShowCoffeeMailContent(); // ✅ ADD THIS LINE
+                jessicaMail.ShowCoffeeMailContent(); 
                 break;
             case COFFEE_STATE_WRITING:
                 SetUI(false, true);
@@ -231,10 +251,11 @@ public class GameLoop : MonoBehaviour
                 item.gameObject.SetActive(true);
                 count++;
             }
-            else
+            else if (!originalDraggables.Contains(item)) // hide only clones
             {
                 item.gameObject.SetActive(false);
             }
+
         }
     }
 
@@ -251,8 +272,13 @@ public class GameLoop : MonoBehaviour
     public void Coffee()
     {
         previousGameState = GameState;
+
+        handsAnimator.SetBool("CoffeeDrink", true);
+        
+
         StatManager.Instance.ResetStaminaOnly();
         ChangeGameState(COFFEE_STATE_RECEIVE);
+
     }
 
     public void ReturnFromCoffee()

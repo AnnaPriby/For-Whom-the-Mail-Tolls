@@ -657,7 +657,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ed885581b19dd284c9085d6d9be66624, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b3c88489348c1cb4b8bbf67f327f1766, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1981,7 +1981,7 @@ Canvas:
   m_GameObject: {fileID: 593433286}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 519420031}
   m_PlaneDistance: 0
   m_PixelPerfect: 0
@@ -2553,7 +2553,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 701165335}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -2612,9 +2612,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetImage: {fileID: 701165338}
   variantSprites:
-  - {fileID: 21300000, guid: 4bb54c1dbab85b544a7b6356aacde101, type: 3}
-  - {fileID: 21300000, guid: adb3e2a77d17a1c47b8e09445d61ce3e, type: 3}
   - {fileID: 21300000, guid: 0017ec1e6ad9bc44dbe045c78a3f664b, type: 3}
+  - {fileID: 21300000, guid: adb3e2a77d17a1c47b8e09445d61ce3e, type: 3}
+  - {fileID: 21300000, guid: 4bb54c1dbab85b544a7b6356aacde101, type: 3}
 --- !u!1 &791379289
 GameObject:
   m_ObjectHideFlags: 0
@@ -8290,6 +8290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assignedItems:
+  - {fileID: 4910571072387646101}
   - {fileID: 4910571072387646101}
   infoDisplay: {fileID: 1408414737413972364}
   slotOptionsPanel: {fileID: 4017784647522976656}
