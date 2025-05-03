@@ -289,13 +289,14 @@ public class GameLoop : MonoBehaviour
 
     private void ChooseVariant()
     {
-        if (Day == 3) ChooseVariantBasedOnSanityDamage();
+        if (Day == 3) ChooseVariantBasedOnStaminaDamage();
         else ChooseVariantBasedOnRemainingSanity();
     }
 
-    private void ChooseVariantBasedOnSanityDamage()
+    private void ChooseVariantBasedOnStaminaDamage()
     {
-        currentVariant = totalSanityDamage <= damagelow ? 2 : totalSanityDamage <= damagehigh ? 1 : 0;
+        int stamina = StatManager.Instance.CurrentStamina;
+        currentVariant = stamina >= angry ? 2 : stamina >= neutral ? 1 : 0;
         ApplyVariantToGame(currentVariant);
     }
 
