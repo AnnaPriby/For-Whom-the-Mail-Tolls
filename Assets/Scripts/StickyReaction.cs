@@ -10,18 +10,18 @@ public class StickyReaction : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(TrackSanity());
+        StartCoroutine(TrackStamina());
     }
 
-    private System.Collections.IEnumerator TrackSanity()
+    private System.Collections.IEnumerator TrackStamina()
     {
         while (true)
         {
             if (StatManager.Instance != null)
             {
-                int sanity = StatManager.Instance.CurrentSanity;
-                int newVariant = sanity >= GameLoop.Instance.angry ? 2 :
-                                 sanity >= GameLoop.Instance.neutral ? 1 : 0;
+                int stamina = StatManager.Instance.CurrentStamina;
+                int newVariant = stamina >= GameLoop.Instance.angry ? 2 :
+                                 stamina >= GameLoop.Instance.neutral ? 1 : 0;
 
                 if (newVariant != lastVariant)
                 {

@@ -39,8 +39,15 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     protected virtual void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            Debug.LogWarning($"⚠️ [Awake] CanvasGroup was missing on {name}, added at runtime.");
+        }
+
         originalParent = transform.parent;
 
+        // Load database fallback
         if (emailDatabaseObject == null && !string.IsNullOrEmpty(resourcePath))
         {
             ScriptableObject loaded = LoadDatabaseFromResources(resourcePath);

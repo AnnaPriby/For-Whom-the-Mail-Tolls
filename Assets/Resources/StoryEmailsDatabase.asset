@@ -41,6 +41,12 @@ MonoBehaviour:
     - MainText: x
       Stamina: 0
       Sanity: -1
+    - MainText: X
+      Stamina: 0
+      Sanity: 0
+    - MainText: X
+      Stamina: 0
+      Sanity: 0
   - Name: 2
     variants:
     - MainText: "Hi Linda,\n\nthank you for the brisk reply (for once\U0001F601).
@@ -80,6 +86,12 @@ MonoBehaviour:
         Jess'
       Stamina: 0
       Sanity: -3
+    - MainText: X
+      Stamina: 0
+      Sanity: 0
+    - MainText: X
+      Stamina: 0
+      Sanity: 0
   - Name: 3
     variants:
     - MainText: "Hey L,\n\njust a friendly reminder that you still haven't filled
@@ -119,6 +131,31 @@ MonoBehaviour:
         Jess'
       Stamina: 0
       Sanity: -1
+    - MainText: "Dear Linda,\n\nas per my first email today, I still need you to
+        fill the availability. As per your eccentric behaviour, I don't have any
+        idea what the fuck is going on. \n\nBut rest assured the management won't
+        look at such behavior fondly once they find out one way or the other..\n\nKind
+        regards,\nJessica"
+      Stamina: 1
+      Sanity: 1
+    - MainText: 'Dear Linda,
+
+
+        it seems like sense can be kicked into someone
+        afterall. This erradic behaviour sure won''t win you the project. As a matter
+        of fact I should be thanking you, only if I wasn''t so bitter.
+
+
+        Just
+        to reiterate, now would be a good time to fill those availability sheets,
+        if you ever want your dog to have a normal life.
+
+
+        Regards,
+
+        Jessica'
+      Stamina: 1
+      Sanity: 1
   - Name: 4
     variants:
     - MainText: "Hiii L,\n\nI wanted to tell you that I REALLY appreciate having
@@ -131,7 +168,27 @@ MonoBehaviour:
         you after the break?\n\nJess"
       Stamina: 0
       Sanity: -1
-    - MainText: X
+    - MainText: 'Dear Linda,
+
+
+        your behaviour remains quite perplexing, but
+        I think it doesn''t really matter anymore. The project is nearing and so
+        is lunch, and I think I''ll have both. :)
+
+
+        I just know that no matter
+        how dark the times get, there is always light waiting! You will sort your
+        ways, surely. The money will come, surely. Your dog.. well, I guess he''s
+        always going to be himself. ^^ And that''s ok too!
+
+
+        I will head
+        for lunch now. See you later? x)
+
+
+        Kind regards,
+
+        Jessica'
       Stamina: 0
       Sanity: -1
     - MainText: 'Hello Linda..
@@ -156,3 +213,9 @@ MonoBehaviour:
         Jessica'
       Stamina: 0
       Sanity: -1
+    - MainText: X
+      Stamina: 0
+      Sanity: 0
+    - MainText: X
+      Stamina: 0
+      Sanity: 0
