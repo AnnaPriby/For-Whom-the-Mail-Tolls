@@ -64,10 +64,9 @@ public class TMPStoryController : MonoBehaviour
         yield return FadeOut();
 
         mainText.text = "";
+        yield return FadeIn(); // 👈 Show the canvas first
         yield return TypeLine(storyLines[currentLine]);
         currentLine++;
-
-        yield return FadeIn();
 
         // Show persistent text after the first line only
         if (!persistentTextShown && currentLine >= 1)
