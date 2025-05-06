@@ -20,12 +20,12 @@ MonoBehaviour:
       Sanity: 0
     - MainText: 'Hello Jess,
 
+        
 
+        it was the opposite direction of
+        you. So I took it.
 
-        it was the opposite direction of you. So
-        I took it.
-
-
+        
 
         Linda'
       Stamina: 0
@@ -40,14 +40,15 @@ MonoBehaviour:
       Sanity: 0
     - MainText: 'Hello Jessica,
 
+        
 
+        I am a an addict, what can I
+        say. That''s why I have no money all the time. I get these twitches when
+        I''m without it for longer periods of time and it gets difficult typing with
+        them. My doctor has assured me, however, that I need not to fear that much,
+        for now.
 
-        I am a an addict, what can I say. That''s
-        why I have no money all the time. I get these twitches when I''m without
-        it for longer periods of time and it gets difficult typing with them. My
-        doctor has assured me, however, that I need not to fear that much, for now.
-
-
+        
 
         :D
 
@@ -98,6 +99,6 @@ MonoBehaviour:
     - MainText: 
       Stamina: 0
       Sanity: 0
-    - MainText: X
+    - MainText: 
       Stamina: 0
       Sanity: 0

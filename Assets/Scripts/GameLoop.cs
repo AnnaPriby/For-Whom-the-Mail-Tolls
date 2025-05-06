@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.Image;
 
 public class GameLoop : MonoBehaviour
 {
@@ -36,21 +37,64 @@ public class GameLoop : MonoBehaviour
     public int damagelow = 2;
     public int damagehigh = 4;
 
+    [Header("Day1 - Daily Damage Thresholds")]
+    public int damagelowDay1 = 2;
+    public int damagehighDay1 = 5;
+    private int damagelowDay2 = 2;
+    private int damagehighDay2 = 4;
+    private int damagelowDay3 = 2;
+    private int damagehighDay3 = 4;
+
+    [Header("Day 2 - Email Variant Thresholds")]
+    public int damagelowDay2Evil = 2;
+    //public int damagehighDay2Evil = 4;
+
+    public int damagelowDay2Neutral = 1;
+    public int damagehighDay2Neutral = 3;
+
+    public int damagelowDay2Nice = 3;
+    //public int damagehighDay2Nice = 2;
+
+    [Header("Day 3 - Email Variant Thresholds")] //up to 5 variants
+    public int damagelowDay3Evil = 2;
+    public int damagehighDay3Evil = 4;
+
+    public int damagelowDay3EvilTransition = 2;
+    public int damagehighDay3EvilTransition = 4;
+
+    public int damagelowDay3Neutral = 1;
+    public int damagehighDay3Neutral = 3;
+
+    public int damagelowDay3NiceTransition = 0;
+    public int damagehighDay3NiceTransition = 2;
+
+    public int damagelowDay3Nice = 0;
+    public int damagehighDay3Nice = 2;
+
+
+    [Header("Day 4 - Email Variant Thresholds")]
+    public int damagelowDay4 = 2;
+    public int damagehighDay4 = 4;
+
+    public int damagelowDay5 = 2;
+    public int damagehighDay5 = 4;
+
     [Header("Visuals")]
     public SpriteChanger JessicaReaction;
-    public SpriteChanger stickyReaction;
+    public StickyReaction stickyReaction;
 
     [Header("Animations")]
     public Animator handsAnimator;
 
     [Header("Draggables")]
     public List<DraggableItem> originalDraggables = new List<DraggableItem>();
-    [HideInInspector] public List<DraggableItem> allDraggables = new List<DraggableItem>();
+    public List<DraggableItem> allDraggables = new List<DraggableItem>();
 
     [Header("Reveal Slots")]
     public List<RevealSlotPro> allRevealSlots = new List<RevealSlotPro>();
 
     private int currentVariant = 0;
+    private int startingStamina = 18; // 🆕 Tracks stamina at start of the day
 
     private const int COFFEE_STATE_RECEIVE = 90;
     private const int COFFEE_STATE_READING = 91;
@@ -89,39 +133,55 @@ public class GameLoop : MonoBehaviour
 
     private void PrepareDraggables()
     {
+        // Optional: clean up previous runtime clones if this might be called more than once
+        foreach (var item in allDraggables)
+        {
+            if (item != null && !originalDraggables.Contains(item))
+                Destroy(item.gameObject);
+        }
+
         List<DraggableItem> prepared = new List<DraggableItem>();
         originalDraggables = new List<DraggableItem>(allDraggables);
 
+        
         foreach (var original in originalDraggables)
         {
             if (original == null) continue;
+
+            // Make sure the parent is set before clone
+            if (original.originalParent == null)
+            {
+                original.originalParent = original.transform.parent; // 👈 This sets it once
+            }
+
 
             // ✅ Only hide non-coffee originals
             if (!(original.emailDatabaseObject is CoffeeResponsesDatabase))
                 original.gameObject.SetActive(false);
 
-            int cloneCount = 5;
-            if (original.emailDatabaseObject is CoffeeResponsesDatabase || original.name.Contains("Coffee"))
-                cloneCount = coffeeDraggablesCount;
+            int cloneCount = (original.emailDatabaseObject is CoffeeResponsesDatabase || original.name.Contains("Coffee"))
+                ? coffeeDraggablesCount
+                : 5;
 
             for (int i = 0; i < cloneCount; i++)
             {
                 DraggableItem clone = Instantiate(original, original.originalParent);
                 clone.gameObject.SetActive(true);
                 clone.enabled = true;
+
                 if (clone.TryGetComponent(out CanvasGroup cg))
                     cg.blocksRaycasts = true;
+
                 clone.transform.localPosition = Vector3.zero;
 
                 if (clone is StoryDraggableItem storyClone)
                     storyClone.UpdateVariantBasedOnDay();
 
-                allDraggables.Add(clone);
+                prepared.Add(clone); // ✅ safe temp list
             }
         }
 
-
-        allDraggables = prepared;
+        allDraggables = prepared; // ✅ assign once at the end
     }
 
     public void ChangeGameState(int stateSet)
@@ -138,6 +198,14 @@ public class GameLoop : MonoBehaviour
         switch (stateSet)
         {
             case 0:
+                startingStamina = StatManager.Instance.CurrentStamina;
+
+                if (Day == 1)
+                {
+                    currentVariant = 1;               // ✅ Set manually
+                    ApplyVariantToGame(currentVariant); // ✅ Force it to reflect in JessicaMail
+                }
+
                 SetUI(false, true);
                 jessicaMail?.ShowNoMail();
                 StartCoroutine(WaitThenGoToNewMail());
@@ -178,9 +246,10 @@ public class GameLoop : MonoBehaviour
                 break;
             case COFFEE_STATE_READING:
                 SetUI(false, true);
+                handsAnimator.SetBool("CoffeeDrink", false);
                 jessicaMail.CloseAllMailUI();
                 jessicaMail.CoffeeReadMailUI?.SetActive(true);
-                jessicaMail.ShowCoffeeMailContent(); // ✅ ADD THIS LINE
+                jessicaMail.ShowCoffeeMailContent(); 
                 break;
             case COFFEE_STATE_WRITING:
                 SetUI(false, true);
@@ -231,10 +300,11 @@ public class GameLoop : MonoBehaviour
                 item.gameObject.SetActive(true);
                 count++;
             }
-            else
+            else if (!originalDraggables.Contains(item)) // hide only clones
             {
                 item.gameObject.SetActive(false);
             }
+
         }
     }
 
@@ -251,8 +321,13 @@ public class GameLoop : MonoBehaviour
     public void Coffee()
     {
         previousGameState = GameState;
+
+        handsAnimator.SetBool("CoffeeDrink", true);
+        
+
         StatManager.Instance.ResetStaminaOnly();
         ChangeGameState(COFFEE_STATE_RECEIVE);
+
     }
 
     public void ReturnFromCoffee()
@@ -260,24 +335,205 @@ public class GameLoop : MonoBehaviour
         Debug.Log("🔁 Returning from CoffeeLoop to previous state.");
         ChangeGameState(previousGameState);
     }
+    private void ChooseVariantBasedOnStaminaDamage()
+    {
+        int stamina = StatManager.Instance.CurrentStamina;
+        currentVariant = stamina >= angry ? 2 : stamina >= neutral ? 1 : 0;
+        ApplyVariantToGame(currentVariant);
+    }
 
     private void ChooseVariant()
     {
-        if (Day == 3) ChooseVariantBasedOnSanityDamage();
-        else ChooseVariantBasedOnRemainingSanity();
+        if (Day == 1)
+        {
+            ChooseVariantDay1();
+        }
+        else if (Day == 2)
+        {
+
+            if (currentVariant == 2) // Angry email
+            {
+                ChooseVariantDay2Evil();
+            }
+            else if (currentVariant == 1) // Neutral email
+            {
+                ChooseVariantDay2Neutral();
+            }
+            else if (currentVariant == 0) // Nice email
+            {
+                ChooseVariantDay2Nice();
+            }
+        }
+        else if (Day == 3)
+        {
+       
+            if (currentVariant == 3)
+            {
+                ChooseVariantDay3Evil();
+            }
+            else if (currentVariant == 4)
+            {
+                ChooseVariantDay3EvilTransition();
+            }
+            else if (currentVariant == 1)
+            {
+                ChooseVariantDay3Neutral();
+            }
+            else if (currentVariant == 3)
+            {
+                ChooseVariantDay3NiceTransition();
+            }
+            else if (currentVariant == 0)
+            {
+                ChooseVariantDay3Nice();
+            }
+            else
+            {
+                Debug.LogWarning("⚠️ Day 3: Unknown variant index. Defaulting to Neutral.");
+                ChooseVariantDay3Neutral(); // fallback if needed
+            }
+        }
+        else if (Day == 4)
+        {
+            ChooseVariantDay4();
+        }
+        else if (Day == 5)
+        {
+            ChooseVariantDay5();
+        }
+        else
+        {
+            ChooseVariantBasedOnRemainingSanity();
+        }
     }
 
-    private void ChooseVariantBasedOnSanityDamage()
-    {
-        currentVariant = totalSanityDamage <= damagelow ? 2 : totalSanityDamage <= damagehigh ? 1 : 0;
-        ApplyVariantToGame(currentVariant);
-    }
+
 
     private void ChooseVariantBasedOnRemainingSanity()
     {
         int sanity = StatManager.Instance.CurrentSanity;
         currentVariant = sanity >= angry ? 2 : sanity >= neutral ? 1 : 0;
         ApplyVariantToGame(currentVariant);
+
+    }
+
+    private void ChooseVariantDay1()//Just based on how much stamina i loose
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+        currentVariant = damage <= damagelowDay1 ? 2 : damage <= damagehighDay1 ? 1 : 0;
+        ApplyVariantToGame(currentVariant);
+        Debug.Log($"Day {Day} - Stamina Damage: {damage}, Variant: {currentVariant}");
+    }
+
+    private void ChooseVariantDay2()
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+        currentVariant = damage <= damagelowDay2 ? 2 : damage <= damagehighDay2 ? 1 : 0;
+        ApplyVariantToGame(currentVariant);
+        Debug.Log($"Day {Day} - Stamina Damage: {damage}, Variant: {currentVariant}");
+    }
+    private void ChooseVariantDay2Evil()
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+
+        // 🔁 Set to 4 (nice outcome) if damage is low enough, otherwise 2 (evil outcome)
+        currentVariant = damage <= damagelowDay2Evil ? 4 : 2;
+
+        ApplyVariantToGame(currentVariant);
+        Debug.Log($"Day {Day} (Evil) - Stamina Damage: {damage}, Applied Variant: {currentVariant}");
+    }
+
+    //DOŘEŠIT LOGIKU    
+    private void ChooseVariantDay2Neutral()
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+        currentVariant = damage <= damagelowDay2Neutral ? 2 : damage <= damagehighDay2Neutral ? 1 : 0;
+        ApplyVariantToGame(currentVariant);
+        Debug.Log($"Day {Day} (Neutral) - Stamina Damage: {damage}, Variant: {currentVariant}");
+    }
+
+    private void ChooseVariantDay2Nice()
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+
+        // 👇 Variant 0 = Nice, Variant 3 = Degraded/Near-neutral
+        currentVariant = damage <= damagelowDay2Nice ? 0 : 3;
+
+        ApplyVariantToGame(currentVariant);
+        Debug.Log($"Day {Day} (Nice - 2-State) - Stamina Damage: {damage}, Applied Variant: {currentVariant}");
+    }
+
+    private void ChooseVariantDay3()
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+        currentVariant = damage <= damagelowDay3 ? 2 : damage <= damagehighDay3 ? 1 : 0;
+        ApplyVariantToGame(currentVariant);
+        Debug.Log($"Day {Day} - Stamina Damage: {damage}, Variant: {currentVariant}");
+    }
+    private void ChooseVariantDay3Evil()
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+
+        currentVariant = 2; // ✅ Always apply evil variant
+        ApplyVariantToGame(currentVariant);
+
+        Debug.Log($"Day 3 (Evil - Forced) - Ignored Damage: {damage}, Applied Variant: {currentVariant}");
+    }
+
+    private void ChooseVariantDay3EvilTransition()
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+
+        // 👇 If damage is low, stay neutral (1); if too high, go evil (2)
+        currentVariant = damage <= damagelowDay3EvilTransition ? 1 : 2;
+
+        ApplyVariantToGame(currentVariant);
+        Debug.Log($"Day 3 (Evil Transition - 2-State) - Stamina Damage: {damage}, Applied Variant: {currentVariant}");
+    }
+
+    private void ChooseVariantDay3Neutral()
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+        currentVariant = damage <= damagelowDay3Neutral ? 2 : damage <= damagehighDay3Neutral ? 1 : 0;
+        ApplyVariantToGame(currentVariant);
+        Debug.Log($"Day 3 (Neutral) - Stamina Damage: {damage}, Variant: {currentVariant}");
+    }
+
+    private void ChooseVariantDay3NiceTransition()
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+
+        // 👇 If damage is low, stay neutral (1); if higher, turn evil (2)
+        currentVariant = damage <= damagelowDay3NiceTransition ? 1 : 2;
+
+        ApplyVariantToGame(currentVariant);
+        Debug.Log($"Day 3 (Nice Transition - 2-State) - Stamina Damage: {damage}, Applied Variant: {currentVariant}");
+    }
+
+    private void ChooseVariantDay3Nice()
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+
+        currentVariant = 0; // ✅ Always apply nice variant
+        ApplyVariantToGame(currentVariant);
+
+        Debug.Log($"Day 3 (Nice - Forced) - Ignored Damage: {damage}, Applied Variant: {currentVariant}");
+    }
+
+    private void ChooseVariantDay4()
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+        currentVariant = damage <= damagelowDay4 ? 2 : damage <= damagehighDay4 ? 1 : 0;
+        ApplyVariantToGame(currentVariant);
+        Debug.Log($"Day {Day} - Stamina Damage: {damage}, Variant: {currentVariant}");
+    }
+
+    private void ChooseVariantDay5()
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+        currentVariant = damage <= damagelowDay5 ? 2 : damage <= damagehighDay5 ? 1 : 0;
+        ApplyVariantToGame(currentVariant);
+        Debug.Log($"Day {Day} - Stamina Damage: {damage}, Variant: {currentVariant}");
     }
 
     private void ApplyVariantToGame(int variant)

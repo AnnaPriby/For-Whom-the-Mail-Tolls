@@ -171,7 +171,7 @@ public class JessicaMail : MonoBehaviour
             Debug.LogWarning("☕ CoffeeEmailsDatabase is missing or empty.");
         }
 
-        StartCoroutine(GoToCoffeeReply());
+        
     }
 
     private IEnumerator GoToCoffeeReply()

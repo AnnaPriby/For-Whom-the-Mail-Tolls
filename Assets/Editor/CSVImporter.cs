@@ -81,9 +81,8 @@ public class EmailCSVImporter : EditorWindow
         Debug.Log($"✅ Imported {newEntries.Count} entries into {typeof(T).Name}");
     }
 
-    // ✅ Story table: StoryDataTypes with 3 EmailVariant entries
     private static void ImportStoryTable<TDatabase>(string csvFileName, string assetFileName)
-        where TDatabase : ScriptableObject
+    where TDatabase : ScriptableObject
     {
         TextAsset csv = Resources.Load<TextAsset>(csvFileName);
         if (csv == null)
@@ -95,12 +94,16 @@ public class EmailCSVImporter : EditorWindow
         List<string[]> parsedCSV = ParseCSV(csv.text);
         List<StoryDataTypes> newEntries = new();
 
+        bool isStoryEmails = typeof(TDatabase) == typeof(StoryEmailsDatabase);
+        int expectedVariants = isStoryEmails ? 5 : 3;
+        int expectedColumns = 1 + (expectedVariants * 3); // Name + N variants
+
         for (int i = 1; i < parsedCSV.Count; i++) // Skip header
         {
             string[] row = parsedCSV[i];
-            if (row.Length < 10)
+            if (row.Length < expectedColumns)
             {
-                Debug.LogWarning($"⚠️ Skipped line {i + 1} (not enough columns): {string.Join(",", row)}");
+                Debug.LogWarning($"⚠️ Skipped line {i + 1} (not enough columns for {expectedVariants} variants): {string.Join(",", row)}");
                 continue;
             }
 
@@ -110,11 +113,14 @@ public class EmailCSVImporter : EditorWindow
                 variants = new List<EmailVariant>()
             };
 
-            for (int v = 0; v < 3; v++) // Expecting 3 variants
+            for (int v = 0; v < expectedVariants; v++)
             {
-                string mainText = row[1 + v * 3].Trim('"').Trim();
-                int.TryParse(row[2 + v * 3].Trim(), out int stamina);
-                int.TryParse(row[3 + v * 3].Trim(), out int sanity);
+                int offset = 1 + v * 3;
+                if (offset + 2 >= row.Length) break;
+
+                string mainText = row[offset].Trim('"').Trim();
+                int.TryParse(row[offset + 1].Trim(), out int stamina);
+                int.TryParse(row[offset + 2].Trim(), out int sanity);
 
                 entry.variants.Add(new EmailVariant
                 {
@@ -135,13 +141,18 @@ public class EmailCSVImporter : EditorWindow
             AssetDatabase.CreateAsset(db, path);
         }
 
-        if (db is StoryEmailsDatabase emailDb) emailDb.entries = newEntries;
-        else if (db is StoryOpinionDatabase opinionDb) opinionDb.entries = newEntries;
-        else if (db is StorySolutionDatabase solutionDb) solutionDb.entries = newEntries;
-        else if (db is StoryAcknowledgementDatabase ackDb) ackDb.entries = newEntries;
-        else if (db is CoffeeEmailsDatabase coffeeEmailDb) coffeeEmailDb.entries = newEntries;
-        else if (db is CoffeeResponsesDatabase coffeeResponseDb) coffeeResponseDb.entries = newEntries;
-        else Debug.LogWarning($"❓ Unknown database type: {typeof(TDatabase).Name}");
+        switch (db)
+        {
+            case StoryEmailsDatabase emailDb: emailDb.entries = newEntries; break;
+            case StoryOpinionDatabase opinionDb: opinionDb.entries = newEntries; break;
+            case StorySolutionDatabase solutionDb: solutionDb.entries = newEntries; break;
+            case StoryAcknowledgementDatabase ackDb: ackDb.entries = newEntries; break;
+            case CoffeeEmailsDatabase coffeeEmailDb: coffeeEmailDb.entries = newEntries; break;
+            case CoffeeResponsesDatabase coffeeResponseDb: coffeeResponseDb.entries = newEntries; break;
+            default:
+                Debug.LogWarning($"❓ Unknown database type: {typeof(TDatabase).Name}");
+                break;
+        }
 
         EditorUtility.SetDirty(db);
         AssetDatabase.SaveAssets();
