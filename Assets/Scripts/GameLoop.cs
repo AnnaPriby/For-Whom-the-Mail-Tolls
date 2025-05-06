@@ -65,7 +65,7 @@ public class GameLoop : MonoBehaviour
     public int damagelowDay3Neutral = 1;
     public int damagehighDay3Neutral = 3;
 
-    public int damagelowDay3NiceTransition = 0;
+    public int damagelowDay3NiceTransition = 5;
     public int damagehighDay3NiceTransition = 2;
 
     public int damagelowDay3Nice = 0;
@@ -95,6 +95,9 @@ public class GameLoop : MonoBehaviour
 
     private int currentVariant = 0;
     private int startingStamina = 18; // 🆕 Tracks stamina at start of the day
+    public int GetCurrentVariant() => currentVariant;
+    private Coroutine liveValidationCoroutine = null;
+    public int GetStartingStamina() => startingStamina;
 
     private const int COFFEE_STATE_RECEIVE = 90;
     private const int COFFEE_STATE_READING = 91;
@@ -222,11 +225,17 @@ public class GameLoop : MonoBehaviour
                 if (Day == 4) lunchImageUI?.SetActive(true);
                 break;
             case 3:
+                baseVariantAtWrite = currentVariant; // Save variant intent at start of writing
+                lastStamina = StatManager.Instance.CurrentStamina; // ✅ Add this line
+                stickyReaction?.ResetVariant(); // 👈 add this
                 SetUI(true, false);
                 coffee.enabled = true;
                 DealHand();
                 handsAnimator.SetBool("IsWriting", true);
-                StartCoroutine(LiveValidateDraggables());
+                if (liveValidationCoroutine != null)
+                    StopCoroutine(liveValidationCoroutine);
+
+                liveValidationCoroutine = StartCoroutine(LiveValidateDraggables());
                 break;
             case 4:
                 SetUI(false, true);
@@ -252,12 +261,18 @@ public class GameLoop : MonoBehaviour
                 jessicaMail.ShowCoffeeMailContent(); 
                 break;
             case COFFEE_STATE_WRITING:
+                baseVariantAtWrite = currentVariant; // Save variant intent at start of writing
+                lastStamina = StatManager.Instance.CurrentStamina; // ✅ Add this line
+                stickyReaction?.ResetVariant(); // 👈 add this
                 SetUI(false, true);
                 jessicaMail.CloseAllMailUI();
                 jessicaMail.CoffeeReplyUI?.SetActive(true);
 
                 DealCoffeeHand();
-                StartCoroutine(LiveValidateDraggables());
+                if (liveValidationCoroutine != null)
+                    StopCoroutine(liveValidationCoroutine);
+
+                liveValidationCoroutine = StartCoroutine(LiveValidateDraggables());
                 break;
         }
     }
@@ -308,7 +323,13 @@ public class GameLoop : MonoBehaviour
         }
     }
 
-    public void LogReceive() => ChangeGameState(3);
+    private int baseVariantAtWrite = 1; // default neutral
+
+    public void LogReceive()
+    {
+        
+        ChangeGameState(3);
+    }
 
     public void LogSend(int sanity)
     {
@@ -494,9 +515,11 @@ public class GameLoop : MonoBehaviour
     private void ChooseVariantDay3Neutral()
     {
         int damage = startingStamina - StatManager.Instance.CurrentStamina;
-        currentVariant = damage <= damagelowDay3Neutral ? 2 : damage <= damagehighDay3Neutral ? 1 : 0;
+
+        currentVariant = 1; // ✅ Always apply neutral variant
         ApplyVariantToGame(currentVariant);
-        Debug.Log($"Day 3 (Neutral) - Stamina Damage: {damage}, Variant: {currentVariant}");
+
+        Debug.Log($"Day 3 (Neutral - Forced) - Ignored Damage: {damage}, Applied Variant: {currentVariant}");
     }
 
     private void ChooseVariantDay3NiceTransition()
@@ -549,7 +572,7 @@ public class GameLoop : MonoBehaviour
         stickyReaction?.UpdateJessicaSpriteByVariant(variant);
     }
 
-    public int GetCurrentVariant() => currentVariant;
+    
 
     public void IncreaseDay()
     {
@@ -599,27 +622,101 @@ public class GameLoop : MonoBehaviour
         Resources.Load<StoryEmailsDatabase>("StoryEmailsDatabase");
     }
 
+    private int lastStamina = -1; // 🧠 Track to detect live changes
+
     private IEnumerator LiveValidateDraggables()
     {
+        Debug.Log("🌀 LiveValidateDraggables STARTED");
+
         while (GameState == 3 || GameState == COFFEE_STATE_WRITING)
         {
-            foreach (var item in allDraggables)
-                item?.ValidateAgainstStats();
-            yield return new WaitForSeconds(0.2f);
-            UpdateStickyReaction(); // 🆕 React immediately to change
-        }
-    }
+            int currentStamina = StatManager.Instance.CurrentStamina;
 
+            if (currentStamina != lastStamina)
+            {
+                Debug.Log($"🔁 Stamina changed → {currentStamina}, Damage: {startingStamina - currentStamina}");
+
+                foreach (var item in allDraggables)
+                    item?.ValidateAgainstStats();
+
+                UpdateStickyReaction(); // This must trigger sprite change
+                lastStamina = currentStamina;
+            }
+
+            yield return new WaitForSeconds(0.1f); // fast enough for UI feedback
+        }
+
+        Debug.Log("🛑 LiveValidateDraggables STOPPED");
+    }
 
     public void UpdateStickyReaction()
     {
         if (stickyReaction == null) return;
 
-        int sanity = StatManager.Instance.CurrentSanity;
-
-        int variant = sanity >= angry ? 2 : sanity >= neutral ? 1 : 0;
+        int variant = PredictNextVariant(); // 🔁 Use correct variant logic (not simplified one)
         stickyReaction.UpdateJessicaSpriteByVariant(variant);
     }
+
+    private int PredictNextVariant()
+    {
+        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+
+        if (Day == 1)
+        {
+            return damage <= damagelowDay1 ? 2 : damage <= damagehighDay1 ? 1 : 0;
+        }
+
+        if (Day == 2)
+        {
+            switch (baseVariantAtWrite)
+            {
+                case 2: return damage <= damagelowDay2Evil ? 4 : 2;
+                case 1: return damage <= damagelowDay2Neutral ? 2 : damage <= damagehighDay2Neutral ? 1 : 0;
+                case 0: return damage <= damagelowDay2Nice ? 0 : 3;
+            }
+        }
+
+        if (Day == 3)
+        {
+            switch (baseVariantAtWrite)
+            {
+                case 3: return 2;
+                case 4: return damage <= damagelowDay3EvilTransition ? 1 : 2;
+                case 1: return 1;
+                case 0: return 0;
+                case 5: return damage <= damagelowDay3NiceTransition ? 1 : 2;
+            }
+        }
+
+        if (Day == 4)
+            return damage <= damagelowDay4 ? 2 : damage <= damagehighDay4 ? 1 : 0;
+
+        if (Day == 5)
+            return damage <= damagelowDay5 ? 2 : damage <= damagehighDay5 ? 1 : 0;
+
+        return 1;
+    }
+
+    public int PredictVariantByDamage(int damage)
+    {
+        switch (Day)
+        {
+            case 1:
+                return damage <= damagelowDay1 ? 2 : damage <= damagehighDay1 ? 1 : 0;
+            case 2:
+                return damage <= damagelowDay2 ? 2 : damage <= damagehighDay2 ? 1 : 0;
+            case 3:
+                return damage <= damagelowDay3 ? 2 : damage <= damagehighDay3 ? 1 : 0;
+            case 4:
+                return damage <= damagelowDay4 ? 2 : damage <= damagehighDay4 ? 1 : 0;
+            case 5:
+                return damage <= damagelowDay5 ? 2 : damage <= damagehighDay5 ? 1 : 0;
+            default:
+                return 1;
+        }
+    }
+
+
 
 #if UNITY_EDITOR
     private void ResetEditorProgress()

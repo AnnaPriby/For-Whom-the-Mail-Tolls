@@ -2213,9 +2213,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   variantSprites:
-  - {fileID: 21300000, guid: acca9562f1131a6499f1e2e8b4a3e408, type: 3}
-  - {fileID: 21300000, guid: d25ac0ec80546b14c86221662390cc86, type: 3}
   - {fileID: 21300000, guid: da12513d92a183a49834f1986f4041ca, type: 3}
+  - {fileID: 21300000, guid: d25ac0ec80546b14c86221662390cc86, type: 3}
+  - {fileID: 21300000, guid: acca9562f1131a6499f1e2e8b4a3e408, type: 3}
 --- !u!222 &651324831
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2489,7 +2489,6 @@ GameObject:
   - component: {fileID: 701165336}
   - component: {fileID: 701165339}
   - component: {fileID: 701165338}
-  - component: {fileID: 701165340}
   - component: {fileID: 701165341}
   m_Layer: 5
   m_Name: Sticky
@@ -2537,7 +2536,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: adb3e2a77d17a1c47b8e09445d61ce3e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0017ec1e6ad9bc44dbe045c78a3f664b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2555,58 +2554,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 701165335}
   m_CullTransparentMesh: 1
---- !u!212 &701165340
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 701165335}
-  m_Enabled: 0
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: adb3e2a77d17a1c47b8e09445d61ce3e, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 2.5, y: 2.5}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!114 &701165341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2621,9 +2568,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetImage: {fileID: 701165338}
   variantSprites:
-  - {fileID: 21300000, guid: 0017ec1e6ad9bc44dbe045c78a3f664b, type: 3}
-  - {fileID: 21300000, guid: adb3e2a77d17a1c47b8e09445d61ce3e, type: 3}
   - {fileID: 21300000, guid: 4bb54c1dbab85b544a7b6356aacde101, type: 3}
+  - {fileID: 21300000, guid: adb3e2a77d17a1c47b8e09445d61ce3e, type: 3}
+  - {fileID: 21300000, guid: 0017ec1e6ad9bc44dbe045c78a3f664b, type: 3}
 --- !u!1 &791379289
 GameObject:
   m_ObjectHideFlags: 0

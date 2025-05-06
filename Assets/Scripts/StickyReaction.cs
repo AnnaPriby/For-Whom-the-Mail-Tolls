@@ -1,5 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class StickyReaction : MonoBehaviour
 {
@@ -8,40 +9,54 @@ public class StickyReaction : MonoBehaviour
 
     private int lastVariant = -1;
 
-    void Start()
+    private void Start()
     {
-        StartCoroutine(TrackStamina());
+        StartCoroutine(TrackStaminaDamage());
     }
 
-    private System.Collections.IEnumerator TrackStamina()
+    private IEnumerator TrackStaminaDamage()
     {
         while (true)
         {
-            if (StatManager.Instance != null)
+            if (StatManager.Instance != null && GameLoop.Instance != null)
             {
-                int stamina = StatManager.Instance.CurrentStamina;
-                int newVariant = stamina >= GameLoop.Instance.angry ? 2 :
-                                 stamina >= GameLoop.Instance.neutral ? 1 : 0;
+                int starting = GameLoop.Instance.GetStartingStamina();
+                int current = StatManager.Instance.CurrentStamina;
+                int damage = starting - current;
 
-                if (newVariant != lastVariant)
-                {
-                    lastVariant = newVariant;
-                    UpdateJessicaSpriteByVariant(newVariant);
-                }
+                int variant = GameLoop.Instance.PredictVariantByDamage(damage);
+
+                UpdateJessicaSpriteByVariant(variant);
             }
 
-            yield return new WaitForSeconds(0.1f); // Adjust frequency as needed
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
     public void UpdateJessicaSpriteByVariant(int variant)
     {
-        if (targetImage == null || variantSprites == null || variant < 0 || variant >= variantSprites.Length)
+        if (targetImage == null)
         {
-            Debug.LogWarning("[StickyReaction] Invalid parameters");
+            Debug.LogWarning("❌ StickyReaction: targetImage is null.");
             return;
         }
 
-        targetImage.sprite = variantSprites[variant];
+        if (variantSprites == null || variant < 0 || variant >= variantSprites.Length)
+        {
+            Debug.LogWarning($"❌ StickyReaction: invalid variant index {variant}. Sprite array size: {variantSprites?.Length ?? 0}");
+            return;
+        }
+
+        if (lastVariant != variant)
+        {
+            lastVariant = variant;
+            targetImage.sprite = variantSprites[variant];
+            Debug.Log($"✅ StickyReaction updated to variant {variant}: {variantSprites[variant]?.name}");
+        }
+    }
+
+    public void ResetVariant()
+    {
+        lastVariant = -1;
     }
 }
