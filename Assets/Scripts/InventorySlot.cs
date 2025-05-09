@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 // This script allows a UI slot to accept draggable items dropped into it
 public class InventorySlot : MonoBehaviour, IDropHandler
@@ -32,4 +33,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             gameObject.SetActive(false);
         }
     }
+
+
+   
 }

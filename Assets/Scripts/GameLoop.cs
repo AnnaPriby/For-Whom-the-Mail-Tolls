@@ -136,7 +136,7 @@ public class GameLoop : MonoBehaviour
 
     private void PrepareDraggables()
     {
-        // Optional: clean up previous runtime clones if this might be called more than once
+        // Clean up previous runtime clones
         foreach (var item in allDraggables)
         {
             if (item != null && !originalDraggables.Contains(item))
@@ -146,19 +146,18 @@ public class GameLoop : MonoBehaviour
         List<DraggableItem> prepared = new List<DraggableItem>();
         originalDraggables = new List<DraggableItem>(allDraggables);
 
-        
         foreach (var original in originalDraggables)
         {
             if (original == null) continue;
 
-            // Make sure the parent is set before clone
+            // 🧩 Ensure originalParent is always initialized
             if (original.originalParent == null)
             {
-                original.originalParent = original.transform.parent; // 👈 This sets it once
+                original.originalParent = original.transform.parent;
+                Debug.LogWarning($"⚠️ originalParent was null on {original.name}, assigned from transform.parent");
             }
 
-
-            // ✅ Only hide non-coffee originals
+            // Hide original unless it's a coffee draggable
             if (!(original.emailDatabaseObject is CoffeeResponsesDatabase))
                 original.gameObject.SetActive(false);
 
@@ -169,6 +168,10 @@ public class GameLoop : MonoBehaviour
             for (int i = 0; i < cloneCount; i++)
             {
                 DraggableItem clone = Instantiate(original, original.originalParent);
+
+                // ✅ CRUCIAL: assign originalParent on clone manually
+                clone.originalParent = original.originalParent;
+
                 clone.gameObject.SetActive(true);
                 clone.enabled = true;
 
@@ -180,11 +183,11 @@ public class GameLoop : MonoBehaviour
                 if (clone is StoryDraggableItem storyClone)
                     storyClone.UpdateVariantBasedOnDay();
 
-                prepared.Add(clone); // ✅ safe temp list
+                prepared.Add(clone);
             }
         }
 
-        allDraggables = prepared; // ✅ assign once at the end
+        allDraggables = prepared;
     }
 
     public void ChangeGameState(int stateSet)
@@ -225,13 +228,14 @@ public class GameLoop : MonoBehaviour
                 if (Day == 4) lunchImageUI?.SetActive(true);
                 break;
             case 3:
+                handsAnimator.SetBool("IsWriting", true);
                 baseVariantAtWrite = currentVariant; // Save variant intent at start of writing
                 lastStamina = StatManager.Instance.CurrentStamina; // ✅ Add this line
                 stickyReaction?.ResetVariant(); // 👈 add this
                 SetUI(true, false);
                 coffee.enabled = true;
                 DealHand();
-                handsAnimator.SetBool("IsWriting", true);
+               
                 if (liveValidationCoroutine != null)
                     StopCoroutine(liveValidationCoroutine);
 
@@ -241,6 +245,7 @@ public class GameLoop : MonoBehaviour
                 SetUI(false, true);
                 coffee.enabled = false;
                 jessicaMail?.ShowNewMail();
+                
                 break;
             case 5:
                 handsAnimator.SetBool("IsWriting", false);
@@ -296,6 +301,7 @@ public class GameLoop : MonoBehaviour
             item.DealHand();
             item.originalParent?.gameObject.SetActive(false);
         }
+
     }
 
     public void DealCoffeeHand()

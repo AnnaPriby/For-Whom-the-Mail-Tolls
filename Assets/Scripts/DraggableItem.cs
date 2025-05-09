@@ -106,8 +106,21 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         gameObject.SetActive(true);
         this.enabled = true;
 
+        // 🛡️ Ensure canvasGroup exists before using it
+        if (canvasGroup == null)
+        {
+            canvasGroup = GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                Debug.LogError($"❌ [DealHand] CanvasGroup missing on {name}");
+                return;
+            }
+        }
+
         canvasGroup.blocksRaycasts = true;
+
         if (image != null) image.raycastTarget = true;
+
         if (label != null)
         {
             label.raycastTarget = true;
@@ -118,8 +131,16 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             Debug.LogWarning($"⚠️ [DealHand] label is null on {name}");
         }
 
-        transform.SetParent(originalParent);
-        transform.localPosition = Vector3.zero;
+        if (originalParent != null)
+        {
+            transform.SetParent(originalParent);
+            transform.localPosition = Vector3.zero;
+        }
+        else
+        {
+            Debug.LogWarning($"⚠️ [DealHand] originalParent is null for {name}. Assigning current parent as fallback.");
+            originalParent = transform.parent;
+        }
     }
 
     public void AssignUniqueEmail()
