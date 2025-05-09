@@ -98,6 +98,7 @@ public class GameLoop : MonoBehaviour
     public int GetCurrentVariant() => currentVariant;
     private Coroutine liveValidationCoroutine = null;
     public int GetStartingStamina() => startingStamina;
+    private int lastStickyVariant = -1; // 🧠 Stores sticky variant across days
 
     private const int COFFEE_STATE_RECEIVE = 90;
     private const int COFFEE_STATE_READING = 91;
@@ -132,6 +133,9 @@ public class GameLoop : MonoBehaviour
         }
         PrepareDraggables();
         ChangeGameState(GameState);
+        stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant);// ✅ Force it to reflect in JessicaMail
+
+
     }
 
     private void PrepareDraggables()
@@ -209,7 +213,12 @@ public class GameLoop : MonoBehaviour
                 if (Day == 1)
                 {
                     currentVariant = 1;               // ✅ Set manually
-                    ApplyVariantToGame(currentVariant); // ✅ Force it to reflect in JessicaMail
+                    ApplyVariantToGame(currentVariant);
+                    stickyReaction?.UpdateJessicaSpriteByVariant(currentVariant);// ✅ Force it to reflect in JessicaMail
+                }
+                if (Day > 1 && lastStickyVariant >= 0)
+                {
+                    stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant); // restore previous day's face
                 }
 
                 SetUI(false, true);
@@ -220,6 +229,8 @@ public class GameLoop : MonoBehaviour
                 SetUI(false, true);
                 coffee.enabled = false;
                 jessicaMail?.ShowNewMail();
+                stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant);
+
                 break;
             case 2:
                 SetUI(false, true);
@@ -231,7 +242,7 @@ public class GameLoop : MonoBehaviour
                 handsAnimator.SetBool("IsWriting", true);
                 baseVariantAtWrite = currentVariant; // Save variant intent at start of writing
                 lastStamina = StatManager.Instance.CurrentStamina; // ✅ Add this line
-                stickyReaction?.ResetVariant(); // 👈 add this
+                stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant);
                 SetUI(true, false);
                 coffee.enabled = true;
                 DealHand();
@@ -257,6 +268,7 @@ public class GameLoop : MonoBehaviour
                 SetUI(false, true);
                 jessicaMail.CloseAllMailUI();
                 jessicaMail.ShowCoffeeMailIntro();
+                stickyReaction?.UpdateJessicaSpriteByVariant(2);// ✅ Force it to reflect in JessicaMail
                 break;
             case COFFEE_STATE_READING:
                 SetUI(false, true);
@@ -290,7 +302,7 @@ public class GameLoop : MonoBehaviour
 
     private IEnumerator WaitThenGoToNewMail()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         ChangeGameState(1);
     }
 
@@ -343,6 +355,7 @@ public class GameLoop : MonoBehaviour
         ChooseVariant();
         SaveGameProgress();
         ChangeGameState(5);
+        lastStickyVariant = PredictNextVariant();
     }
 
     public void Coffee()
@@ -441,6 +454,7 @@ public class GameLoop : MonoBehaviour
         int sanity = StatManager.Instance.CurrentSanity;
         currentVariant = sanity >= angry ? 2 : sanity >= neutral ? 1 : 0;
         ApplyVariantToGame(currentVariant);
+       
 
     }
 
@@ -450,6 +464,7 @@ public class GameLoop : MonoBehaviour
         currentVariant = damage <= damagelowDay1 ? 2 : damage <= damagehighDay1 ? 1 : 0;
         ApplyVariantToGame(currentVariant);
         Debug.Log($"Day {Day} - Stamina Damage: {damage}, Variant: {currentVariant}");
+        
     }
 
     private void ChooseVariantDay2()
@@ -458,6 +473,7 @@ public class GameLoop : MonoBehaviour
         currentVariant = damage <= damagelowDay2 ? 2 : damage <= damagehighDay2 ? 1 : 0;
         ApplyVariantToGame(currentVariant);
         Debug.Log($"Day {Day} - Stamina Damage: {damage}, Variant: {currentVariant}");
+        
     }
     private void ChooseVariantDay2Evil()
     {
@@ -468,6 +484,7 @@ public class GameLoop : MonoBehaviour
 
         ApplyVariantToGame(currentVariant);
         Debug.Log($"Day {Day} (Evil) - Stamina Damage: {damage}, Applied Variant: {currentVariant}");
+        
     }
 
     //DOŘEŠIT LOGIKU    
@@ -477,6 +494,7 @@ public class GameLoop : MonoBehaviour
         currentVariant = damage <= damagelowDay2Neutral ? 2 : damage <= damagehighDay2Neutral ? 1 : 0;
         ApplyVariantToGame(currentVariant);
         Debug.Log($"Day {Day} (Neutral) - Stamina Damage: {damage}, Variant: {currentVariant}");
+        lastStickyVariant = PredictNextVariant(); // Store the final sticky variant
     }
 
     private void ChooseVariantDay2Nice()
@@ -488,6 +506,7 @@ public class GameLoop : MonoBehaviour
 
         ApplyVariantToGame(currentVariant);
         Debug.Log($"Day {Day} (Nice - 2-State) - Stamina Damage: {damage}, Applied Variant: {currentVariant}");
+        
     }
 
     private void ChooseVariantDay3()
@@ -505,6 +524,7 @@ public class GameLoop : MonoBehaviour
         ApplyVariantToGame(currentVariant);
 
         Debug.Log($"Day 3 (Evil - Forced) - Ignored Damage: {damage}, Applied Variant: {currentVariant}");
+        
     }
 
     private void ChooseVariantDay3EvilTransition()
@@ -516,6 +536,7 @@ public class GameLoop : MonoBehaviour
 
         ApplyVariantToGame(currentVariant);
         Debug.Log($"Day 3 (Evil Transition - 2-State) - Stamina Damage: {damage}, Applied Variant: {currentVariant}");
+       
     }
 
     private void ChooseVariantDay3Neutral()
@@ -526,6 +547,7 @@ public class GameLoop : MonoBehaviour
         ApplyVariantToGame(currentVariant);
 
         Debug.Log($"Day 3 (Neutral - Forced) - Ignored Damage: {damage}, Applied Variant: {currentVariant}");
+        
     }
 
     private void ChooseVariantDay3NiceTransition()
@@ -537,6 +559,7 @@ public class GameLoop : MonoBehaviour
 
         ApplyVariantToGame(currentVariant);
         Debug.Log($"Day 3 (Nice Transition - 2-State) - Stamina Damage: {damage}, Applied Variant: {currentVariant}");
+       
     }
 
     private void ChooseVariantDay3Nice()
@@ -547,6 +570,7 @@ public class GameLoop : MonoBehaviour
         ApplyVariantToGame(currentVariant);
 
         Debug.Log($"Day 3 (Nice - Forced) - Ignored Damage: {damage}, Applied Variant: {currentVariant}");
+       
     }
 
     private void ChooseVariantDay4()
@@ -555,6 +579,7 @@ public class GameLoop : MonoBehaviour
         currentVariant = damage <= damagelowDay4 ? 2 : damage <= damagehighDay4 ? 1 : 0;
         ApplyVariantToGame(currentVariant);
         Debug.Log($"Day {Day} - Stamina Damage: {damage}, Variant: {currentVariant}");
+       
     }
 
     private void ChooseVariantDay5()
@@ -563,6 +588,7 @@ public class GameLoop : MonoBehaviour
         currentVariant = damage <= damagelowDay5 ? 2 : damage <= damagehighDay5 ? 1 : 0;
         ApplyVariantToGame(currentVariant);
         Debug.Log($"Day {Day} - Stamina Damage: {damage}, Variant: {currentVariant}");
+        
     }
 
     private void ApplyVariantToGame(int variant)
@@ -573,9 +599,9 @@ public class GameLoop : MonoBehaviour
         foreach (var original in originalDraggables)
             if (original is StoryDraggableItem sdo) sdo.UpdateVariantBasedOnDay();
 
-
         JessicaReaction?.UpdateJessicaSpriteByVariant(variant);
-        stickyReaction?.UpdateJessicaSpriteByVariant(variant);
+        stickyReaction?.UpdateJessicaSpriteByVariant(variant); // ← update once at decision
+        lastStickyVariant = variant; // ← store it for tomorrow
     }
 
     
@@ -645,11 +671,11 @@ public class GameLoop : MonoBehaviour
                 foreach (var item in allDraggables)
                     item?.ValidateAgainstStats();
 
-                UpdateStickyReaction(); // This must trigger sprite change
+                UpdateStickyReaction();
                 lastStamina = currentStamina;
             }
 
-            yield return new WaitForSeconds(0.1f); // fast enough for UI feedback
+            yield return new WaitForSeconds(0.1f);
         }
 
         Debug.Log("🛑 LiveValidateDraggables STOPPED");

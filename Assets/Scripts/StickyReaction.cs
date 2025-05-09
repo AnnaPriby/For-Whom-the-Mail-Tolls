@@ -11,7 +11,7 @@ public class StickyReaction : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(TrackStaminaDamage());
+       // StartCoroutine(TrackStaminaDamage());
     }
 
     private IEnumerator TrackStaminaDamage()

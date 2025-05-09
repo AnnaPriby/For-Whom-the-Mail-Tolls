@@ -47,38 +47,48 @@ public class TMPStoryController : MonoBehaviour
             if (isTyping)
             {
                 StopAllCoroutines();
-                mainText.text = storyLines[currentLine - 1]; // Show full current line
+                mainText.text = storyLines[currentLine];
                 mainCanvasGroup.alpha = 1;
                 isTyping = false;
+
+                // ✅ Fade in persistentText if we skipped the first line
+                if (!persistentTextShown && currentLine == 0)
+                {
+                    StartCoroutine(FadeInPersistentText());
+                    persistentTextShown = true;
+                }
+
+                if (currentLine == storyLines.Length - 1)
+                {
+                    nextSceneButton.gameObject.SetActive(true);
+                }
             }
-            else if (currentLine < storyLines.Length)
+            else
             {
+                if (currentLine >= storyLines.Length - 1)
+                    return;
+
+                currentLine++;
                 StopAllCoroutines();
                 StartCoroutine(ShowNextLine());
             }
         }
     }
-
     IEnumerator ShowNextLine()
     {
         yield return FadeOut();
 
         mainText.text = "";
-        yield return FadeIn(); // 👈 Show the canvas first
-        yield return TypeLine(storyLines[currentLine]);
-        currentLine++;
+        yield return FadeIn();
 
-        // Show persistent text after the first line only
-        if (!persistentTextShown && currentLine >= 1)
+        // ✅ Fade in persistent text immediately on first line
+        if (!persistentTextShown && currentLine == 0)
         {
             StartCoroutine(FadeInPersistentText());
             persistentTextShown = true;
         }
 
-        if (currentLine >= storyLines.Length)
-        {
-            nextSceneButton.gameObject.SetActive(true);
-        }
+        yield return TypeLine(storyLines[currentLine]);
     }
 
     IEnumerator TypeLine(string line)
