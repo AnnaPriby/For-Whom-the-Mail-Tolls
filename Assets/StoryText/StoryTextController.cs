@@ -7,8 +7,8 @@ using System.Collections;
 public class TMPStoryController : MonoBehaviour
 {
     [Header("UI Elements")]
-    public TextMeshProUGUI mainText;          // Story that changes each line
-    public TextMeshProUGUI persistentText;    // Appears after first line and stays visible
+    public TextMeshProUGUI mainText;
+    public TextMeshProUGUI persistentText;
     public Button nextSceneButton;
 
     [Header("Story Settings")]
@@ -24,7 +24,6 @@ public class TMPStoryController : MonoBehaviour
 
     void Start()
     {
-        // Ensure CanvasGroup exists on mainText for fading
         mainCanvasGroup = mainText.GetComponent<CanvasGroup>();
         if (mainCanvasGroup == null)
         {
@@ -32,11 +31,9 @@ public class TMPStoryController : MonoBehaviour
         }
 
         mainCanvasGroup.alpha = 0;
-
-        // Hide the persistentText initially (but preserve its content from Inspector)
         persistentText.alpha = 0f;
-
         nextSceneButton.gameObject.SetActive(false);
+
         StartCoroutine(ShowNextLine());
     }
 
@@ -51,13 +48,13 @@ public class TMPStoryController : MonoBehaviour
                 mainCanvasGroup.alpha = 1;
                 isTyping = false;
 
-                // ✅ Fade in persistentText if we skipped the first line
                 if (!persistentTextShown && currentLine == 0)
                 {
                     StartCoroutine(FadeInPersistentText());
                     persistentTextShown = true;
                 }
 
+                // ✅ If skipping last line, show button immediately
                 if (currentLine == storyLines.Length - 1)
                 {
                     nextSceneButton.gameObject.SetActive(true);
@@ -74,6 +71,7 @@ public class TMPStoryController : MonoBehaviour
             }
         }
     }
+
     IEnumerator ShowNextLine()
     {
         yield return FadeOut();
@@ -81,7 +79,6 @@ public class TMPStoryController : MonoBehaviour
         mainText.text = "";
         yield return FadeIn();
 
-        // ✅ Fade in persistent text immediately on first line
         if (!persistentTextShown && currentLine == 0)
         {
             StartCoroutine(FadeInPersistentText());
@@ -89,6 +86,12 @@ public class TMPStoryController : MonoBehaviour
         }
 
         yield return TypeLine(storyLines[currentLine]);
+
+        // ✅ Automatically show the button if this is the last line
+        if (currentLine == storyLines.Length - 1)
+        {
+            nextSceneButton.gameObject.SetActive(true);
+        }
     }
 
     IEnumerator TypeLine(string line)
