@@ -52,14 +52,8 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         }
 
         currentItem = newItem;
-        string phrase = newItem.Phrase;
-        DayData matched = variantDatabase.entries.Find(entry => entry.Phrase == phrase);
-
-        if (matched == null)
-        {
-            Debug.LogWarning($"❌ Phrase '{phrase}' not found in {variantDatabase.name}");
-            return;
-        }
+        DayData matched = newItem.AssignedData;
+      
 
         string selectedPart = variant switch
         {
@@ -68,6 +62,10 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
             VariantType.Part3 => matched.Part3,
             _ => matched.Part1
         };
+
+        Debug.Log($"📦 Dropped Phrase: {matched.Phrase}");
+        Debug.Log($"🧩 Parts: P1='{matched.Part1}' | P2='{matched.Part2}' | P3='{matched.Part3}'");
+        Debug.Log($"📤 Displayed Part ({variant}): {selectedPart}");
 
         infoDisplay.text = selectedPart;
 

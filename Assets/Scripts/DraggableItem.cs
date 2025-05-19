@@ -27,6 +27,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public int Stamina => dayData?.Stamina ?? 0;
     public int Sanity => dayData?.Sanity ?? 0;
 
+    public DayData AssignedData => dayData;
+
     public string FullInfo => dayData != null
         ? $"<b>{dayData.Phrase}</b>\n<color=#f4c542>Stamina:</color> {dayData.Stamina}\n<color=#42b0f5>Sanity:</color> {dayData.Sanity}"
         : "";
@@ -44,7 +46,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void DealHand()
     {
-        AssignEntry();
+        if (dayData == null) // ✅ Prevent reassigning randomly
+            AssignEntry();
 
         gameObject.SetActive(true);
         this.enabled = true;
