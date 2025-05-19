@@ -2,21 +2,21 @@
 using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
-using System.Collections.Generic;
+using System.Linq;
+using System;
 
 public class RevealSlotPro : MonoBehaviour, IDropHandler
 {
-   
-
     [Header("UI")]
     public TextMeshProUGUI infoDisplay;
 
     public enum VariantType { Part1, Part2, Part3 }
+
     [Header("Variant Settings")]
     public VariantType variant = VariantType.Part1;
 
     [Header("Database")]
-    public Day1Database variantDatabase;
+    public Day1Database variantDatabase; 
 
     [Header("References")]
     public StatManager statManager;
@@ -25,16 +25,10 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     private DraggableItem currentItem;
     private int sanityCost;
 
-    
-
     private void Start()
     {
         if (sendButton != null)
-        {
             sendButton.onClick.AddListener(OnSendButtonClicked);
-        }
-
-       
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -43,7 +37,6 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         DraggableItem newItem = dropped?.GetComponent<DraggableItem>();
         if (newItem == null) return;
 
-        // Remove restriction check
         if (currentItem != null)
         {
             statManager.ApplyStaminaDelta(-currentItem.Stamina);
@@ -52,8 +45,19 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         }
 
         currentItem = newItem;
-        DayData matched = newItem.AssignedData;
-      
+
+        // Sanitize the phrase for matching
+        string phraseToMatch = currentItem.Phrase?.Trim().Replace("\u200B", ""); // remove zero-width space
+
+        DayData matched = variantDatabase.entries
+            .FirstOrDefault(entry => string.Equals(entry.Phrase?.Trim().Replace("\u200B", ""), phraseToMatch, StringComparison.OrdinalIgnoreCase));
+
+        if (matched == null)
+        {
+            Debug.LogWarning($"❌ Phrase '{phraseToMatch}' not found in Day1Database.");
+            infoDisplay.text = "<not found>";
+            return;
+        }
 
         string selectedPart = variant switch
         {
@@ -63,10 +67,6 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
             _ => matched.Part1
         };
 
-        Debug.Log($"📦 Dropped Phrase: {matched.Phrase}");
-        Debug.Log($"🧩 Parts: P1='{matched.Part1}' | P2='{matched.Part2}' | P3='{matched.Part3}'");
-        Debug.Log($"📤 Displayed Part ({variant}): {selectedPart}");
-
         infoDisplay.text = selectedPart;
 
         currentItem.DisableDragging();
@@ -75,11 +75,12 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         statManager.ApplyStaminaDelta(currentItem.Stamina);
         statManager.ApplySanityDelta(currentItem.Sanity);
 
-        Debug.Log($"📥 {newItem.name} dropped → Applied Stamina: {currentItem.Stamina}, Sanity: {currentItem.Sanity}");
-        Debug.Log($"📊 Updated Stats → Stamina: {statManager.CurrentStamina}, Sanity: {statManager.CurrentSanity}");
+        Debug.Log($"✅ Matched Phrase: {matched.Phrase}");
+        Debug.Log($"📤 Displayed Part: {selectedPart}");
+        Debug.Log($"📊 Stats → Stamina: {statManager.CurrentStamina}, Sanity: {statManager.CurrentSanity}");
     }
 
-    
+
 
     private void OnSendButtonClicked()
     {
@@ -94,25 +95,14 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         TrackGameState();
 
         if (GameLoop.Instance.GameState == 92)
-        {
             GameLoop.Instance.ReturnFromCoffee();
-        }
     }
 
     private void ApplyStatsFromItem()
     {
-        if (currentItem == null)
-        {
-            Debug.LogWarning("❌ No message to send.");
-            return;
-        }
-
-        Debug.Log($"📬 Sent: {currentItem.name} already applied → Final Stats → Stamina: {statManager.CurrentStamina}, Sanity: {statManager.CurrentSanity}");
-
+        Debug.Log($"📬 Message sent with ST: {statManager.CurrentStamina}, SA: {statManager.CurrentSanity}");
         currentItem = null;
         sanityCost = 0;
-
-        
     }
 
     private void DrawNewCards()
@@ -130,11 +120,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     {
         currentItem = null;
         infoDisplay.text = "";
-
-        
     }
-
-   
 
     private void ReturnOldItemToInventory()
     {
@@ -143,7 +129,6 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         currentItem.gameObject.SetActive(true);
         currentItem.transform.SetParent(currentItem.originalParent);
         currentItem.transform.localPosition = Vector3.zero;
-
         currentItem.enabled = true;
 
         if (currentItem.TryGetComponent(out CanvasGroup cg))
@@ -151,7 +136,6 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
         if (currentItem.image != null)
             currentItem.image.raycastTarget = true;
-
         if (currentItem.label != null)
             currentItem.label.raycastTarget = true;
 

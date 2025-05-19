@@ -29,12 +29,12 @@ public class EmailCSVImporter : EditorWindow
 
             DayData entry = new DayData
             {
-                Phrase = row[0].Trim(),
+                Phrase = Clean(row[0]),
                 Sanity = int.TryParse(row[1], out int sanity) ? sanity : 0,
                 Stamina = int.TryParse(row[2], out int stamina) ? stamina : 0,
-                Part1 = row[3].Trim(),
-                Part2 = row[4].Trim(),
-                Part3 = row[5].Trim()
+                Part1 = Clean(row[3]),
+                Part2 = Clean(row[4]),
+                Part3 = Clean(row[5])
             };
 
             newEntries.Add(entry);
@@ -55,6 +55,21 @@ public class EmailCSVImporter : EditorWindow
         AssetDatabase.Refresh();
 
         Debug.Log($"✅ Imported {newEntries.Count} entries into Day1Database.");
+
+        // Debug preview
+        foreach (var e in db.entries)
+        {
+            Debug.Log($"[Preview] Phrase='{e.Phrase}' | P1='{e.Part1}' | SA={e.Sanity}, ST={e.Stamina}");
+        }
+    }
+
+    private static string Clean(string input)
+    {
+        return input?.Trim()
+            .Replace("\u200B", "") // Zero-width space
+            .Replace("\uFEFF", "") // BOM
+            .Replace("\r", "")     // Windows carriage return
+            .Replace("\n", "");    // Line breaks
     }
 
     private static List<string[]> ParseCSV(string csvText)
@@ -64,9 +79,22 @@ public class EmailCSVImporter : EditorWindow
         string currentField = "";
         List<string> currentRow = new();
 
-        foreach (char c in csvText)
+        for (int i = 0; i < csvText.Length; i++)
         {
-            if (c == '"') insideQuotes = !insideQuotes;
+            char c = csvText[i];
+
+            if (c == '"')
+            {
+                if (insideQuotes && i + 1 < csvText.Length && csvText[i + 1] == '"')
+                {
+                    currentField += '"'; // Escaped quote
+                    i++;
+                }
+                else
+                {
+                    insideQuotes = !insideQuotes;
+                }
+            }
             else if (c == ',' && !insideQuotes)
             {
                 currentRow.Add(currentField);
@@ -74,15 +102,16 @@ public class EmailCSVImporter : EditorWindow
             }
             else if ((c == '\n' || c == '\r') && !insideQuotes)
             {
-                if (!string.IsNullOrEmpty(currentField) || currentRow.Count > 0)
-                {
-                    currentRow.Add(currentField);
-                    rows.Add(currentRow.ToArray());
-                    currentRow = new List<string>();
-                    currentField = "";
-                }
+                if (i + 1 < csvText.Length && csvText[i + 1] == '\n') i++; // Windows line ending
+                currentRow.Add(currentField);
+                rows.Add(currentRow.ToArray());
+                currentRow = new List<string>();
+                currentField = "";
             }
-            else currentField += c;
+            else
+            {
+                currentField += c;
+            }
         }
 
         if (!string.IsNullOrEmpty(currentField) || currentRow.Count > 0)

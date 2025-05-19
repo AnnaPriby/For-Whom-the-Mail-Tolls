@@ -46,7 +46,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void DealHand()
     {
-        if (dayData == null) // ✅ Prevent reassigning randomly
+        if (dayData == null) // ✅ Only assign once per round
             AssignEntry();
 
         gameObject.SetActive(true);
@@ -55,11 +55,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (canvasGroup != null)
             canvasGroup.blocksRaycasts = true;
 
-        if (label != null)
-        {
-            label.text = dayData?.Phrase ?? "???";
-            label.raycastTarget = true;
-        }
+        
 
         if (image != null)
             image.raycastTarget = true;
@@ -91,8 +87,15 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         usedIndexes.Add(index);
         dayData = database.entries[index];
-    }
 
+        if (label != null && dayData != null)
+        {
+            label.text = $"{dayData.Phrase} ({dayData.Stamina}/{dayData.Sanity})";
+            label.raycastTarget = true;
+        }
+
+        Debug.Log($"🎴 {name} assigned → Phrase: '{dayData.Phrase}', ST: {dayData.Stamina}, SA: {dayData.Sanity}");
+    }
     public void OnBeginDrag(PointerEventData eventData)
     {
         parentAfterDrag = transform.parent;
@@ -144,7 +147,10 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
     }
 
-    public static void ResetUsed() => usedIndexes.Clear();
+    public static void ResetUsed()
+    {
+        usedIndexes.Clear();
+    }
 
     public void DisableDragging()
     {
