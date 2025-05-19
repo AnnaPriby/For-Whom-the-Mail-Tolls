@@ -14,6 +14,8 @@ public class GameLoop : MonoBehaviour
     public GameObject lunchImageUI;
     public GameObject noMailUI;
 
+
+
     [Header("Game Objects")]
     public Coffee coffee;
     public VerticalParallax verticalParallax;
@@ -110,10 +112,10 @@ public class GameLoop : MonoBehaviour
 #if UNITY_EDITOR
         ResetEditorProgress();
 #endif
-        playerTurnUI?.gameObject.SetActive(true);
+        
         jessicaUI?.SetActive(true);
-        playerTurnUI.localScale = Vector3.zero;
-        jessicaUI.transform.localScale = Vector3.one;
+        playerTurnUI?.gameObject.SetActive(false); // Start hidden
+        jessicaUI?.SetActive(true);
         coffee.enabled = false;
         lunchImageUI?.SetActive(false);
         noMailUI?.SetActive(false);
@@ -140,58 +142,34 @@ public class GameLoop : MonoBehaviour
 
     private void PrepareDraggables()
     {
-        // Clean up previous runtime clones
+        allDraggables = new List<DraggableItem>(originalDraggables); // Just reference them directly
+
         foreach (var item in allDraggables)
         {
-            if (item != null && !originalDraggables.Contains(item))
-                Destroy(item.gameObject);
-        }
+            if (item == null) continue;
 
-        List<DraggableItem> prepared = new List<DraggableItem>();
-        originalDraggables = new List<DraggableItem>(allDraggables);
+            // Ensure visibility
+            item.gameObject.SetActive(true);
+            item.enabled = true;
 
-        foreach (var original in originalDraggables)
-        {
-            if (original == null) continue;
-
-            // 🧩 Ensure originalParent is always initialized
-            if (original.originalParent == null)
+            // Assign originalParent if not set (failsafe)
+            if (item.originalParent == null)
             {
-                original.originalParent = original.transform.parent;
-                Debug.LogWarning($"⚠️ originalParent was null on {original.name}, assigned from transform.parent");
+                item.originalParent = item.transform.parent;
+                Debug.LogWarning($"⚠️ originalParent was null on {item.name}, assigned from transform.parent");
             }
 
-            // Hide original unless it's a coffee draggable
-            if (!(original.emailDatabaseObject is CoffeeResponsesDatabase))
-                original.gameObject.SetActive(false);
+            // Enable raycast for dragging
+            if (item.TryGetComponent(out CanvasGroup cg))
+                cg.blocksRaycasts = true;
 
-            int cloneCount = (original.emailDatabaseObject is CoffeeResponsesDatabase || original.name.Contains("Coffee"))
-                ? coffeeDraggablesCount
-                : 5;
+            // Update variant visuals if it's a story item
+            if (item is StoryDraggableItem story)
+                story.UpdateVariantBasedOnDay();
 
-            for (int i = 0; i < cloneCount; i++)
-            {
-                DraggableItem clone = Instantiate(original, original.originalParent);
-
-                // ✅ CRUCIAL: assign originalParent on clone manually
-                clone.originalParent = original.originalParent;
-
-                clone.gameObject.SetActive(true);
-                clone.enabled = true;
-
-                if (clone.TryGetComponent(out CanvasGroup cg))
-                    cg.blocksRaycasts = true;
-
-                clone.transform.localPosition = Vector3.zero;
-
-                if (clone is StoryDraggableItem storyClone)
-                    storyClone.UpdateVariantBasedOnDay();
-
-                prepared.Add(clone);
-            }
+            // ✅ Assign database manually if needed
+            //item.AssignDatabase(); // ← Optional: If you use a method to bind the database
         }
-
-        allDraggables = prepared;
     }
 
     public void ChangeGameState(int stateSet)
@@ -296,8 +274,8 @@ public class GameLoop : MonoBehaviour
 
     private void SetUI(bool playerTurn, bool jessica)
     {
-        playerTurnUI.localScale = playerTurn ? Vector3.one : Vector3.zero;
-        jessicaUI.transform.localScale = jessica ? Vector3.one : Vector3.zero;
+        playerTurnUI?.gameObject.SetActive(playerTurn);
+        jessicaUI?.SetActive(jessica);
     }
 
     private IEnumerator WaitThenGoToNewMail()
@@ -311,7 +289,7 @@ public class GameLoop : MonoBehaviour
         foreach (var item in allDraggables)
         {
             item.DealHand();
-            item.originalParent?.gameObject.SetActive(false);
+           // item.originalParent?.gameObject.SetActive(false);
         }
 
     }
@@ -324,7 +302,7 @@ public class GameLoop : MonoBehaviour
             if (item == null) continue;
 
             // 💡 Only allow items from CoffeeResponsesDatabase or matching name
-            if (!(item.emailDatabaseObject is CoffeeResponsesDatabase) && !item.name.Contains("Coffee")) continue;
+          //  if (!(item.emailDatabaseObject is CoffeeResponsesDatabase) && !item.name.Contains("Coffee")) continue;
 
             if (count < coffeeDraggablesCount)
             {
@@ -621,7 +599,7 @@ public class GameLoop : MonoBehaviour
         IncreaseDay();
         ChangeGameState(0);
         foreach (var slot in allRevealSlots) slot.PrepareForNewRound();
-        DraggableItem.ResetUsedEmails();
+        DraggableItem.ResetUsed();
     }
 
     public void SaveGameProgress()

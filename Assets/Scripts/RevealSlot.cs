@@ -40,7 +40,7 @@ public class RevealSlot : MonoBehaviour, IDropHandler
         if (item != null)
         {
             currentItem = item;                             // Store the item for later use when sending
-            infoDisplay.text = item.MainTextOnly;           // Show only the message text in the UI
+            infoDisplay.text = item.Phrase;           // Show only the message text in the UI
 
             item.DisableDragging();                         // Disable further dragging of this item
             dropped.SetActive(false);                       // Hide the visual object

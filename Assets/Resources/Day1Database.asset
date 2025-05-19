@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4ff090bfb84f14d9caa64ff7732016, type: 3}
+  m_Name: Day1Database
+  m_EditorClassIdentifier: 
+  entries:
+  - Phrase: Please forgive me
+    Sanity: -2
+    Stamina: 0
+    Part1: Dearest Linda, please forgive this transgression.
+    Part2: Please forgive my absent mind on account of my dog's needing surgery.
+    Part3: Please forgive this transgression.
+  - Phrase: Of course
+    Sanity: -1
+    Stamina: 0
+    Part1: Hello Linda, Of course I'll do my part.
+    Part2: Of course I also need to know next weeks schedule because of my dogs surgery.
+    Part3: Of course my mistake will be fixed.
+  - Phrase: As you may remember
+    Sanity: 0
+    Stamina: -1
+    Part1: Linda, as you may remember, you are not my boss.
+    Part2: As you may remember, my dog is in great need of surgery.
+    Part3: As you may remember, I still have time to submit.
+  - Phrase: I'm busy
+    Sanity: 1
+    Stamina: -1
+    Part1: Linda, I've been quite busy with important stuff.
+    Part2: I've been busy with both work and my surgery needing dog.
+    Part3: Lets get back to being busy, shall we?
+  - Phrase: Bitch
+    Sanity: 2
+    Stamina: -2
+    Part1: Oh my good Jessica, you bitch.
+    Part2: Speaking of bitches, my dog needs surgery.
+    Part3: So leave me alone, bitch.
