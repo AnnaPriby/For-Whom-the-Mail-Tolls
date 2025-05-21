@@ -16,7 +16,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     public VariantType variant = VariantType.Part1;
 
     [Header("Database")]
-    public Day1Database variantDatabase; 
+    public Day1Database variantDatabase;
 
     [Header("References")]
     public StatManager statManager;
@@ -24,9 +24,13 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
     private DraggableItem currentItem;
     private int sanityCost;
+    private string originalInfoText;
 
     private void Start()
     {
+        if (infoDisplay != null)
+            originalInfoText = infoDisplay.text;
+
         if (sendButton != null)
             sendButton.onClick.AddListener(OnSendButtonClicked);
     }
@@ -47,7 +51,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         currentItem = newItem;
 
         // Sanitize the phrase for matching
-        string phraseToMatch = currentItem.Phrase?.Trim().Replace("\u200B", ""); // remove zero-width space
+        string phraseToMatch = currentItem.Phrase?.Trim().Replace("\u200B", "");
 
         DayData matched = variantDatabase.entries
             .FirstOrDefault(entry => string.Equals(entry.Phrase?.Trim().Replace("\u200B", ""), phraseToMatch, StringComparison.OrdinalIgnoreCase));
@@ -55,7 +59,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         if (matched == null)
         {
             Debug.LogWarning($"❌ Phrase '{phraseToMatch}' not found in Day1Database.");
-            infoDisplay.text = "<not found>";
+            infoDisplay.text = originalInfoText;
             return;
         }
 
@@ -79,8 +83,6 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         Debug.Log($"📤 Displayed Part: {selectedPart}");
         Debug.Log($"📊 Stats → Stamina: {statManager.CurrentStamina}, Sanity: {statManager.CurrentSanity}");
     }
-
-
 
     private void OnSendButtonClicked()
     {
@@ -112,14 +114,14 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
     private void TrackGameState()
     {
-        infoDisplay.text = null;
+        infoDisplay.text = originalInfoText;
         GameLoop.Instance.LogSend(sanityCost);
     }
 
     public void PrepareForNewRound()
     {
         currentItem = null;
-        infoDisplay.text = "";
+        infoDisplay.text = originalInfoText;
     }
 
     private void ReturnOldItemToInventory()

@@ -4,7 +4,7 @@ using TMPro;
 
 public class StatManager : MonoBehaviour
 {
-    public static StatManager Instance; // 🌟 ADD THIS for global access!
+    public static StatManager Instance;
 
     [Header("Stamina UI")]
     public Slider staminaSlider;
@@ -16,16 +16,21 @@ public class StatManager : MonoBehaviour
     public TextMeshProUGUI sanityValueText;
     public Image sanityFill;
 
+    [Header("Damage UI")]
+    public Slider damageSlider;
+    public TextMeshProUGUI damageValueText;
+    public Image damageFill;
+
     [Header("Gradient Colors")]
     public Color fullColor = Color.green;
     public Color lowColor = Color.red;
 
     private float maxStamina;
     private float maxSanity;
+    private float maxDamage;
 
     private void Awake()
     {
-        // 🌟 Simple Singleton
         if (Instance == null)
             Instance = this;
         else
@@ -40,6 +45,9 @@ public class StatManager : MonoBehaviour
         if (sanitySlider != null)
             maxSanity = sanitySlider.value;
 
+        if (damageSlider != null)
+            maxDamage = damageSlider.value;
+
         UpdateAllVisuals();
     }
 
@@ -49,6 +57,15 @@ public class StatManager : MonoBehaviour
             staminaSlider.value = maxStamina;
 
         UpdateStaminaVisuals();
+    }
+
+    public void ResetStats()
+    {
+        if (staminaSlider != null) staminaSlider.value = maxStamina;
+        if (sanitySlider != null) sanitySlider.value = maxSanity;
+        if (damageSlider != null) damageSlider.value = maxDamage;
+
+        UpdateAllVisuals();
     }
 
     public void ApplyStaminaDelta(int delta)
@@ -72,7 +89,15 @@ public class StatManager : MonoBehaviour
         if (sanitySlider == null) return;
 
         sanitySlider.value = Mathf.Clamp(sanitySlider.value + delta, 0, maxSanity);
-        // ❌ Do NOT call UpdateSanityVisuals()
+        // Do not call UpdateSanityVisuals
+    }
+
+    public void ApplyDamageDelta(int delta)
+    {
+        if (damageSlider == null) return;
+
+        damageSlider.value = Mathf.Clamp(damageSlider.value + delta, 0, maxDamage);
+        UpdateDamageVisuals();
     }
 
     private void UpdateStaminaVisuals()
@@ -99,24 +124,30 @@ public class StatManager : MonoBehaviour
         }
     }
 
+    private void UpdateDamageVisuals()
+    {
+        if (damageValueText != null)
+            damageValueText.text = Mathf.RoundToInt(damageSlider.value).ToString();
+
+        if (damageFill != null)
+        {
+            float ratio = damageSlider.value / maxDamage;
+            damageFill.color = Color.Lerp(lowColor, fullColor, ratio);
+        }
+    }
+
     private void UpdateAllVisuals()
     {
         UpdateStaminaVisuals();
         UpdateSanityVisuals();
+        UpdateDamageVisuals();
     }
 
-    public void ResetStats()
-    {
-        if (staminaSlider != null) staminaSlider.value = maxStamina;
-        if (sanitySlider != null) sanitySlider.value = maxSanity;
-        UpdateAllVisuals();
-    }
-
-    // ✅ Read-only access to current stats
     public int CurrentStamina => Mathf.RoundToInt(staminaSlider.value);
     public int CurrentSanity => Mathf.RoundToInt(sanitySlider.value);
+    public int CurrentDamage => Mathf.RoundToInt(damageSlider.value);
 
-    // ✅ Max values accessible if needed
     public int MaxStamina => Mathf.RoundToInt(maxStamina);
     public int MaxSanity => Mathf.RoundToInt(maxSanity);
+    public int MaxDamage => Mathf.RoundToInt(maxDamage);
 }
