@@ -96,7 +96,10 @@ public class GameLoop : MonoBehaviour
     public List<RevealSlotPro> allRevealSlots = new List<RevealSlotPro>();
 
     private int currentVariant = 0;
-    private int startingStamina = 18; // 🆕 Tracks stamina at start of the day
+    [Header("Stat Starting Values")]
+    public int startingStamina = 20;
+    public int startingSanity = 25;
+    public int startingDamage = 45;
     public int GetCurrentVariant() => currentVariant;
     private Coroutine liveValidationCoroutine = null;
     public int GetStartingStamina() => startingStamina;
@@ -186,7 +189,8 @@ public class GameLoop : MonoBehaviour
         switch (stateSet)
         {
             case 0:
-                startingStamina = StatManager.Instance.CurrentStamina;
+                StatManager.Instance.SetStartingStats(startingStamina, startingSanity, startingDamage);
+                // track stamina baseline for damage calculation
 
                 if (Day == 1)
                 {

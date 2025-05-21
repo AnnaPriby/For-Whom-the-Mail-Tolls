@@ -23,8 +23,11 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     public Button sendButton;
 
     private DraggableItem currentItem;
-    private int sanityCost;
     private string originalInfoText;
+
+    private int previousStamina = 0;
+    private int previousSanity = 0;
+    private int previousDamage = 0;
 
     private void Start()
     {
@@ -43,14 +46,11 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
         if (currentItem != null)
         {
-            statManager.ApplyStaminaDelta(-currentItem.Stamina);
-            statManager.ApplySanityDelta(-currentItem.Sanity);
             ReturnOldItemToInventory();
         }
 
         currentItem = newItem;
 
-        // Sanitize the phrase for matching
         string phraseToMatch = currentItem.Phrase?.Trim().Replace("\u200B", "");
 
         DayData matched = variantDatabase.entries
@@ -76,12 +76,17 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         currentItem.DisableDragging();
         dropped.SetActive(false);
 
-        statManager.ApplyStaminaDelta(currentItem.Stamina);
-        statManager.ApplySanityDelta(currentItem.Sanity);
+        // Calculate delta difference
+        int deltaStamina = newItem.Stamina - previousStamina;
+        int deltaSanity = newItem.Sanity - previousSanity;
+        int deltaDamage = -Mathf.Abs(newItem.Damage) - (-Mathf.Abs(previousDamage));
 
-        Debug.Log($"✅ Matched Phrase: {matched.Phrase}");
-        Debug.Log($"📤 Displayed Part: {selectedPart}");
-        Debug.Log($"📊 Stats → Stamina: {statManager.CurrentStamina}, Sanity: {statManager.CurrentSanity}");
+        statManager.UpdateSlotDelta(deltaStamina, deltaSanity, deltaDamage);
+
+        // Cache new values
+        previousStamina = newItem.Stamina;
+        previousSanity = newItem.Sanity;
+        previousDamage = -Mathf.Abs(newItem.Damage);
     }
 
     private void OnSendButtonClicked()
@@ -102,31 +107,44 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
     private void ApplyStatsFromItem()
     {
-        Debug.Log($"📬 Message sent with ST: {statManager.CurrentStamina}, SA: {statManager.CurrentSanity}");
+        statManager.ApplyStaminaDelta(previousStamina);
+        statManager.ApplySanityDelta(previousSanity);
+        statManager.ApplyDamageDelta(previousDamage);
+
         currentItem = null;
-        sanityCost = 0;
+        previousStamina = 0;
+        previousSanity = 0;
+        previousDamage = 0;
     }
 
     private void DrawNewCards()
     {
-        // Placeholder for future logic
+        // Optional logic
     }
 
     private void TrackGameState()
     {
         infoDisplay.text = originalInfoText;
-        GameLoop.Instance.LogSend(sanityCost);
+        GameLoop.Instance.LogSend(0);
     }
 
     public void PrepareForNewRound()
     {
         currentItem = null;
         infoDisplay.text = originalInfoText;
+
+        statManager.UpdateSlotDelta(-previousStamina, -previousSanity, -previousDamage);
+
+        previousStamina = 0;
+        previousSanity = 0;
+        previousDamage = 0;
     }
 
     private void ReturnOldItemToInventory()
     {
         if (currentItem == null) return;
+
+        statManager.UpdateSlotDelta(-previousStamina, -previousSanity, -previousDamage);
 
         currentItem.gameObject.SetActive(true);
         currentItem.transform.SetParent(currentItem.originalParent);
@@ -142,6 +160,10 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
             currentItem.label.raycastTarget = true;
 
         Debug.Log($"♻️ Returned {currentItem.name} to inventory.");
+
         currentItem = null;
+        previousStamina = 0;
+        previousSanity = 0;
+        previousDamage = 0;
     }
 }

@@ -6,6 +6,9 @@ public class StatManager : MonoBehaviour
 {
     public static StatManager Instance;
 
+    [Header("Unified Stat Delta Display")]
+    public TextMeshProUGUI statsDeltaDisplayText;
+
     [Header("Stamina UI")]
     public Slider staminaSlider;
     public TextMeshProUGUI staminaValueText;
@@ -29,6 +32,10 @@ public class StatManager : MonoBehaviour
     private float maxSanity;
     private float maxDamage;
 
+    private int totalPendingStamina = 0;
+    private int totalPendingSanity = 0;
+    private int totalPendingDamage = 0;
+
     private void Awake()
     {
         if (Instance == null)
@@ -39,14 +46,32 @@ public class StatManager : MonoBehaviour
 
     void Start()
     {
+        UpdateAllVisuals();
+    }
+
+    public void SetStartingStats(int stamina, int sanity, int damage)
+    {
+        maxStamina = stamina;
+        maxSanity = sanity;
+        maxDamage = damage;
+
         if (staminaSlider != null)
-            maxStamina = staminaSlider.value;
+        {
+            staminaSlider.maxValue = stamina;
+            staminaSlider.value = stamina;
+        }
 
         if (sanitySlider != null)
-            maxSanity = sanitySlider.value;
+        {
+            sanitySlider.maxValue = sanity;
+            sanitySlider.value = sanity;
+        }
 
         if (damageSlider != null)
-            maxDamage = damageSlider.value;
+        {
+            damageSlider.maxValue = damage;
+            damageSlider.value = damage;
+        }
 
         UpdateAllVisuals();
     }
@@ -71,7 +96,6 @@ public class StatManager : MonoBehaviour
     public void ApplyStaminaDelta(int delta)
     {
         if (staminaSlider == null) return;
-
         staminaSlider.value = Mathf.Clamp(staminaSlider.value + delta, 0, maxStamina);
         UpdateStaminaVisuals();
     }
@@ -79,25 +103,45 @@ public class StatManager : MonoBehaviour
     public void ApplySanityDelta(int delta)
     {
         if (sanitySlider == null) return;
-
         sanitySlider.value = Mathf.Clamp(sanitySlider.value + delta, 0, maxSanity);
         UpdateSanityVisuals();
-    }
-
-    public void ApplySanityDeltaSilently(int delta)
-    {
-        if (sanitySlider == null) return;
-
-        sanitySlider.value = Mathf.Clamp(sanitySlider.value + delta, 0, maxSanity);
-        // Do not call UpdateSanityVisuals
     }
 
     public void ApplyDamageDelta(int delta)
     {
         if (damageSlider == null) return;
-
         damageSlider.value = Mathf.Clamp(damageSlider.value + delta, 0, maxDamage);
         UpdateDamageVisuals();
+    }
+
+    public void UpdateSlotDelta(int deltaStamina, int deltaSanity, int deltaDamage)
+    {
+        totalPendingStamina += deltaStamina;
+        totalPendingSanity += deltaSanity;
+        totalPendingDamage += deltaDamage;
+
+        ShowPendingDelta(totalPendingStamina, totalPendingSanity, totalPendingDamage);
+    }
+
+    public void ClearPendingDelta()
+    {
+        totalPendingStamina = 0;
+        totalPendingSanity = 0;
+        totalPendingDamage = 0;
+
+        if (statsDeltaDisplayText != null)
+            statsDeltaDisplayText.text = "";
+    }
+
+    private void ShowPendingDelta(int stamina, int sanity, int damage)
+    {
+        if (statsDeltaDisplayText == null) return;
+
+        string result = $"Sanity: {(sanity >= 0 ? "+" : "")}{sanity}\n" + 
+                        $"Stamina: {(stamina >= 0 ? "+" : "")}{stamina}\n" +
+                        $"Damage: {(damage >= 0 ? "+" : "")}{damage}";
+
+        statsDeltaDisplayText.text = result.Trim();
     }
 
     private void UpdateStaminaVisuals()
@@ -106,10 +150,7 @@ public class StatManager : MonoBehaviour
             staminaValueText.text = Mathf.RoundToInt(staminaSlider.value).ToString();
 
         if (staminaFill != null)
-        {
-            float ratio = staminaSlider.value / maxStamina;
-            staminaFill.color = Color.Lerp(lowColor, fullColor, ratio);
-        }
+            staminaFill.color = Color.Lerp(lowColor, fullColor, staminaSlider.value / maxStamina);
     }
 
     private void UpdateSanityVisuals()
@@ -118,10 +159,7 @@ public class StatManager : MonoBehaviour
             sanityValueText.text = Mathf.RoundToInt(sanitySlider.value).ToString();
 
         if (sanityFill != null)
-        {
-            float ratio = sanitySlider.value / maxSanity;
-            sanityFill.color = Color.Lerp(lowColor, fullColor, ratio);
-        }
+            sanityFill.color = Color.Lerp(lowColor, fullColor, sanitySlider.value / maxSanity);
     }
 
     private void UpdateDamageVisuals()
@@ -130,10 +168,7 @@ public class StatManager : MonoBehaviour
             damageValueText.text = Mathf.RoundToInt(damageSlider.value).ToString();
 
         if (damageFill != null)
-        {
-            float ratio = damageSlider.value / maxDamage;
-            damageFill.color = Color.Lerp(lowColor, fullColor, ratio);
-        }
+            damageFill.color = Color.Lerp(lowColor, fullColor, damageSlider.value / maxDamage);
     }
 
     private void UpdateAllVisuals()
@@ -146,8 +181,4 @@ public class StatManager : MonoBehaviour
     public int CurrentStamina => Mathf.RoundToInt(staminaSlider.value);
     public int CurrentSanity => Mathf.RoundToInt(sanitySlider.value);
     public int CurrentDamage => Mathf.RoundToInt(damageSlider.value);
-
-    public int MaxStamina => Mathf.RoundToInt(maxStamina);
-    public int MaxSanity => Mathf.RoundToInt(maxSanity);
-    public int MaxDamage => Mathf.RoundToInt(maxDamage);
 }
