@@ -24,10 +24,10 @@ public class TooltipController : MonoBehaviour
     }
 
     // ✅ NEW ShowTooltip: Accepts stamina and sanity separately
-    public void ShowTooltip(int stamina, int sanity)
+    public void ShowTooltip(int stamina, int sanity, int damage)
     {
-        tooltipText.text = $"<color=#f4c542>Stamina:</color> {stamina}\n<color=#42b0f5>Sanity:</color> {sanity}";
-        tooltipObject.SetActive(true);
+        tooltipText.text = $"<b>Stamina:</b> {stamina}\n<b>Sanity:</b> {sanity}\n<b>Damage:</b> {damage}";
+        gameObject.SetActive(true);
     }
 
     // Hide

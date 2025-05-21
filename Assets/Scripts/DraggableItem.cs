@@ -7,30 +7,53 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CanvasGroup))]
 public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    [Header("Scriptable Object Source (Day1Database)")]
-    [SerializeField] public Day1Database database;
+    public enum StatVersion { Version1, Version2 }
+
+    [Header("Scriptable Object Source (DayExperimentalDatabase)")]
+    [SerializeField] public DayExperimentalDatabase database;
 
     [Header("UI References")]
     [SerializeField] public Image image;
     [SerializeField] public TextMeshProUGUI label;
 
+    [Header("Stat Version Toggle")]
+    [SerializeField] private StatVersion staminaVersion = StatVersion.Version1;
+    [SerializeField] private StatVersion sanityVersion = StatVersion.Version1;
+    [SerializeField] private StatVersion damageVersion = StatVersion.Version1;
+
     [HideInInspector] public Transform originalParent;
     [HideInInspector] public Transform parentAfterDrag;
 
-    private DayData dayData;
+    private DayExperimentalData dayData;
     private CanvasGroup canvasGroup;
 
     private static HashSet<int> usedIndexes = new();
     private bool isUsable = true;
 
     public string Phrase => dayData?.Phrase ?? "";
-    public int Stamina => dayData?.Stamina ?? 0;
-    public int Sanity => dayData?.Sanity ?? 0;
 
-    public DayData AssignedData => dayData;
+    public int Stamina =>
+        dayData != null
+        ? (staminaVersion == StatVersion.Version1 ? dayData.Stamina1 : dayData.Stamina2)
+        : 0;
+
+    public int Sanity =>
+        dayData != null
+        ? (sanityVersion == StatVersion.Version1 ? dayData.Sanity1 : dayData.Sanity2)
+        : 0;
+
+    public int Damage =>
+        dayData != null
+        ? (damageVersion == StatVersion.Version1 ? dayData.Damage1 : dayData.Damage2)
+        : 0;
+
+    public DayExperimentalData AssignedData => dayData;
 
     public string FullInfo => dayData != null
-        ? $"<b>{dayData.Phrase}</b>\n<color=#f4c542>Stamina:</color> {dayData.Stamina}\n<color=#42b0f5>Sanity:</color> {dayData.Sanity}"
+        ? $"<b>{dayData.Phrase}</b>\n" +
+          $"<color=#f4c542>Stamina:</color> {Stamina}\n" +
+          $"<color=#42b0f5>Sanity:</color> {Sanity}\n" +
+          $"<color=#ff6347>Damage:</color> {Damage}"
         : "";
 
     private void Awake()
@@ -46,7 +69,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void DealHand()
     {
-        if (dayData == null) // ✅ Only assign once per round
+        if (dayData == null)
             AssignEntry();
 
         gameObject.SetActive(true);
@@ -54,8 +77,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         if (canvasGroup != null)
             canvasGroup.blocksRaycasts = true;
-
-        
 
         if (image != null)
             image.raycastTarget = true;
@@ -71,7 +92,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         if (database == null || database.entries == null || database.entries.Count == 0)
         {
-            Debug.LogWarning($"❌ No data in Day1Database for {name}");
+            Debug.LogWarning($"❌ No data in DayExperimentalDatabase for {name}");
             return;
         }
 
@@ -90,12 +111,13 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         if (label != null && dayData != null)
         {
-            label.text = $"{dayData.Phrase} ({dayData.Stamina}/{dayData.Sanity})";
+            label.text = $"{dayData.Phrase} ({Sanity}/{Stamina}/{Damage})";
             label.raycastTarget = true;
         }
 
-        Debug.Log($"🎴 {name} assigned → Phrase: '{dayData.Phrase}', ST: {dayData.Stamina}, SA: {dayData.Sanity}");
+        Debug.Log($"🎴 {name} assigned → Phrase: '{dayData.Phrase}',SA: {Sanity} , ST: {Stamina}, DMG: {Damage}");
     }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         parentAfterDrag = transform.parent;
@@ -123,7 +145,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (dayData != null)
-            TooltipController.Instance.ShowTooltip(dayData.Stamina, dayData.Sanity);
+            TooltipController.Instance.ShowTooltip(Stamina, Sanity, Damage);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -135,8 +157,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         if (StatManager.Instance == null || dayData == null) return;
 
-        bool invalid = StatManager.Instance.CurrentStamina + dayData.Stamina < 0 ||
-                       StatManager.Instance.CurrentSanity + dayData.Sanity < 0;
+        bool invalid = StatManager.Instance.CurrentStamina + Stamina < 0 ||
+                       StatManager.Instance.CurrentSanity + Sanity < 0;
 
         isUsable = !invalid;
 
@@ -167,7 +189,4 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (TryGetComponent(out CanvasGroup cg))
             cg.blocksRaycasts = true;
     }
-
-
-
 }
