@@ -15,12 +15,21 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     [Header("Variant Settings")]
     public VariantType variant = VariantType.Part1;
 
-    [Header("Database")]
-    public Day1Database variantDatabase;
+    [Header("Databases")]
+    public Day1Database day1Database;
+    public Day2ExperimentalDatabase day2Database;
 
     [Header("References")]
     public StatManager statManager;
     public Button sendButton;
+
+    [Header("Starting Info Text (Editable)")]
+    [TextArea]
+    public string defaultInfoTextDay1 = "📝 Drop your message here...";
+    [TextArea]
+    public string defaultInfoTextDay2 = "💡 Drop your second-day idea here...";
+    [TextArea]
+    public string defaultInfoTextDay3 = "📄 Compose your final draft here...";
 
     private DraggableItem currentItem;
     private string originalInfoText;
@@ -32,7 +41,20 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     private void Start()
     {
         if (infoDisplay != null)
+        {
+            int day = GameLoop.Instance != null ? GameLoop.Instance.Day : 1;
+
+            // Select default text based on current day
+            switch (day)
+            {
+                case 1: infoDisplay.text = defaultInfoTextDay1; break;
+                case 2: infoDisplay.text = defaultInfoTextDay2; break;
+                case 3: infoDisplay.text = defaultInfoTextDay3; break;
+                default: infoDisplay.text = defaultInfoTextDay1; break;
+            }
+
             originalInfoText = infoDisplay.text;
+        }
 
         if (sendButton != null)
             sendButton.onClick.AddListener(OnSendButtonClicked);
@@ -52,38 +74,60 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         currentItem = newItem;
 
         string phraseToMatch = currentItem.Phrase?.Trim().Replace("\u200B", "");
+        string selectedPart = "";
+        bool matched = false;
 
-        DayData matched = variantDatabase.entries
-            .FirstOrDefault(entry => string.Equals(entry.Phrase?.Trim().Replace("\u200B", ""), phraseToMatch, StringComparison.OrdinalIgnoreCase));
-
-        if (matched == null)
+        if (GameLoop.Instance.Day == 1 && day1Database != null)
         {
-            Debug.LogWarning($"❌ Phrase '{phraseToMatch}' not found in Day1Database.");
+            var entry = day1Database.entries.FirstOrDefault(e =>
+                string.Equals(e.Phrase?.Trim().Replace("\u200B", ""), phraseToMatch, StringComparison.OrdinalIgnoreCase));
+            if (entry != null)
+            {
+                matched = true;
+                selectedPart = variant switch
+                {
+                    VariantType.Part1 => entry.Part1,
+                    VariantType.Part2 => entry.Part2,
+                    VariantType.Part3 => entry.Part3,
+                    _ => entry.Part1
+                };
+            }
+        }
+        else if (GameLoop.Instance.Day >= 2 && day2Database != null)
+        {
+            var entry = day2Database.entries.FirstOrDefault(e =>
+                string.Equals(e.Phrase?.Trim().Replace("\u200B", ""), phraseToMatch, StringComparison.OrdinalIgnoreCase));
+            if (entry != null)
+            {
+                matched = true;
+                selectedPart = variant switch
+                {
+                    VariantType.Part1 => entry.Part1,
+                    VariantType.Part2 => entry.Part2,
+                    VariantType.Part3 => entry.Part3,
+                    _ => entry.Part1
+                };
+            }
+        }
+
+        if (!matched)
+        {
+            Debug.LogWarning($"❌ Phrase '{phraseToMatch}' not found in current day database.");
             infoDisplay.text = originalInfoText;
             return;
         }
 
-        string selectedPart = variant switch
-        {
-            VariantType.Part1 => matched.Part1,
-            VariantType.Part2 => matched.Part2,
-            VariantType.Part3 => matched.Part3,
-            _ => matched.Part1
-        };
-
         infoDisplay.text = selectedPart;
-
         currentItem.DisableDragging();
         dropped.SetActive(false);
 
-        // Calculate delta difference
+        // Calculate stat changes
         int deltaStamina = newItem.Stamina - previousStamina;
         int deltaSanity = newItem.Sanity - previousSanity;
         int deltaDamage = -Mathf.Abs(newItem.Damage) - (-Mathf.Abs(previousDamage));
 
         statManager.UpdateSlotDelta(deltaStamina, deltaSanity, deltaDamage);
 
-        // Cache new values
         previousStamina = newItem.Stamina;
         previousSanity = newItem.Sanity;
         previousDamage = -Mathf.Abs(newItem.Damage);
@@ -131,7 +175,18 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     public void PrepareForNewRound()
     {
         currentItem = null;
-        infoDisplay.text = originalInfoText;
+
+        int day = GameLoop.Instance != null ? GameLoop.Instance.Day : 1;
+
+        switch (day)
+        {
+            case 1: infoDisplay.text = defaultInfoTextDay1; break;
+            case 2: infoDisplay.text = defaultInfoTextDay2; break;
+            case 3: infoDisplay.text = defaultInfoTextDay3; break;
+            default: infoDisplay.text = defaultInfoTextDay1; break;
+        }
+
+        originalInfoText = infoDisplay.text;
 
         statManager.UpdateSlotDelta(-previousStamina, -previousSanity, -previousDamage);
 
@@ -139,7 +194,6 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         previousSanity = 0;
         previousDamage = 0;
     }
-
     private void ReturnOldItemToInventory()
     {
         if (currentItem == null) return;

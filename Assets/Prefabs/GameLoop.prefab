@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &829948878848854042
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5825324761731840244}
+  - component: {fileID: 7740419126676389504}
+  m_Layer: 0
+  m_Name: GameLoop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5825324761731840244
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829948878848854042}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7740419126676389504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829948878848854042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e0d5f0abc0604f3789583a33844a47e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTurnUI: {fileID: 0}
+  jessicaUI: {fileID: 0}
+  lunchImageUI: {fileID: 0}
+  noMailUI: {fileID: 0}
+  coffee: {fileID: 0}
+  verticalParallax: {fileID: 0}
+  jessicaMail: {fileID: 0}
+  GameState: 0
+  Day: 1
+  coffeeDraggablesCount: 1
+  angry: 15
+  neutral: 11
+  damagelow: 2
+  damagehigh: 4
+  damagelowDay1: 2
+  damagehighDay1: 4
+  damagelowDay2Evil: 2
+  damagelowDay2Neutral: 1
+  damagehighDay2Neutral: 3
+  damagelowDay2Nice: 0
+  damagelowDay3Evil: 2
+  damagehighDay3Evil: 4
+  damagelowDay3EvilTransition: 2
+  damagehighDay3EvilTransition: 4
+  damagelowDay3Neutral: 1
+  damagehighDay3Neutral: 3
+  damagelowDay3NiceTransition: 0
+  damagehighDay3NiceTransition: 2
+  damagelowDay3Nice: 0
+  damagehighDay3Nice: 2
+  damagelowDay4: 2
+  damagehighDay4: 4
+  damagelowDay5: 2
+  damagehighDay5: 4
+  JessicaReaction: {fileID: 0}
+  stickyReaction: {fileID: 0}
+  handsAnimator: {fileID: 0}
+  originalDraggables:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  allDraggables:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  allRevealSlots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  startingStamina: 18
+  startingSanity: 25
+  startingDamage: 45

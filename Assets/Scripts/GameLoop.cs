@@ -189,8 +189,11 @@ public class GameLoop : MonoBehaviour
         switch (stateSet)
         {
             case 0:
-                StatManager.Instance.SetStartingStats(startingStamina, startingSanity, startingDamage);
-                // track stamina baseline for damage calculation
+
+                if (Day == 1)
+                {
+                    StatManager.Instance.SetStartingStats(startingStamina, startingSanity, startingDamage);
+                }
 
                 if (Day == 1)
                 {
@@ -592,6 +595,16 @@ public class GameLoop : MonoBehaviour
     {
         Day++;
         SaveGameProgress();
+   
+
+        if (StatManager.Instance != null)
+        {
+            StatManager.Instance.ClearPendingDelta();
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ StatManager.Instance was null during IncreaseDay. Delta reset skipped.");
+        }
         foreach (var d in allDraggables)
             if (d is StoryDraggableItem sdi) sdi.UpdateVariantBasedOnDay();
         foreach (var o in originalDraggables)
@@ -602,7 +615,14 @@ public class GameLoop : MonoBehaviour
     {
         IncreaseDay();
         ChangeGameState(0);
-        foreach (var slot in allRevealSlots) slot.PrepareForNewRound();
+
+        foreach (var slot in allRevealSlots)
+        {
+            if (slot != null)
+                slot.PrepareForNewRound();
+        }
+
+       
         DraggableItem.ResetUsed();
     }
 

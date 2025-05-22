@@ -4,10 +4,16 @@ using System.Collections.Generic;
 
 public class DayExperimentalCSVImporter : EditorWindow
 {
-    [MenuItem("Tools/Import Day Experimental Data Table")]
-    public static void ImportExperimentalDayTable()
+    [MenuItem("Tools/Import Day1 Experimental Data Table")]
+    public static void ImportDay1ExperimentalTable()
     {
         ImportDayExperimentalData("ExtendedDayTable", "DayExperimentalDatabase.asset");
+    }
+
+    [MenuItem("Tools/Import Day2 Experimental Data Table")]
+    public static void ImportDay2ExperimentalTable()
+    {
+        ImportDayExperimentalData("Day2ExtendedTable", "Day2ExperimentalDatabase.asset");
     }
 
     private static void ImportDayExperimentalData(string csvFileName, string assetFileName)
@@ -22,7 +28,7 @@ public class DayExperimentalCSVImporter : EditorWindow
         List<string[]> parsedCSV = ParseCSV(csv.text);
         List<DayExperimentalData> newEntries = new();
 
-        for (int i = 1; i < parsedCSV.Count; i++)
+        for (int i = 1; i < parsedCSV.Count; i++) // Skip header
         {
             string[] row = parsedCSV[i];
             if (row.Length < 10) continue;
@@ -45,27 +51,46 @@ public class DayExperimentalCSVImporter : EditorWindow
         }
 
         string path = $"Assets/Resources/{assetFileName}";
-        DayExperimentalDatabase db = AssetDatabase.LoadAssetAtPath<DayExperimentalDatabase>(path);
+        ScriptableObject db = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
+
         if (db == null)
         {
-            db = ScriptableObject.CreateInstance<DayExperimentalDatabase>();
+            // Dynamically create the correct ScriptableObject type
+            if (assetFileName.Contains("Day2"))
+                db = ScriptableObject.CreateInstance<Day2ExperimentalDatabase>();
+            else
+                db = ScriptableObject.CreateInstance<DayExperimentalDatabase>();
+
             AssetDatabase.CreateAsset(db, path);
         }
 
-        db.entries = newEntries;
+        // Assign entries
+        if (db is DayExperimentalDatabase dayDb)
+        {
+            dayDb.entries = newEntries;
+        }
+        else if (db is Day2ExperimentalDatabase day2Db)
+        {
+            day2Db.entries = newEntries;
+        }
+        else
+        {
+            Debug.LogError("❌ Unknown database type.");
+            return;
+        }
 
         EditorUtility.SetDirty(db);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log($"✅ Imported {newEntries.Count} entries into DayExperimentalDatabase.");
+        Debug.Log($"✅ Imported {newEntries.Count} entries into {assetFileName}.");
     }
 
     private static string Clean(string input)
     {
         return input?.Trim()
-            .Replace("\u200B", "")
-            .Replace("\uFEFF", "")
+            .Replace("\u200B", "") // Zero-width space
+            .Replace("\uFEFF", "") // BOM
             .Replace("\r", "")
             .Replace("\n", "");
     }

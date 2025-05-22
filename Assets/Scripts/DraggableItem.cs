@@ -9,8 +9,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 {
     public enum StatVersion { Version1, Version2 }
 
-    [Header("Scriptable Object Source (DayExperimentalDatabase)")]
-    [SerializeField] public DayExperimentalDatabase database;
+    [Header("Scriptable Object Sources")]
+    [SerializeField] public DayExperimentalDatabase day1Database;
+    [SerializeField] public Day2ExperimentalDatabase day2Database;
 
     [Header("UI References")]
     [SerializeField] public Image image;
@@ -24,6 +25,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [HideInInspector] public Transform originalParent;
     [HideInInspector] public Transform parentAfterDrag;
 
+    
+
     private DayExperimentalData dayData;
     private CanvasGroup canvasGroup;
 
@@ -32,28 +35,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public string Phrase => dayData?.Phrase ?? "";
 
-    public int Stamina =>
-        dayData != null
-        ? (staminaVersion == StatVersion.Version1 ? dayData.Stamina1 : dayData.Stamina2)
-        : 0;
-
-    public int Sanity =>
-        dayData != null
-        ? (sanityVersion == StatVersion.Version1 ? dayData.Sanity1 : dayData.Sanity2)
-        : 0;
-
-    public int Damage =>
-        dayData != null
-        ? (damageVersion == StatVersion.Version1 ? dayData.Damage1 : dayData.Damage2)
-        : 0;
+    public int Stamina => dayData != null ? (staminaVersion == StatVersion.Version1 ? dayData.Stamina1 : dayData.Stamina2) : 0;
+    public int Sanity => dayData != null ? (sanityVersion == StatVersion.Version1 ? dayData.Sanity1 : dayData.Sanity2) : 0;
+    public int Damage => dayData != null ? (damageVersion == StatVersion.Version1 ? dayData.Damage1 : dayData.Damage2) : 0;
 
     public DayExperimentalData AssignedData => dayData;
 
     public string FullInfo => dayData != null
-        ? $"<b>{dayData.Phrase}</b>\n" +
-          $"<color=#f4c542>Stamina:</color> {Stamina}\n" +
-          $"<color=#42b0f5>Sanity:</color> {Sanity}\n" +
-          $"<color=#ff6347>Damage:</color> {Damage}"
+        ? $"<b>{dayData.Phrase}</b>\n<color=#f4c542>Stamina:</color> {Stamina}\n<color=#42b0f5>Sanity:</color> {Sanity}\n<color=#ff6347>Damage:</color> {Damage}"
         : "";
 
     private void Awake()
@@ -64,13 +53,13 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     private void Start()
     {
-        AssignEntry();
+        
     }
 
     public void DealHand()
     {
-        if (dayData == null)
-            AssignEntry();
+       
+         AssignEntry();
 
         gameObject.SetActive(true);
         this.enabled = true;
@@ -88,26 +77,40 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
     }
 
-    private void AssignEntry()
+    public void AssignEntry()
     {
-        if (database == null || database.entries == null || database.entries.Count == 0)
+        List<DayExperimentalData> entries = null;
+
+        int day = GameLoop.Instance != null ? GameLoop.Instance.Day : 1;
+        if (day == 1)
         {
-            Debug.LogWarning($"❌ No data in DayExperimentalDatabase for {name}");
+            entries = day1Database?.entries;
+            
+        }
+        else
+        {
+            entries = day2Database?.entries;
+            
+        }
+
+        if (entries == null || entries.Count == 0)
+        {
+            Debug.LogWarning($"❌ No entries found in database for {name} on Day {day}");
             return;
         }
 
-        if (usedIndexes.Count >= database.entries.Count)
+        if (usedIndexes.Count >= entries.Count)
             usedIndexes.Clear();
 
         int index, safety = 50;
         do
         {
-            index = Random.Range(0, database.entries.Count);
+            index = Random.Range(0, entries.Count);
             safety--;
         } while (usedIndexes.Contains(index) && safety > 0);
 
         usedIndexes.Add(index);
-        dayData = database.entries[index];
+        dayData = entries[index];
 
         if (label != null && dayData != null)
         {
@@ -115,7 +118,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             label.raycastTarget = true;
         }
 
-        Debug.Log($"🎴 {name} assigned → Phrase: '{dayData.Phrase}',SA: {Sanity} , ST: {Stamina}, DMG: {Damage}");
+        Debug.Log($"🎴 {name} assigned → Phrase: '{dayData.Phrase}', SA: {Sanity}, ST: {Stamina}, DMG: {Damage}");
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -177,7 +180,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void DisableDragging()
     {
         this.enabled = false;
-
         if (TryGetComponent(out CanvasGroup cg))
             cg.blocksRaycasts = false;
     }
@@ -185,7 +187,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void EnableDragging()
     {
         this.enabled = true;
-
         if (TryGetComponent(out CanvasGroup cg))
             cg.blocksRaycasts = true;
     }
