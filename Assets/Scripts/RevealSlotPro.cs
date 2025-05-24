@@ -19,6 +19,9 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     public Day1Database day1Database;
     public Day2ExperimentalDatabase day2Database;
 
+    [Header("History")]
+    public ConversationHistoryManager historyManager;
+
     [Header("References")]
     public StatManager statManager;
     public Button sendButton;
@@ -57,6 +60,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         }
 
         if (sendButton != null)
+            
             sendButton.onClick.AddListener(OnSendButtonClicked);
     }
 
@@ -118,6 +122,8 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         }
 
         infoDisplay.text = selectedPart;
+
+     
         currentItem.DisableDragging();
         dropped.SetActive(false);
 
@@ -149,6 +155,28 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
             GameLoop.Instance.ReturnFromCoffee();
     }
 
+    public string GetMessageWithStats()
+    {
+        if (string.IsNullOrWhiteSpace(infoDisplay?.text) || infoDisplay.text == originalInfoText)
+        {
+            Debug.Log($"⛔ RevealSlot [{name}] skipped. Text: '{infoDisplay?.text}'");
+            return null;
+        }
+
+        string log = $"{infoDisplay.text.Trim()}\n<size=80%><i>" +
+                     $"Stamina: {(previousStamina >= 0 ? "+" : "")}{previousStamina}, " +
+                     $"Sanity: {(previousSanity >= 0 ? "+" : "")}{previousSanity}, " +
+                     $"Damage: {(previousDamage >= 0 ? "" : "-")}{Mathf.Abs(previousDamage)}</i></size>";
+
+        Debug.Log($"✅ RevealSlot [{name}] logging: {log}");
+        return log;
+    }
+
+    public string GetCurrentMessage()
+    {
+        return infoDisplay != null ? infoDisplay.text : "";
+    }
+
     private void ApplyStatsFromItem()
     {
         statManager.ApplyStaminaDelta(previousStamina);
@@ -168,8 +196,8 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
     private void TrackGameState()
     {
-        infoDisplay.text = originalInfoText;
         GameLoop.Instance.LogSend(0);
+        infoDisplay.text = originalInfoText;
     }
 
     public void PrepareForNewRound()

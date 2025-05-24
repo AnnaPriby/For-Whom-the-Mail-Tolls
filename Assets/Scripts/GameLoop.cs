@@ -1,6 +1,7 @@
 ﻿// GameLoop.cs (with correct logic for restoring previous UI state after coffee)
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static UnityEngine.UI.Image;
 
@@ -206,6 +207,8 @@ public class GameLoop : MonoBehaviour
                     stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant); // restore previous day's face
                 }
 
+                hasLoggedSendThisTurn = false;
+
                 SetUI(false, true);
                 jessicaMail?.ShowNoMail();
                 StartCoroutine(WaitThenGoToNewMail());
@@ -300,6 +303,27 @@ public class GameLoop : MonoBehaviour
         }
 
     }
+    public void LogPlayerResponseToHistory()
+    {
+        List<string> parts = new List<string>();
+
+        foreach (var slot in allRevealSlots)
+        {
+            if (slot == null) continue;
+
+            string entry = slot.GetMessageWithStats();
+            if (!string.IsNullOrWhiteSpace(entry))
+                parts.Add(entry.Trim());
+        }
+
+        if (parts.Count > 0 && ConversationHistoryManager.Instance != null)
+        {
+            string combined = string.Join("\n\n", parts);
+            ConversationHistoryManager.Instance.AddPlayerMessage(combined);
+        }
+    }
+
+
 
     public void DealCoffeeHand()
     {
@@ -334,13 +358,28 @@ public class GameLoop : MonoBehaviour
         ChangeGameState(3);
     }
 
+    private bool hasLoggedSendThisTurn = false;
+
     public void LogSend(int sanity)
     {
+        if (hasLoggedSendThisTurn)
+        {
+            Debug.LogWarning("⛔ LogSend skipped — already logged this turn");
+            return;
+        }
+
+        hasLoggedSendThisTurn = true;
+
         totalSanityDamage = sanity;
         ChooseVariant();
         SaveGameProgress();
+
+        LogPlayerResponseToHistory(); // only once
+
         ChangeGameState(5);
         lastStickyVariant = PredictNextVariant();
+
+        Debug.LogWarning("🧠 LogSend CALLED");
     }
 
     public void Coffee()
@@ -610,6 +649,9 @@ public class GameLoop : MonoBehaviour
         foreach (var o in originalDraggables)
             if (o is StoryDraggableItem sdo) sdo.UpdateVariantBasedOnDay();
     }
+
+
+  
 
     public void OnScrollFinished()
     {

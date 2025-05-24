@@ -17,6 +17,10 @@ public class JessicaMail : MonoBehaviour
     [Header("Manual Story Emails (One per day)")]
     public List<SimpleMailEntry> dailyStoryEmails;
 
+    [Header("Conversation History")]
+    public ConversationHistoryManager historyManager;
+
+
     [Header("Coffee Email Support")]
     public CoffeeEmailsDatabase coffeeEmailsDatabase;
 
@@ -102,6 +106,10 @@ public class JessicaMail : MonoBehaviour
 
         if (jessicaEmailText != null)
             jessicaEmailText.text = entry.mainText;
+
+        // ✅ Add to conversation history
+        if (historyManager != null)
+            historyManager.AddJessicaMessage(entry.mainText);
 
         ApplyVariantStats(entry.stamina, entry.sanity);
     }
