@@ -18,6 +18,9 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     [Header("Databases")]
     public Day1Database day1Database;
     public Day2ExperimentalDatabase day2Database;
+    public Day2ExperimentalDatabase day3Database;
+    public Day2ExperimentalDatabase day4Database;
+    public Day2ExperimentalDatabase day5Database;
 
     [Header("History")]
     public ConversationHistoryManager historyManager;
@@ -33,6 +36,10 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     public string defaultInfoTextDay2 = "💡 Drop your second-day idea here...";
     [TextArea]
     public string defaultInfoTextDay3 = "📄 Compose your final draft here...";
+    [TextArea]
+    public string defaultInfoTextDay4 = "✉️ Fourth day message...";
+    [TextArea]
+    public string defaultInfoTextDay5 = "📨 Final thoughts for Day 5...";
 
     private DraggableItem currentItem;
     private string originalInfoText;
@@ -47,12 +54,13 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         {
             int day = GameLoop.Instance != null ? GameLoop.Instance.Day : 1;
 
-            // Select default text based on current day
             switch (day)
             {
                 case 1: infoDisplay.text = defaultInfoTextDay1; break;
                 case 2: infoDisplay.text = defaultInfoTextDay2; break;
                 case 3: infoDisplay.text = defaultInfoTextDay3; break;
+                case 4: infoDisplay.text = defaultInfoTextDay4; break;
+                case 5: infoDisplay.text = defaultInfoTextDay5; break;
                 default: infoDisplay.text = defaultInfoTextDay1; break;
             }
 
@@ -60,7 +68,6 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         }
 
         if (sendButton != null)
-            
             sendButton.onClick.AddListener(OnSendButtonClicked);
     }
 
@@ -81,7 +88,9 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         string selectedPart = "";
         bool matched = false;
 
-        if (GameLoop.Instance.Day == 1 && day1Database != null)
+        int day = GameLoop.Instance != null ? GameLoop.Instance.Day : 1;
+
+        if (day == 1 && day1Database != null)
         {
             var entry = day1Database.entries.FirstOrDefault(e =>
                 string.Equals(e.Phrase?.Trim().Replace("\u200B", ""), phraseToMatch, StringComparison.OrdinalIgnoreCase));
@@ -97,20 +106,32 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
                 };
             }
         }
-        else if (GameLoop.Instance.Day >= 2 && day2Database != null)
+        else
         {
-            var entry = day2Database.entries.FirstOrDefault(e =>
-                string.Equals(e.Phrase?.Trim().Replace("\u200B", ""), phraseToMatch, StringComparison.OrdinalIgnoreCase));
-            if (entry != null)
+            var activeDB = day switch
             {
-                matched = true;
-                selectedPart = variant switch
+                2 => day2Database,
+                3 => day3Database,
+                4 => day4Database,
+                5 => day5Database,
+                _ => null
+            };
+
+            if (activeDB != null)
+            {
+                var entry = activeDB.entries.FirstOrDefault(e =>
+                    string.Equals(e.Phrase?.Trim().Replace("\u200B", ""), phraseToMatch, StringComparison.OrdinalIgnoreCase));
+                if (entry != null)
                 {
-                    VariantType.Part1 => entry.Part1,
-                    VariantType.Part2 => entry.Part2,
-                    VariantType.Part3 => entry.Part3,
-                    _ => entry.Part1
-                };
+                    matched = true;
+                    selectedPart = variant switch
+                    {
+                        VariantType.Part1 => entry.Part1,
+                        VariantType.Part2 => entry.Part2,
+                        VariantType.Part3 => entry.Part3,
+                        _ => entry.Part1
+                    };
+                }
             }
         }
 
@@ -123,11 +144,9 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
         infoDisplay.text = selectedPart;
 
-     
         currentItem.DisableDragging();
         dropped.SetActive(false);
 
-        // Calculate stat changes
         int deltaStamina = newItem.Stamina - previousStamina;
         int deltaSanity = newItem.Sanity - previousSanity;
         int deltaDamage = -Mathf.Abs(newItem.Damage) - (-Mathf.Abs(previousDamage));
@@ -211,6 +230,8 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
             case 1: infoDisplay.text = defaultInfoTextDay1; break;
             case 2: infoDisplay.text = defaultInfoTextDay2; break;
             case 3: infoDisplay.text = defaultInfoTextDay3; break;
+            case 4: infoDisplay.text = defaultInfoTextDay4; break;
+            case 5: infoDisplay.text = defaultInfoTextDay5; break;
             default: infoDisplay.text = defaultInfoTextDay1; break;
         }
 
@@ -222,6 +243,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         previousSanity = 0;
         previousDamage = 0;
     }
+
     private void ReturnOldItemToInventory()
     {
         if (currentItem == null) return;

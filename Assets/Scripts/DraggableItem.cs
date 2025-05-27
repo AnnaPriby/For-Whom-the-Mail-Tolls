@@ -3,15 +3,21 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
+using System.Linq;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public enum StatVersion { Version1, Version2 }
 
-    [Header("Scriptable Object Sources")]
-    [SerializeField] public DayExperimentalDatabase day1Database;
-    [SerializeField] public Day2ExperimentalDatabase day2Database;
+    [System.Serializable]
+    public class DayDatabaseWrapper
+    {
+        public int Day;
+        public ScriptableObject Database;
+    }
+
+    [SerializeField] public List<DayDatabaseWrapper> allDayDatabases = new();
 
     [Header("UI References")]
     [SerializeField] public Image image;
@@ -79,23 +85,25 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void AssignEntry()
     {
+        int day = GameLoop.Instance != null ? GameLoop.Instance.Day : 1;
+
+        var matchingWrapper = allDayDatabases.FirstOrDefault(d => d.Day == day);
+        if (matchingWrapper == null || matchingWrapper.Database == null)
+        {
+            Debug.LogWarning($"❌ No database found for Day {day} in {name}");
+            return;
+        }
+
         List<DayExperimentalData> entries = null;
 
-        int day = GameLoop.Instance != null ? GameLoop.Instance.Day : 1;
-        if (day == 1)
-        {
-            entries = day1Database?.entries;
-            
-        }
-        else
-        {
-            entries = day2Database?.entries;
-            
-        }
+        if (matchingWrapper.Database is DayExperimentalDatabase db1)
+            entries = db1.entries;
+        else if (matchingWrapper.Database is Day2ExperimentalDatabase db2)
+            entries = db2.entries;
 
         if (entries == null || entries.Count == 0)
         {
-            Debug.LogWarning($"❌ No entries found in database for {name} on Day {day}");
+            Debug.LogWarning($"❌ No entries found for Day {day} in database for {name}");
             return;
         }
 
