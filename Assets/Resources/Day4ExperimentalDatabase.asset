@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c00d33cc39424646bf11b797c05933a, type: 3}
+  m_Name: Day4ExperimentalDatabase
+  m_EditorClassIdentifier: 
+  entries:
+  - Phrase: Keep your energy high!
+    Sanity1: 0
+    Stamina1: -3
+    Damage1: 1
+    Sanity2: -1
+    Stamina2: -2
+    Damage2: 2
+    Part1: I know yogurts are essential to keeping one's energy going.
+    Part2: Yogurts, much like dogs, get a person energized.
+    Part3: Your energy is contagious
+  - Phrase: Safety first.
+    Sanity1: -1
+    Stamina1: -2
+    Damage1: 2
+    Sanity2: -2
+    Stamina2: -2
+    Damage2: 3
+    Part1: I would hate for you to feel unsafe because of this thievery
+    Part2: I thought my picture made this cubicle a safe space, too.
+    Part3: I feel safer knowing you are over there.
+  - Phrase: Kitten
+    Sanity1: -3
+    Stamina1: -1
+    Damage1: 3
+    Sanity2: -5
+    Stamina2: -3
+    Damage2: 5
+    Part1: Oh nooooo kitten
+    Part2: My dog is not a kitten but I love him just the same.
+    Part3: Your such a swet kitty kitty come herre kitty kitty
+  - Phrase: As has been mentioned
+    Sanity1: -4
+    Stamina1: -1
+    Damage1: 4
+    Sanity2: -6
+    Stamina2: -4
+    Damage2: 5
+    Part1: As has been mentioned, stealing is bad. :) :(
+    Part2: I've mentioned my sick dog, right?
+    Part3: Your kind nature has been mentioned to me many times.
+  - Phrase: Bitch
+    Sanity1: -6
+    Stamina1: 0
+    Damage1: 3
+    Sanity2: 1
+    Stamina2: -5
+    Damage2: 3
+    Part1: Oh my good Jessica, you bitch.
+    Part2: Speaking of bitches, my dog needs surgery.
+    Part3: So leave me alone, bitch.

@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c9c4855117f2f547b3dbb10eff6dfaf, type: 3}
+  m_Name: Day3ExperimentalDatabase
+  m_EditorClassIdentifier: 
+  entries:
+  - Phrase: Your kindness.
+    Sanity1: 0
+    Stamina1: 4
+    Damage1: 1
+    Sanity2: -1
+    Stamina2: -2
+    Damage2: 2
+    Part1: Thank you, Jessica, for your kind words.
+    Part2: Your kindness shines even through your adversities.
+    Part3: Your kindness is duly noted.
+  - Phrase: Thats a shame
+    Sanity1: -1
+    Stamina1: 3
+    Damage1: 2
+    Sanity2: -2
+    Stamina2: -2
+    Damage2: 3
+    Part1: Yes, what a shame someone would steal a picture of such a sweet dog
+    Part2: It's a shame someone would steal someones delicious snack.
+    Part3: It's truly such a shame and hopefully wont repeat itself!
+  - Phrase: Whom it may concern.
+    Sanity1: -2
+    Stamina1: 2
+    Damage1: 5
+    Sanity2: -3
+    Stamina2: -3
+    Damage2: 5
+    Part1: To whom it may concern, yes, someone did steal my baby's picture.
+    Part2: And to whom it may concern, I miss that dog picture gravely.
+    Part3: So to whom it may concern, hopefully these strange occurences cease soon.
+      xo.
+  - Phrase: Life is unjust
+    Sanity1: -3
+    Stamina1: 1
+    Damage1: 4
+    Sanity2: -3
+    Stamina2: -4
+    Damage2: 5
+    Part1: Dear Jessica, life truly is unjust - towards dogs and humans alike.
+    Part2: Life is unjust towards dogs and humans alike.
+    Part3: Life is unjust towards dogs and humans alike.
+  - Phrase: Poor you
+    Sanity1: -4
+    Stamina1: 0
+    Damage1: 3
+    Sanity2: -2
+    Stamina2: -4
+    Damage2: 4
+    Part1: Oh my poor Jessica, stay strong!
+    Part2: And you, poor yogurt-less Jessica, how do you manage?
+    Part3: So stay strong, my poor Jessica.

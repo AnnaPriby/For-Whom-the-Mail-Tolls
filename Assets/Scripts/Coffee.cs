@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class Coffee : MonoBehaviour, IPointerClickHandler
 {
     [Header("Stamina Refill Settings")]
-    public int refillAmount = 20; // Amount of stamina to restore when clicked
+    public int refillAmount = 12; // Updated stamina restore value
 
     [Header("Reference to Stat Manager")]
     public StatManager statManager; // Reference to StatManager
@@ -19,13 +19,16 @@ public class Coffee : MonoBehaviour, IPointerClickHandler
             // Apply stamina boost
             statManager.ApplyStaminaDelta(refillAmount);
 
-            // ❗Apply sanity penalty
-            statManager.ApplySanityDelta(-1);
+            // Divide current sanity by 3
+            int currentSanity = statManager.CurrentSanity;
+            int newSanity = currentSanity / 3;
+            int deltaSanity = newSanity - currentSanity;
+            statManager.ApplySanityDelta(deltaSanity);
 
-            // Trigger coffee event logic
-            GameLoop.Instance.Coffee();
+            // Removed GameLoop.Instance.Coffee();
+            // GameLoop.Instance.Coffee();
 
-            Debug.Log($"☕ Coffee used! +{refillAmount} stamina, -1 sanity.");
+            Debug.Log($"☕ Coffee used! +{refillAmount} stamina, sanity reduced to {newSanity}.");
         }
     }
 }

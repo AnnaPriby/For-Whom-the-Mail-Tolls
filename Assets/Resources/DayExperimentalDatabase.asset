@@ -51,15 +51,15 @@ MonoBehaviour:
     Stamina2: -3
     Damage2: 4
     Part1: Linda, I've been quite busy with important stuff.
-    Part2: I've been busy with both work and my surgery needing dog.
+    Part2: I've been busy with both work and my surgery-needing dog.
     Part3: Lets get back to being busy, shall we?
-  - Phrase: Bitch
-    Sanity1: -2
-    Stamina1: 0
+  - Phrase: If you would be so kind
+    Sanity1: -1
+    Stamina1: -1
     Damage1: 3
-    Sanity2: 1
-    Stamina2: -4
-    Damage2: 3
-    Part1: Oh my good Jessica, you bitch.
-    Part2: Speaking of bitches, my dog needs surgery.
-    Part3: So leave me alone, bitch.
+    Sanity2: -3
+    Stamina2: -2
+    Damage2: 2
+    Part1: Dear Linda, would you kindly forgive this error on my part?
+    Part2: If you would be so kind, have mercy on this poor surgery-needing dog owner.
+    Part3: Let me hastily fix this mistake, if you would be so kind.

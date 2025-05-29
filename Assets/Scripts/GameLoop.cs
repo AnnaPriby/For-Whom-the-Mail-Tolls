@@ -106,9 +106,7 @@ public class GameLoop : MonoBehaviour
     public int GetStartingStamina() => startingStamina;
     private int lastStickyVariant = -1; // 🧠 Stores sticky variant across days
 
-    private const int COFFEE_STATE_RECEIVE = 90;
-    private const int COFFEE_STATE_READING = 91;
-    private const int COFFEE_STATE_WRITING = 92;
+  
 
     void Awake()
     {
@@ -224,7 +222,7 @@ public class GameLoop : MonoBehaviour
                 SetUI(false, true);
                 coffee.enabled = false;
                 jessicaMail?.ShowReadMail();
-                if (Day == 4) lunchImageUI?.SetActive(true);
+                
                 break;
             case 3:
                 handsAnimator.SetBool("IsWriting", true);
@@ -252,33 +250,7 @@ public class GameLoop : MonoBehaviour
                 coffee.enabled = false;
                 verticalParallax?.StartAutoScroll();
                 break;
-            case COFFEE_STATE_RECEIVE:
-                SetUI(false, true);
-                jessicaMail.CloseAllMailUI();
-                jessicaMail.ShowCoffeeMailIntro();
-                stickyReaction?.UpdateJessicaSpriteByVariant(2);// ✅ Force it to reflect in JessicaMail
-                break;
-            case COFFEE_STATE_READING:
-                SetUI(false, true);
-                handsAnimator.SetBool("CoffeeDrink", false);
-                jessicaMail.CloseAllMailUI();
-                jessicaMail.CoffeeReadMailUI?.SetActive(true);
-                jessicaMail.ShowCoffeeMailContent(); 
-                break;
-            case COFFEE_STATE_WRITING:
-                baseVariantAtWrite = currentVariant; // Save variant intent at start of writing
-                lastStamina = StatManager.Instance.CurrentStamina; // ✅ Add this line
-                stickyReaction?.ResetVariant(); // 👈 add this
-                SetUI(false, true);
-                jessicaMail.CloseAllMailUI();
-                jessicaMail.CoffeeReplyUI?.SetActive(true);
-
-                DealCoffeeHand();
-                if (liveValidationCoroutine != null)
-                    StopCoroutine(liveValidationCoroutine);
-
-                liveValidationCoroutine = StartCoroutine(LiveValidateDraggables());
-                break;
+           
         }
     }
 
@@ -290,7 +262,7 @@ public class GameLoop : MonoBehaviour
 
     private IEnumerator WaitThenGoToNewMail()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
         ChangeGameState(1);
     }
 
@@ -325,30 +297,7 @@ public class GameLoop : MonoBehaviour
 
 
 
-    public void DealCoffeeHand()
-    {
-        int count = 0;
-        foreach (var item in allDraggables)
-        {
-            if (item == null) continue;
-
-            // 💡 Only allow items from CoffeeResponsesDatabase or matching name
-          //  if (!(item.emailDatabaseObject is CoffeeResponsesDatabase) && !item.name.Contains("Coffee")) continue;
-
-            if (count < coffeeDraggablesCount)
-            {
-                item.DealHand();
-                item.originalParent?.gameObject.SetActive(true);
-                item.gameObject.SetActive(true);
-                count++;
-            }
-            else if (!originalDraggables.Contains(item)) // hide only clones
-            {
-                item.gameObject.SetActive(false);
-            }
-
-        }
-    }
+   
 
     private int baseVariantAtWrite = 1; // default neutral
 
@@ -390,7 +339,7 @@ public class GameLoop : MonoBehaviour
         
 
         StatManager.Instance.ResetStaminaOnly();
-        ChangeGameState(COFFEE_STATE_RECEIVE);
+       // ChangeGameState(COFFEE_STATE_RECEIVE);
 
     }
 
@@ -500,7 +449,7 @@ public class GameLoop : MonoBehaviour
     {
         Debug.Log("🌀 LiveValidateDraggables STARTED");
 
-        while (GameState == 3 || GameState == COFFEE_STATE_WRITING)
+        while (GameState == 3 )
         {
             int currentStamina = StatManager.Instance.CurrentStamina;
 

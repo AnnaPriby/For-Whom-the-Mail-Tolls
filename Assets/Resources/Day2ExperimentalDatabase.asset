@@ -13,54 +13,53 @@ MonoBehaviour:
   m_Name: Day2ExperimentalDatabase
   m_EditorClassIdentifier: 
   entries:
-  - Phrase: Your kindness.
-    Sanity1: 2
-    Stamina1: -3
-    Damage1: 1
-    Sanity2: -1
+  - Phrase: As per my last email,
+    Sanity1: 1
+    Stamina1: -4
+    Damage1: 0
+    Sanity2: -2
     Stamina2: -2
     Damage2: 2
-    Part1: Thank you, Jessica, for your kind words.
-    Part2: Your kindness shines even through your adversities.
-    Part3: Your kindness is duly noted.
-  - Phrase: Thats a shame
-    Sanity1: 1
-    Stamina1: -2
-    Damage1: 2
-    Sanity2: -2
-    Stamina2: -2
-    Damage2: 3
-    Part1: Yes, what a shame someone would steal a picture of such a sweet dog
-    Part2: It's a shame someone would steal someones delicious snack.
-    Part3: It's truly such a shame and hopefully wont repeat itself!
-  - Phrase: Whom it may concern.
-    Sanity1: 0
+    Part1: As per my last email, I'm on it
+    Part2: As per my last email, I've been preoccupied
+    Part3: As per my last, I'm on it
+  - Phrase: Baby girl,
+    Sanity1: -2
     Stamina1: -1
     Damage1: 3
+    Sanity2: 2
+    Stamina2: -4
+    Damage2: 3
+    Part1: You're right baby girl
+    Part2: Daddy's been busy, baby girl
+    Part3: Don't worry about it baby girl
+  - Phrase: Friendly reminder,
+    Sanity1: -1
+    Stamina1: -2
+    Damage1: 5
+    Sanity2: -5
+    Stamina2: -2
+    Damage2: 4
+    Part1: Your friendly reminder has been acknowledged!
+    Part2: Friendly reminder - I've got my own stuff going on.
+    Part3: Friendly reminder that we will get throught this!
+  - Phrase: Correct me if I'm wrong
+    Sanity1: -1
+    Stamina1: -3
+    Damage1: 5
     Sanity2: -3
     Stamina2: -3
-    Damage2: 5
-    Part1: To whom it may concern, yes, someone did steal my baby's picture.
-    Part2: And to whom it may concern, I miss that dog picture gravely.
-    Part3: So to whom it may concern, hopefully these strange occurences cease soon.
-      xo.
-  - Phrase: Life is unjust
-    Sanity1: -1
-    Stamina1: -1
-    Damage1: 4
-    Sanity2: -3
-    Stamina2: -4
-    Damage2: 5
-    Part1: Dear Jessica, life truly is unjust - towards dogs and humans alike.
-    Part2: Life is unjust towards dogs and humans alike.
-    Part3: Life is unjust towards dogs and humans alike.
-  - Phrase: Poor you
-    Sanity1: -1
-    Stamina1: 0
-    Damage1: 3
-    Sanity2: -2
-    Stamina2: -4
     Damage2: 4
-    Part1: Oh my poor Jessica, stay strong!
-    Part2: And you, poor yogurt-less Jessica, how do you manage?
-    Part3: So stay strong, my poor Jessica.
+    Part1: Correct me if I'm wrong, but we've been over this
+    Part2: Correct me if I'm wrong, but this challenge can be overcome easily.
+    Part3: Correct me if I'm wrong, but have I ever let you down?
+  - Phrase: I appreciate
+    Sanity1: 2
+    Stamina1: -5
+    Damage1: 3
+    Sanity2: -1
+    Stamina2: -1
+    Damage2: 1
+    Part1: I appreciate your repeated reminders.
+    Part2: I appreciate you trying to get this thing finished
+    Part3: I appreciate you :)

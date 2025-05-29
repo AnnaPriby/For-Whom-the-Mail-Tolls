@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16436829d886d9f4dbee10aa71966936, type: 3}
+  m_Name: Day6ExperimentalDatabase
+  m_EditorClassIdentifier: 
+  entries:
+  - Phrase: Let's get HR involved
+    Sanity1: 3
+    Stamina1: -2
+    Damage1: 3
+    Sanity2: -2
+    Stamina2: -5
+    Damage2: 4
+    Part1: UR the one being reported
+    Part2: I go down you go down with me bitch
+    Part3: You, me, 12:00 outside  see you tthere
+  - Phrase: Hope this helps!
+    Sanity1: 2
+    Stamina1: -4
+    Damage1: 5
+    Sanity2: -5
+    Stamina2: -3
+    Damage2: 6
+    Part1: See U in hell,
+    Part2: Spawn of Satan
+    Part3: Please die.
+  - Phrase: Moving forward.
+    Sanity1: 3
+    Stamina1: -5
+    Damage1: 5
+    Sanity2: -3
+    Stamina2: -7
+    Damage2: 7
+    Part1: Sleep with one eye open tonight,
+    Part2: you'll be wishing you never fucking met me
+    Part3: youll rue the day your filthy mutt paws touched my beloved picture
+  - Phrase: Milord
+    Sanity1: 7
+    Stamina1: -4
+    Damage1: 4
+    Sanity2: -7
+    Stamina2: -4
+    Damage2: 10
+    Part1: U blasphemous fiend!!!
+    Part2: I bestow a cursee upon yee and thy bloodline
+    Part3: The royal council shall grant me your head
+  - Phrase: Woof
+    Sanity1: 5
+    Stamina1: -8
+    Damage1: 9
+    Sanity2: -1
+    Stamina2: -12
+    Damage2: 8
+    Part1: Woofo woof woof
+    Part2: Rawrawrarw
+    Part3: AWOOOOOO

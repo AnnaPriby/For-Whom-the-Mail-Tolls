@@ -18,9 +18,10 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     [Header("Databases")]
     public Day1Database day1Database;
     public Day2ExperimentalDatabase day2Database;
-    public Day2ExperimentalDatabase day3Database;
+    public Day3ExperimentalDatabase day3Database;
     public Day2ExperimentalDatabase day4Database;
     public Day2ExperimentalDatabase day5Database;
+    public Day2ExperimentalDatabase day6Database;
 
     [Header("History")]
     public ConversationHistoryManager historyManager;
@@ -40,6 +41,8 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     public string defaultInfoTextDay4 = "✉️ Fourth day message...";
     [TextArea]
     public string defaultInfoTextDay5 = "📨 Final thoughts for Day 5...";
+    [TextArea]
+    public string defaultInfoTextDay6 = "🧬 Insights for Day 6 go here...";
 
     private DraggableItem currentItem;
     private string originalInfoText;
@@ -61,6 +64,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
                 case 3: infoDisplay.text = defaultInfoTextDay3; break;
                 case 4: infoDisplay.text = defaultInfoTextDay4; break;
                 case 5: infoDisplay.text = defaultInfoTextDay5; break;
+                case 6: infoDisplay.text = defaultInfoTextDay6; break;
                 default: infoDisplay.text = defaultInfoTextDay1; break;
             }
 
@@ -108,18 +112,20 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         }
         else
         {
-            var activeDB = day switch
+            // Select appropriate database by day
+            ScriptableObject activeDB = day switch
             {
                 2 => day2Database,
                 3 => day3Database,
                 4 => day4Database,
                 5 => day5Database,
+                6 => day6Database,
                 _ => null
             };
 
-            if (activeDB != null)
+            if (activeDB is Day2ExperimentalDatabase baseDB && baseDB.entries != null)
             {
-                var entry = activeDB.entries.FirstOrDefault(e =>
+                var entry = baseDB.entries.FirstOrDefault(e =>
                     string.Equals(e.Phrase?.Trim().Replace("\u200B", ""), phraseToMatch, StringComparison.OrdinalIgnoreCase));
                 if (entry != null)
                 {

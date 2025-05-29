@@ -3912,7 +3912,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 87878e6d3be600942ac9a95f687b4966, type: 2}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.size
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[0].Day
@@ -3927,6 +3927,18 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[3].Day
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[4].Day
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[5].Day
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[0].Database
       value: 
       objectReference: {fileID: 11400000, guid: d3ba8520bb187ae4287ad57a42a5c6a1, type: 2}
@@ -3937,7 +3949,19 @@ PrefabInstance:
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[2].Database
       value: 
-      objectReference: {fileID: 11400000, guid: d6ace195b82ba184a893e8e70b35f8ce, type: 2}
+      objectReference: {fileID: 11400000, guid: e4f8f6501627b204cb38c8ecfb71bd03, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[3].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: c25a04d5356fa5f4bbb6c66e143aef62, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[4].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: b201b69e850e258429385367711e1ab8, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[5].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: 84b716f20f9211e46bd33663455a84f9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4441,7 +4465,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 87878e6d3be600942ac9a95f687b4966, type: 2}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.size
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[0].Day
@@ -4456,6 +4480,18 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[3].Day
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[4].Day
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[5].Day
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[0].Database
       value: 
       objectReference: {fileID: 11400000, guid: d3ba8520bb187ae4287ad57a42a5c6a1, type: 2}
@@ -4466,7 +4502,19 @@ PrefabInstance:
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[2].Database
       value: 
-      objectReference: {fileID: 11400000, guid: d6ace195b82ba184a893e8e70b35f8ce, type: 2}
+      objectReference: {fileID: 11400000, guid: e4f8f6501627b204cb38c8ecfb71bd03, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[3].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: c25a04d5356fa5f4bbb6c66e143aef62, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[4].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: b201b69e850e258429385367711e1ab8, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[5].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: 84b716f20f9211e46bd33663455a84f9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5460,7 +5508,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 87878e6d3be600942ac9a95f687b4966, type: 2}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.size
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[0].Day
@@ -5475,6 +5523,18 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[3].Day
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[4].Day
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[5].Day
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[0].Database
       value: 
       objectReference: {fileID: 11400000, guid: d3ba8520bb187ae4287ad57a42a5c6a1, type: 2}
@@ -5485,7 +5545,19 @@ PrefabInstance:
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[2].Database
       value: 
-      objectReference: {fileID: 11400000, guid: d6ace195b82ba184a893e8e70b35f8ce, type: 2}
+      objectReference: {fileID: 11400000, guid: e4f8f6501627b204cb38c8ecfb71bd03, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[3].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: c25a04d5356fa5f4bbb6c66e143aef62, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[4].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: b201b69e850e258429385367711e1ab8, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[5].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: 84b716f20f9211e46bd33663455a84f9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6700,7 +6772,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 87878e6d3be600942ac9a95f687b4966, type: 2}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.size
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[0].Day
@@ -6715,6 +6787,18 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[3].Day
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[4].Day
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[5].Day
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[0].Database
       value: 
       objectReference: {fileID: 11400000, guid: d3ba8520bb187ae4287ad57a42a5c6a1, type: 2}
@@ -6725,7 +6809,19 @@ PrefabInstance:
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[2].Database
       value: 
-      objectReference: {fileID: 11400000, guid: d6ace195b82ba184a893e8e70b35f8ce, type: 2}
+      objectReference: {fileID: 11400000, guid: e4f8f6501627b204cb38c8ecfb71bd03, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[3].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: c25a04d5356fa5f4bbb6c66e143aef62, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[4].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: b201b69e850e258429385367711e1ab8, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[5].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: 84b716f20f9211e46bd33663455a84f9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6897,7 +6993,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 87878e6d3be600942ac9a95f687b4966, type: 2}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.size
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[0].Day
@@ -6912,6 +7008,18 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[3].Day
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[4].Day
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[5].Day
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[0].Database
       value: 
       objectReference: {fileID: 11400000, guid: d3ba8520bb187ae4287ad57a42a5c6a1, type: 2}
@@ -6922,7 +7030,19 @@ PrefabInstance:
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: allDayDatabases.Array.data[2].Database
       value: 
-      objectReference: {fileID: 11400000, guid: d6ace195b82ba184a893e8e70b35f8ce, type: 2}
+      objectReference: {fileID: 11400000, guid: e4f8f6501627b204cb38c8ecfb71bd03, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[3].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: c25a04d5356fa5f4bbb6c66e143aef62, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[4].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: b201b69e850e258429385367711e1ab8, type: 2}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: allDayDatabases.Array.data[5].Database
+      value: 
+      objectReference: {fileID: 11400000, guid: 84b716f20f9211e46bd33663455a84f9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9041,6 +9161,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: d6ace195b82ba184a893e8e70b35f8ce, type: 2}
     - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
+      propertyPath: day3Database
+      value: 
+      objectReference: {fileID: 11400000, guid: e4f8f6501627b204cb38c8ecfb71bd03, type: 2}
+    - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
+      propertyPath: day4Database
+      value: 
+      objectReference: {fileID: 11400000, guid: c25a04d5356fa5f4bbb6c66e143aef62, type: 2}
+    - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
+      propertyPath: day5Database
+      value: 
+      objectReference: {fileID: 11400000, guid: b201b69e850e258429385367711e1ab8, type: 2}
+    - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
+      propertyPath: day6Database
+      value: 
+      objectReference: {fileID: 11400000, guid: 84b716f20f9211e46bd33663455a84f9, type: 2}
+    - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
       propertyPath: historyManager
       value: 
       objectReference: {fileID: 11538146}
@@ -9059,6 +9195,22 @@ PrefabInstance:
     - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
       propertyPath: defaultInfoTextDay2
       value: Acknowledge the situation!.
+      objectReference: {fileID: 0}
+    - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
+      propertyPath: defaultInfoTextDay3
+      value: Acknowledge the situation!.
+      objectReference: {fileID: 0}
+    - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
+      propertyPath: defaultInfoTextDay4
+      value: Be empathetic..
+      objectReference: {fileID: 0}
+    - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
+      propertyPath: defaultInfoTextDay5
+      value: Keep your cool..
+      objectReference: {fileID: 0}
+    - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
+      propertyPath: defaultInfoTextDay6
+      value: There's a U in SUCcess!!.
       objectReference: {fileID: 0}
     - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
       propertyPath: assignedItems.Array.size
@@ -9659,6 +9811,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: d6ace195b82ba184a893e8e70b35f8ce, type: 2}
     - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
+      propertyPath: day3Database
+      value: 
+      objectReference: {fileID: 11400000, guid: e4f8f6501627b204cb38c8ecfb71bd03, type: 2}
+    - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
+      propertyPath: day4Database
+      value: 
+      objectReference: {fileID: 11400000, guid: c25a04d5356fa5f4bbb6c66e143aef62, type: 2}
+    - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
+      propertyPath: day5Database
+      value: 
+      objectReference: {fileID: 11400000, guid: b201b69e850e258429385367711e1ab8, type: 2}
+    - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
+      propertyPath: day6Database
+      value: 
+      objectReference: {fileID: 11400000, guid: 84b716f20f9211e46bd33663455a84f9, type: 2}
+    - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
       propertyPath: historyManager
       value: 
       objectReference: {fileID: 11538146}
@@ -9676,7 +9844,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
       propertyPath: defaultInfoTextDay2
+      value: Reassure her.
+      objectReference: {fileID: 0}
+    - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
+      propertyPath: defaultInfoTextDay3
       value: Think positive!.
+      objectReference: {fileID: 0}
+    - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
+      propertyPath: defaultInfoTextDay4
+      value: Lift her up.
+      objectReference: {fileID: 0}
+    - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
+      propertyPath: defaultInfoTextDay5
+      value: Team work makes the dream work!.
+      objectReference: {fileID: 0}
+    - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
+      propertyPath: defaultInfoTextDay6
+      value: Just do it!.
       objectReference: {fileID: 0}
     - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
       propertyPath: allDatabases.Array.size
@@ -10417,6 +10601,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: d6ace195b82ba184a893e8e70b35f8ce, type: 2}
     - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
+      propertyPath: day3Database
+      value: 
+      objectReference: {fileID: 11400000, guid: e4f8f6501627b204cb38c8ecfb71bd03, type: 2}
+    - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
+      propertyPath: day4Database
+      value: 
+      objectReference: {fileID: 11400000, guid: c25a04d5356fa5f4bbb6c66e143aef62, type: 2}
+    - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
+      propertyPath: day5Database
+      value: 
+      objectReference: {fileID: 11400000, guid: b201b69e850e258429385367711e1ab8, type: 2}
+    - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
+      propertyPath: day6Database
+      value: 
+      objectReference: {fileID: 11400000, guid: 84b716f20f9211e46bd33663455a84f9, type: 2}
+    - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
       propertyPath: historyManager
       value: 
       objectReference: {fileID: 11538146}
@@ -10434,7 +10634,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
       propertyPath: defaultInfoTextDay2
+      value: Expand on the circumstances
+      objectReference: {fileID: 0}
+    - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
+      propertyPath: defaultInfoTextDay3
       value: Relate to her struggles!.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
+      propertyPath: defaultInfoTextDay4
+      value: Relate to her.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
+      propertyPath: defaultInfoTextDay5
+      value: Be straight forward.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
+      propertyPath: defaultInfoTextDay6
+      value: We're like a family here..
       objectReference: {fileID: 0}
     - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
       propertyPath: assignedItems.Array.size
@@ -10837,8 +11053,21 @@ MonoBehaviour:
       forward for you pariticpation xxx. '
     stamina: 0
     sanity: -1
-  - mainText: 'Yes, I''ve heard of your troubled dog - the one who''s picture u used
-      to have hanging in your cubicle, right? '
+  - mainText: Yes, I've heard of your troubled dog. I've also heard of their picture
+      dissapearing from your table. What a shame! It's horrible, when things go missing
+      in the office. Just like last week, SOMEONE ate my jogurt from the fridge.
+    stamina: 0
+    sanity: -1
+  - mainText: Hopefully your supportive attitude reaches the filthy yogurt thief
+      that has been plaguing the office and my probiotic diet goals. Xxx.
+    stamina: 0
+    sanity: -1
+  - mainText: Well to be honest, I've heard talk around the office about your dog
+      not being quite easy on the eye. Perhaps you should reconsider spending money
+      on any needed medical treatments.
+    stamina: 0
+    sanity: -1
+  - mainText: I REPORTED YOUR UGLY ASS DOG, AND NOW I WILL REPORT YOU TOO.
     stamina: 0
     sanity: -1
   historyManager: {fileID: 11538146}
@@ -11066,6 +11295,7 @@ MonoBehaviour:
   day3Database: {fileID: 0}
   day4Database: {fileID: 0}
   day5Database: {fileID: 0}
+  day6Database: {fileID: 0}
   historyManager: {fileID: 0}
   statManager: {fileID: 507051709}
   sendButton: {fileID: 3158348125479978088}
@@ -11074,6 +11304,7 @@ MonoBehaviour:
   defaultInfoTextDay3: "\U0001F4C4 Compose your final draft here..."
   defaultInfoTextDay4: "\u2709\uFE0F Fourth day message..."
   defaultInfoTextDay5: "\U0001F4E8 Final thoughts for Day 5..."
+  defaultInfoTextDay6: "\U0001F9EC Insights for Day 6 go here..."
 --- !u!222 &5427094250959308382
 CanvasRenderer:
   m_ObjectHideFlags: 0

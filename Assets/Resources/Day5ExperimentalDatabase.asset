@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec86bab495c1f7a4fa3894e17817aeb3, type: 3}
+  m_Name: Day5ExperimentalDatabase
+  m_EditorClassIdentifier: 
+  entries:
+  - Phrase: Let me clarify
+    Sanity1: 2
+    Stamina1: -5
+    Damage1: 2
+    Sanity2: -2
+    Stamina2: -2
+    Damage2: 2
+    Part1: Let me clarify myself further,
+    Part2: Let me clarify how much you've offended me.
+    Part3: Let me clarify
+  - Phrase: Being on the same page
+    Sanity1: 1
+    Stamina1: -4
+    Damage1: 4
+    Sanity2: -1
+    Stamina2: -3
+    Damage2: 3
+    Part1: I'd love for us to be on the same page.
+    Part2: I think you and my doggy are on the same page looks wise
+    Part3: Let's be on the same page when it comes to looking good in the office
+  - Phrase: In my personal opinion
+    Sanity1: -1
+    Stamina1: -3
+    Damage1: 5
+    Sanity2: -5
+    Stamina2: -4
+    Damage2: 5
+    Part1: My personal opinion might be better left unsaid.
+    Part2: In my personal opinion, youre not much of a catch either
+    Part3: In my personal opinion, our dynamic makes this work interesting.
+  - Phrase: Thanks for your input
+    Sanity1: -3
+    Stamina1: -2
+    Damage1: 6
+    Sanity2: -4
+    Stamina2: -4
+    Damage2: 7
+    Part1: Your input, while unasked for, is noted.
+    Part2: I will relay your input to my dog.
+    Part3: With your input, we will surely go far.
+  - Phrase: Perhaps
+    Sanity1: -4
+    Stamina1: -1
+    Damage1: 3
+    Sanity2: 2
+    Stamina2: -6
+    Damage2: 4
+    Part1: Perhaps you should consider shutting the fuuck up
+    Part2: Perhaps it's time for us to straight up fight it out
+    Part3: Perhaps you should get fired

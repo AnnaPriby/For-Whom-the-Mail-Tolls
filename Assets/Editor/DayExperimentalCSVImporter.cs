@@ -16,6 +16,31 @@ public class DayExperimentalCSVImporter : EditorWindow
         ImportDayExperimentalData("Day2ExtendedTable", "Day2ExperimentalDatabase.asset");
     }
 
+
+    [MenuItem("Tools/Import Day3 Experimental Data Table")]
+    public static void ImportDay3ExperimentalTable()
+    {
+        ImportDayExperimentalData("Day3ExtendedTable", "Day3ExperimentalDatabase.asset");
+    }
+
+    [MenuItem("Tools/Import Day4 Experimental Data Table")]
+    public static void ImportDay4ExperimentalTable()
+    {
+        ImportDayExperimentalData("Day4ExtendedTable", "Day4ExperimentalDatabase.asset");
+    }
+
+    [MenuItem("Tools/Import Day5 Experimental Data Table")]
+    public static void ImportDay5ExperimentalTable()
+    {
+        ImportDayExperimentalData("Day5ExtendedTable", "Day5ExperimentalDatabase.asset");
+    }
+
+    [MenuItem("Tools/Import Day6 Experimental Data Table")]
+    public static void ImportDay6ExperimentalTable()
+    {
+        ImportDayExperimentalData("Day6ExtendedTable", "Day6ExperimentalDatabase.asset");
+    }
+
     private static void ImportDayExperimentalData(string csvFileName, string assetFileName)
     {
         TextAsset csv = Resources.Load<TextAsset>(csvFileName);
@@ -55,9 +80,16 @@ public class DayExperimentalCSVImporter : EditorWindow
 
         if (db == null)
         {
-            // Dynamically create the correct ScriptableObject type
             if (assetFileName.Contains("Day2"))
                 db = ScriptableObject.CreateInstance<Day2ExperimentalDatabase>();
+            else if (assetFileName.Contains("Day3"))
+                db = ScriptableObject.CreateInstance<Day3ExperimentalDatabase>();
+            else if (assetFileName.Contains("Day4"))
+                db = ScriptableObject.CreateInstance<Day4ExperimentalDatabase>();
+            else if (assetFileName.Contains("Day5"))
+                db = ScriptableObject.CreateInstance<Day5ExperimentalDatabase>();
+            else if (assetFileName.Contains("Day6"))
+                db = ScriptableObject.CreateInstance<Day6ExperimentalDatabase>();
             else
                 db = ScriptableObject.CreateInstance<DayExperimentalDatabase>();
 
@@ -72,6 +104,22 @@ public class DayExperimentalCSVImporter : EditorWindow
         else if (db is Day2ExperimentalDatabase day2Db)
         {
             day2Db.entries = newEntries;
+        }
+        else if (db is Day3ExperimentalDatabase day3Db)
+        {
+            day3Db.entries = newEntries;
+        }
+        else if (db is Day4ExperimentalDatabase day4Db)
+        {
+            day4Db.entries = newEntries;
+        }
+        else if (db is Day5ExperimentalDatabase day5Db)
+        {
+            day5Db.entries = newEntries;
+        }
+        else if (db is Day6ExperimentalDatabase day6Db)
+        {
+            day6Db.entries = newEntries;
         }
         else
         {
