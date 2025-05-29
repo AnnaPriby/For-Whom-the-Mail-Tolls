@@ -85,7 +85,7 @@ public class GameLoop : MonoBehaviour
     [Header("Visuals")]
     public SpriteChanger JessicaReaction;
     public StickyReaction stickyReaction;
-
+    
     [Header("Animations")]
     public Animator handsAnimator;
 
@@ -106,7 +106,6 @@ public class GameLoop : MonoBehaviour
     public int GetStartingStamina() => startingStamina;
     private int lastStickyVariant = -1; // 🧠 Stores sticky variant across days
 
-  
 
     void Awake()
     {

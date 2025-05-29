@@ -9,6 +9,8 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 {
     [Header("UI")]
     public TextMeshProUGUI infoDisplay;
+    public TextMeshProUGUI sentenceDisplay;
+    public GameObject clearButton;
 
     public enum VariantType { Part1, Part2, Part3 }
 
@@ -16,7 +18,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     public VariantType variant = VariantType.Part1;
 
     [Header("Databases")]
-    public Day1Database day1Database;
+    public DayExperimentalDatabase day1Database;
     public Day2ExperimentalDatabase day2Database;
     public Day3ExperimentalDatabase day3Database;
     public Day2ExperimentalDatabase day4Database;
@@ -93,6 +95,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         bool matched = false;
 
         int day = GameLoop.Instance != null ? GameLoop.Instance.Day : 1;
+        Debug.LogWarning("day " + day + " database " + day1Database.name);
 
         if (day == 1 && day1Database != null)
         {
@@ -144,11 +147,18 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         if (!matched)
         {
             Debug.LogWarning($"❌ Phrase '{phraseToMatch}' not found in current day database.");
+            sentenceDisplay.enabled = false;
+            infoDisplay.enabled = true;
             infoDisplay.text = originalInfoText;
+            clearButton.SetActive(false);
             return;
         }
 
-        infoDisplay.text = selectedPart;
+        infoDisplay.enabled = false;
+        clearButton.SetActive(true);
+        sentenceDisplay.enabled = true;
+        sentenceDisplay.text = selectedPart;
+        Debug.Log("text : " + sentenceDisplay.text + " or " + selectedPart);
 
         currentItem.DisableDragging();
         dropped.SetActive(false);
@@ -196,6 +206,20 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         Debug.Log($"✅ RevealSlot [{name}] logging: {log}");
         return log;
     }
+    
+    // OD ZORY VOID NA VYMAZANI VETY ZE SLOTU
+    public void ClearSlot()
+    {
+        Debug.Log("ClearSlot");
+        sentenceDisplay.enabled = false;
+        clearButton.SetActive(false);
+        infoDisplay.enabled = true;
+        infoDisplay.text = originalInfoText;
+        if (currentItem != null)
+        {
+            ReturnOldItemToInventory();
+        }
+    }
 
     public string GetCurrentMessage()
     {
@@ -204,8 +228,8 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
     private void ApplyStatsFromItem()
     {
-        statManager.ApplyStaminaDelta(previousStamina);
         statManager.ApplySanityDelta(previousSanity);
+        statManager.ApplyStaminaDelta(previousStamina);
         statManager.ApplyDamageDelta(previousDamage);
 
         currentItem = null;

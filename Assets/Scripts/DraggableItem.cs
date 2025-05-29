@@ -10,7 +10,13 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 {
     public enum StatVersion { Version1, Version2 }
 
+    public GameObject slot1;
+    public GameObject slot2;
+    public GameObject slot3;
+    public Vector3 startScale = new Vector3(1f,1f,1f);
+    public Vector3 endScale = new Vector3(1.1f ,1.1f, 1.1f);
     [System.Serializable]
+    
     public class DayDatabaseWrapper
     {
         public int Day;
@@ -22,6 +28,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [Header("UI References")]
     [SerializeField] public Image image;
     [SerializeField] public TextMeshProUGUI label;
+    [SerializeField] public TextMeshProUGUI stats;
+    
 
     [Header("Stat Version Toggle")]
     [SerializeField] private StatVersion staminaVersion = StatVersion.Version1;
@@ -122,8 +130,18 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         if (label != null && dayData != null)
         {
-            label.text = $"{dayData.Phrase} ({Sanity}/{Stamina}/{Damage})";
+            label.text = $"\"{dayData.Phrase}\"";
             label.raycastTarget = true;
+            //obycejnejsi vypsani hodnot:
+            //stats.text = $"<color=#1b9902>Sanity: <b><size=22><mark=#5dc24c66>{Sanity}</b></size></mark>\n<color=#0063cc>Stamina :  <b><size=22><mark=#057bfa66>{Stamina}</b></size></mark>\n<color=#cc0025>Damage: <size=22><b><mark=#f74e5b66>{Damage}</b>";
+            //dvouradkove vypsani hodnot:
+            stats.text = $"<color=#1b9902>Sanity: " +
+                         $"<color=#0063cc> Stamina: " +
+                         $"<color=#cc0025>Damage: \n<color=#000>" +
+                         $"<b><size=30><mark=#5dc24c66>{Sanity}</b></size></mark>" +
+                         $"<b><size=30><mark=#057bfa66>{Stamina}</b></size></mark>" +
+                         $"<size=30><b><mark=#f74e5b66>{Damage}</b>";
+            stats.raycastTarget = true;
         }
 
         Debug.Log($"🎴 {name} assigned → Phrase: '{dayData.Phrase}', SA: {Sanity}, ST: {Stamina}, DMG: {Damage}");
@@ -138,6 +156,10 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (canvasGroup != null) canvasGroup.blocksRaycasts = false;
         if (label != null) label.raycastTarget = false;
         if (image != null) image.raycastTarget = false;
+
+        slot1.transform.localScale = endScale;
+        slot2.transform.localScale = endScale;
+        slot3.transform.localScale = endScale;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -151,6 +173,10 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (canvasGroup != null) canvasGroup.blocksRaycasts = true;
         if (label != null) label.raycastTarget = true;
         if (image != null) image.raycastTarget = true;
+
+        slot1.transform.localScale = startScale;
+        slot2.transform.localScale = startScale;
+        slot3.transform.localScale = startScale;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
