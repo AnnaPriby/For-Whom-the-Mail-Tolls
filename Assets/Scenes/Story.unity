@@ -632,7 +632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b798e8627cc0144ca97cdddc09195f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Anna_MainScreenTogether 1
+  sceneName: Day1
   continueButton: {fileID: 0}
   continueButtonGroup: {fileID: 0}
 --- !u!1 &1353073027
