@@ -6,7 +6,10 @@ using UnityEngine.EventSystems;
 public class Coffee : MonoBehaviour, IPointerClickHandler
 {
     [Header("Stamina Refill Settings")]
-    public int refillAmount = 12; // Updated stamina restore value
+    public int refillAmount = 12; // Amount of stamina to restore
+
+    [Header("Sanity Adjustment Settings")]
+    public int sanityDivisionFactor = 3; // Factor to divide current sanity by
 
     [Header("Reference to Stat Manager")]
     public StatManager statManager; // Reference to StatManager
@@ -19,16 +22,16 @@ public class Coffee : MonoBehaviour, IPointerClickHandler
             // Apply stamina boost
             statManager.ApplyStaminaDelta(refillAmount);
 
-            // Divide current sanity by 3
+            // Sanity division logic
             int currentSanity = statManager.CurrentSanity;
-            int newSanity = currentSanity / 3;
+            int newSanity = currentSanity / Mathf.Max(sanityDivisionFactor, 1); // prevent divide by 0
             int deltaSanity = newSanity - currentSanity;
             statManager.ApplySanityDelta(deltaSanity);
 
             // Removed GameLoop.Instance.Coffee();
             // GameLoop.Instance.Coffee();
 
-            Debug.Log($"☕ Coffee used! +{refillAmount} stamina, sanity reduced to {newSanity}.");
+            Debug.Log($"☕ Coffee used! +{refillAmount} stamina, sanity reduced to {newSanity} (÷{sanityDivisionFactor}).");
         }
     }
 }

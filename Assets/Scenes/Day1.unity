@@ -8310,7 +8310,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ff4b8e0fd0117d489a902e81fbe4150, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  refillAmount: 20
+  refillAmount: 12
+  sanityDivisionFactor: 3
   statManager: {fileID: 507051709}
 --- !u!212 &1904930219
 SpriteRenderer:
