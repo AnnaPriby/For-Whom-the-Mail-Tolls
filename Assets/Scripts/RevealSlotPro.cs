@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Linq;
 using System;
+using Unity.Mathematics;
 
 public class RevealSlotPro : MonoBehaviour, IDropHandler
 {
@@ -16,6 +17,9 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
     [Header("Variant Settings")]
     public VariantType variant = VariantType.Part1;
+
+    // Add this to store the original size of the object
+    public Vector3 startScale = new Vector3(1f, 1f, 1f);
 
     [Header("Databases")]
     public DayExperimentalDatabase day1Database;
@@ -172,6 +176,31 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         previousStamina = newItem.Stamina;
         previousSanity = newItem.Sanity;
         previousDamage = -Mathf.Abs(newItem.Damage);
+
+        // Reset the scale of the object (the one this script is attached to) back to its original size
+        transform.localScale = startScale;
+
+        // Reset the scale of all RevealSlotPro instances in the scene
+        ResetAllScales();
+    }
+
+    // Static method to reset the scale of all instances of RevealSlotPro in the scene
+    public static void ResetAllScales()
+    {
+        // Find all instances of RevealSlotPro in the scene
+        RevealSlotPro[] allRevealSlotPros = FindObjectsOfType<RevealSlotPro>();
+
+        // Loop through all of them and reset their scales
+        foreach (RevealSlotPro slotPro in allRevealSlotPros)
+        {
+            if (slotPro != null)
+            {
+                // Reset the scale of the object this script is attached to
+                slotPro.transform.localScale = slotPro.startScale;
+            }
+        }
+
+        Debug.Log("All scales reset.");
     }
 
     private void OnSendButtonClicked()
@@ -206,8 +235,8 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         Debug.Log($"✅ RevealSlot [{name}] logging: {log}");
         return log;
     }
-    
-    // OD ZORY VOID NA VYMAZANI VETY ZE SLOTU
+
+    // Method to clear the slot's content
     public void ClearSlot()
     {
         Debug.Log("ClearSlot");
@@ -240,7 +269,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
     private void DrawNewCards()
     {
-        // Optional logic
+        // Optional logic to draw new cards
     }
 
     private void TrackGameState()

@@ -11537,6 +11537,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 2295033289333960741}
     m_Modifications:
     - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
+      propertyPath: slot1
+      value: 
+      objectReference: {fileID: 1980131761}
+    - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
+      propertyPath: slot2
+      value: 
+      objectReference: {fileID: 2019527497}
+    - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
+      propertyPath: slot3
+      value: 
+      objectReference: {fileID: 1729736893}
+    - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
       propertyPath: sendButton
       value: 
       objectReference: {fileID: 3158348125479978088}
@@ -12234,6 +12246,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
+      propertyPath: slot1
+      value: 
+      objectReference: {fileID: 1980131761}
+    - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
+      propertyPath: slot2
+      value: 
+      objectReference: {fileID: 1980131761}
+    - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
+      propertyPath: slot3
+      value: 
+      objectReference: {fileID: 1980131761}
     - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
       propertyPath: variant
       value: 2
@@ -13119,6 +13143,18 @@ PrefabInstance:
       value: Info
       objectReference: {fileID: 0}
     - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
+      propertyPath: slot1
+      value: 
+      objectReference: {fileID: 1980131761}
+    - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
+      propertyPath: slot2
+      value: 
+      objectReference: {fileID: 1980131761}
+    - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
+      propertyPath: slot3
+      value: 
+      objectReference: {fileID: 1980131761}
+    - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
       propertyPath: variant
       value: 1
       objectReference: {fileID: 0}
@@ -13848,6 +13884,7 @@ MonoBehaviour:
   sentenceDisplay: {fileID: 0}
   clearButton: {fileID: 0}
   variant: 0
+  startScale: {x: 1, y: 1, z: 1}
   day1Database: {fileID: 0}
   day2Database: {fileID: 0}
   day3Database: {fileID: 0}
