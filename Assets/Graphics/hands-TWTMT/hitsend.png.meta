@@ -116,7 +116,7 @@ TextureImporter:
         x: 0
         y: 4328
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -137,7 +137,7 @@ TextureImporter:
         x: 1922
         y: 4328
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -158,7 +158,7 @@ TextureImporter:
         x: 3844
         y: 4328
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -179,7 +179,7 @@ TextureImporter:
         x: 5766
         y: 4328
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -200,7 +200,7 @@ TextureImporter:
         x: 0
         y: 3246
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -218,10 +218,10 @@ TextureImporter:
       name: hitsend_5
       rect:
         serializedVersion: 2
-        x: 1922
+        x: 1932
         y: 3246
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -242,7 +242,7 @@ TextureImporter:
         x: 3844
         y: 3246
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -263,7 +263,7 @@ TextureImporter:
         x: 5766
         y: 3246
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -281,10 +281,10 @@ TextureImporter:
       name: hitsend_8
       rect:
         serializedVersion: 2
-        x: 0
+        x: 10
         y: 2164
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -305,7 +305,7 @@ TextureImporter:
         x: 1922
         y: 2164
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -326,7 +326,7 @@ TextureImporter:
         x: 3844
         y: 2164
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -347,7 +347,7 @@ TextureImporter:
         x: 5766
         y: 2164
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -368,7 +368,7 @@ TextureImporter:
         x: 0
         y: 1082
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -389,7 +389,7 @@ TextureImporter:
         x: 1922
         y: 1082
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -410,7 +410,7 @@ TextureImporter:
         x: 3844
         y: 1082
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -449,10 +449,10 @@ TextureImporter:
       name: hitsend_16
       rect:
         serializedVersion: 2
-        x: 0
+        x: 10
         y: 0
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -473,7 +473,7 @@ TextureImporter:
         x: 1922
         y: 0
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}
@@ -494,7 +494,7 @@ TextureImporter:
         x: 3844
         y: 0
         width: 1922
-        height: 1082
+        height: 948
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 100}

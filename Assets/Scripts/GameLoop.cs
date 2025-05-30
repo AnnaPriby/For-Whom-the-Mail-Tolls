@@ -142,7 +142,7 @@ public class GameLoop : MonoBehaviour
         switch (stateSet)
         {
             case 0:
-
+                handsAnimator.SetBool("HitSend", false);
                 if (Day == 1)
                 {
                     StatManager.Instance.SetStartingStats(startingStamina, startingSanity, startingDamage);
@@ -203,7 +203,8 @@ public class GameLoop : MonoBehaviour
                 SetUI(false, false);
                 coffee.enabled = false;
                 verticalParallax?.StartAutoScroll();
-               
+                
+
                 break;
            
         }

@@ -227,6 +227,9 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
         if (GameLoop.Instance.GameState == 92)
             GameLoop.Instance.ReturnFromCoffee();
+
+
+        handsAnimator.SetBool("HitSend", true);
     }
 
     public string GetMessageWithStats()
@@ -295,7 +298,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     {
         if (infoDisplay == null || sentenceDisplay == null || clearButton == null)
         {
-            Debug.LogError($"❌ RevealSlotPro [{name}] is missing UI references. Skipping reset.");
+            Debug.Log($"❌ RevealSlotPro [{name}] is missing UI references. Skipping reset.");
             return;
         }
 
