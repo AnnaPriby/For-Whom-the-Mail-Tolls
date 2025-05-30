@@ -18,6 +18,9 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     [Header("Variant Settings")]
     public VariantType variant = VariantType.Part1;
 
+    [Header("Animations")]
+    public Animator handsAnimator;
+
     // Add this to store the original size of the object
     public Vector3 startScale = new Vector3(1f, 1f, 1f);
 
@@ -83,6 +86,8 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
+
+        handsAnimator.SetBool("IsCalmWriting", false);
         GameObject dropped = eventData.pointerDrag;
         DraggableItem newItem = dropped?.GetComponent<DraggableItem>();
         if (newItem == null) return;

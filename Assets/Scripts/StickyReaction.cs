@@ -24,9 +24,9 @@ public class StickyReaction : MonoBehaviour
                 int current = StatManager.Instance.CurrentStamina;
                 int damage = starting - current;
 
-                int variant = GameLoop.Instance.PredictVariantByDamage(damage);
+               // int variant = GameLoop.Instance.PredictVariantByDamage(damage);
 
-                UpdateJessicaSpriteByVariant(variant);
+               // UpdateJessicaSpriteByVariant(variant);
             }
 
             yield return new WaitForSeconds(0.1f);

@@ -13,10 +13,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public GameObject slot1;
     public GameObject slot2;
     public GameObject slot3;
-    public Vector3 startScale = new Vector3(1f,1f,1f);
-    public Vector3 endScale = new Vector3(1.1f ,1.1f, 1.1f);
+    public Vector3 startScale = new Vector3(1f, 1f, 1f);
+    public Vector3 endScale = new Vector3(1.1f, 1.1f, 1.1f);
     [System.Serializable]
-    
     public class DayDatabaseWrapper
     {
         public int Day;
@@ -29,17 +28,17 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [SerializeField] public Image image;
     [SerializeField] public TextMeshProUGUI label;
     [SerializeField] public TextMeshProUGUI stats;
-    
 
     [Header("Stat Version Toggle")]
     [SerializeField] private StatVersion staminaVersion = StatVersion.Version1;
     [SerializeField] private StatVersion sanityVersion = StatVersion.Version1;
     [SerializeField] private StatVersion damageVersion = StatVersion.Version1;
 
+    [Header("Animations")]
+    public Animator handsAnimator;
+
     [HideInInspector] public Transform originalParent;
     [HideInInspector] public Transform parentAfterDrag;
-
-    
 
     private DayExperimentalData dayData;
     private CanvasGroup canvasGroup;
@@ -63,17 +62,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         canvasGroup = GetComponent<CanvasGroup>();
         originalParent = transform.parent;
+        handsAnimator.SetBool("IsCalmWriting", false);
     }
 
-    private void Start()
-    {
-        
-    }
+    private void Start() { }
 
     public void DealHand()
     {
-       
-         AssignEntry();
+        AssignEntry();
 
         gameObject.SetActive(true);
         this.enabled = true;
@@ -132,9 +128,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             label.text = $"\"{dayData.Phrase}\"";
             label.raycastTarget = true;
-            //obycejnejsi vypsani hodnot:
-            //stats.text = $"<color=#1b9902>Sanity: <b><size=22><mark=#5dc24c66>{Sanity}</b></size></mark>\n<color=#0063cc>Stamina :  <b><size=22><mark=#057bfa66>{Stamina}</b></size></mark>\n<color=#cc0025>Damage: <size=22><b><mark=#f74e5b66>{Damage}</b>";
-            //dvouradkove vypsani hodnot:
+
             stats.text = $"<color=#1b9902>Sanity: " +
                          $"<color=#0063cc> Stamina: " +
                          $"<color=#cc0025>Damage: \n<color=#000>" +
@@ -160,11 +154,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         slot1.transform.localScale = endScale;
         slot2.transform.localScale = endScale;
         slot3.transform.localScale = endScale;
+        handsAnimator.SetBool("IsCalmWriting", true);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         transform.position = Input.mousePosition;
+
+        
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -177,17 +174,20 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         slot1.transform.localScale = startScale;
         slot2.transform.localScale = startScale;
         slot3.transform.localScale = startScale;
+
+        handsAnimator.SetBool("IsCalmWriting", false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (dayData != null)
-            TooltipController.Instance.ShowTooltip(Stamina, Sanity, Damage);
+        // Make the item slightly larger when hovered over
+        transform.localScale = new Vector3(1.2f, 1.2f, 1.2f); // Increase size on hover
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        TooltipController.Instance.HideTooltip();
+        // Reset the size when hover ends
+        transform.localScale = startScale; // Reset to original size
     }
 
     public void ValidateAgainstStats()

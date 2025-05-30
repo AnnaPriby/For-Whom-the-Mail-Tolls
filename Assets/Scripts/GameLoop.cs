@@ -34,53 +34,8 @@ public class GameLoop : MonoBehaviour
     [Header("Coffee Settings")]
     public int coffeeDraggablesCount = 2; // 🔧 Set this in Inspector
 
-    [Header("Stats")]
-    public int angry = 18;
-    public int neutral = 15;
-    public int damagelow = 2;
-    public int damagehigh = 4;
-
-    [Header("Day1 - Daily Damage Thresholds")]
-    public int damagelowDay1 = 2;
-    public int damagehighDay1 = 5;
-    private int damagelowDay2 = 2;
-    private int damagehighDay2 = 4;
-    private int damagelowDay3 = 2;
-    private int damagehighDay3 = 4;
-
-    [Header("Day 2 - Email Variant Thresholds")]
-    public int damagelowDay2Evil = 2;
-    //public int damagehighDay2Evil = 4;
-
-    public int damagelowDay2Neutral = 1;
-    public int damagehighDay2Neutral = 3;
-
-    public int damagelowDay2Nice = 3;
-    //public int damagehighDay2Nice = 2;
-
-    [Header("Day 3 - Email Variant Thresholds")] //up to 5 variants
-    public int damagelowDay3Evil = 2;
-    public int damagehighDay3Evil = 4;
-
-    public int damagelowDay3EvilTransition = 2;
-    public int damagehighDay3EvilTransition = 4;
-
-    public int damagelowDay3Neutral = 1;
-    public int damagehighDay3Neutral = 3;
-
-    public int damagelowDay3NiceTransition = 5;
-    public int damagehighDay3NiceTransition = 2;
-
-    public int damagelowDay3Nice = 0;
-    public int damagehighDay3Nice = 2;
 
 
-    [Header("Day 4 - Email Variant Thresholds")]
-    public int damagelowDay4 = 2;
-    public int damagehighDay4 = 4;
-
-    public int damagelowDay5 = 2;
-    public int damagehighDay5 = 4;
 
     [Header("Visuals")]
     public SpriteChanger JessicaReaction;
@@ -224,7 +179,7 @@ public class GameLoop : MonoBehaviour
                 
                 break;
             case 3:
-                handsAnimator.SetBool("IsWriting", true);
+              
                 baseVariantAtWrite = currentVariant; // Save variant intent at start of writing
                 lastStamina = StatManager.Instance.CurrentStamina; // ✅ Add this line
                 stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant);
@@ -244,7 +199,7 @@ public class GameLoop : MonoBehaviour
                 
                 break;
             case 5:
-                handsAnimator.SetBool("IsWriting", false);
+                
                 SetUI(false, false);
                 coffee.enabled = false;
                 verticalParallax?.StartAutoScroll();
@@ -325,7 +280,7 @@ public class GameLoop : MonoBehaviour
         LogPlayerResponseToHistory(); // only once
 
         ChangeGameState(5);
-        lastStickyVariant = PredictNextVariant();
+      //  lastStickyVariant = PredictNextVariant();
 
         Debug.LogWarning("🧠 LogSend CALLED");
     }
@@ -350,7 +305,7 @@ public class GameLoop : MonoBehaviour
     private void ChooseVariantBasedOnStaminaDamage()
     {
         int stamina = StatManager.Instance.CurrentStamina;
-        currentVariant = stamina >= angry ? 2 : stamina >= neutral ? 1 : 0;
+       // currentVariant = stamina >= angry ? 2 : stamina >= neutral ? 1 : 0;
         ApplyVariantToGame(currentVariant);
     }
 
@@ -473,68 +428,13 @@ public class GameLoop : MonoBehaviour
     {
         if (stickyReaction == null) return;
 
-        int variant = PredictNextVariant(); // 🔁 Use correct variant logic (not simplified one)
-        stickyReaction.UpdateJessicaSpriteByVariant(variant);
+       // int variant = PredictNextVariant(); // 🔁 Use correct variant logic (not simplified one)
+       // stickyReaction.UpdateJessicaSpriteByVariant(variant);
     }
 
-    private int PredictNextVariant()
-    {
-        int damage = startingStamina - StatManager.Instance.CurrentStamina;
+    
 
-        if (Day == 1)
-        {
-            return damage <= damagelowDay1 ? 2 : damage <= damagehighDay1 ? 1 : 0;
-        }
-
-        if (Day == 2)
-        {
-            switch (baseVariantAtWrite)
-            {
-                case 2: return damage <= damagelowDay2Evil ? 4 : 2;
-                case 1: return damage <= damagelowDay2Neutral ? 2 : damage <= damagehighDay2Neutral ? 1 : 0;
-                case 0: return damage <= damagelowDay2Nice ? 0 : 3;
-            }
-        }
-
-        if (Day == 3)
-        {
-            switch (baseVariantAtWrite)
-            {
-                case 3: return 2;
-                case 4: return damage <= damagelowDay3EvilTransition ? 1 : 2;
-                case 1: return 1;
-                case 0: return 0;
-                case 5: return damage <= damagelowDay3NiceTransition ? 1 : 2;
-            }
-        }
-
-        if (Day == 4)
-            return damage <= damagelowDay4 ? 2 : damage <= damagehighDay4 ? 1 : 0;
-
-        if (Day == 5)
-            return damage <= damagelowDay5 ? 2 : damage <= damagehighDay5 ? 1 : 0;
-
-        return 1;
-    }
-
-    public int PredictVariantByDamage(int damage)
-    {
-        switch (Day)
-        {
-            case 1:
-                return damage <= damagelowDay1 ? 2 : damage <= damagehighDay1 ? 1 : 0;
-            case 2:
-                return damage <= damagelowDay2 ? 2 : damage <= damagehighDay2 ? 1 : 0;
-            case 3:
-                return damage <= damagelowDay3 ? 2 : damage <= damagehighDay3 ? 1 : 0;
-            case 4:
-                return damage <= damagelowDay4 ? 2 : damage <= damagehighDay4 ? 1 : 0;
-            case 5:
-                return damage <= damagelowDay5 ? 2 : damage <= damagehighDay5 ? 1 : 0;
-            default:
-                return 1;
-        }
-    }
+   
 
 
 

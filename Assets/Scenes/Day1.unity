@@ -3284,6 +3284,10 @@ PrefabInstance:
       value: StatBar_Damage
       objectReference: {fileID: 0}
     - target: {fileID: 2431237235126261599, guid: 96ab1bf0bb7ff6d48a2af0f8127858c7, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2431237235126261599, guid: 96ab1bf0bb7ff6d48a2af0f8127858c7, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -4308,7 +4312,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 425, y: -95}
+  m_AnchoredPosition: {x: 425, y: -113}
   m_SizeDelta: {x: 119.6393, y: 115.3308}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &701165338
@@ -4925,6 +4929,10 @@ PrefabInstance:
       value: 1.1
       objectReference: {fileID: 0}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: handsAnimator
+      value: 
+      objectReference: {fileID: 1580764817}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: sanityVersion
       value: 0
       objectReference: {fileID: 0}
@@ -5540,6 +5548,10 @@ PrefabInstance:
       propertyPath: endPosition.z
       value: 1.1
       objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: handsAnimator
+      value: 
+      objectReference: {fileID: 1580764817}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: sanityVersion
       value: 0
@@ -6806,6 +6818,10 @@ PrefabInstance:
       propertyPath: endPosition.z
       value: 1.1
       objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: handsAnimator
+      value: 
+      objectReference: {fileID: 1580764817}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: sanityVersion
       value: 0
@@ -8141,6 +8157,10 @@ PrefabInstance:
       value: 1.1
       objectReference: {fileID: 0}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: handsAnimator
+      value: 
+      objectReference: {fileID: 1580764817}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: sanityVersion
       value: 0
       objectReference: {fileID: 0}
@@ -8526,6 +8546,10 @@ PrefabInstance:
       propertyPath: endPosition.z
       value: 1.1
       objectReference: {fileID: 0}
+    - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
+      propertyPath: handsAnimator
+      value: 
+      objectReference: {fileID: 1580764817}
     - target: {fileID: 9218540687229041046, guid: 049cd31c0a639ea48a510b3b8ec89a34, type: 3}
       propertyPath: sanityVersion
       value: 0
@@ -11589,6 +11613,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 84b716f20f9211e46bd33663455a84f9, type: 2}
     - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
+      propertyPath: handsAnimator
+      value: 
+      objectReference: {fileID: 1580764817}
+    - target: {fileID: 671332350904877842, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
       propertyPath: historyManager
       value: 
       objectReference: {fileID: 11538146}
@@ -11766,11 +11794,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1051469120438755946, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 436.77
+      value: 453
       objectReference: {fileID: 0}
     - target: {fileID: 1051469120438755946, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -91.5
+      value: -94
       objectReference: {fileID: 0}
     - target: {fileID: 1051469120438755946, guid: 690e35deebe807e4fb671cc41cd98ff7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -12228,11 +12256,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 742382848536826125, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 436.78
+      value: 453.01004
       objectReference: {fileID: 0}
     - target: {fileID: 742382848536826125, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -334.5
+      value: -337
       objectReference: {fileID: 0}
     - target: {fileID: 742382848536826125, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -12302,6 +12330,10 @@ PrefabInstance:
       propertyPath: day6Database
       value: 
       objectReference: {fileID: 11400000, guid: 84b716f20f9211e46bd33663455a84f9, type: 2}
+    - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
+      propertyPath: handsAnimator
+      value: 
+      objectReference: {fileID: 1580764817}
     - target: {fileID: 878970421287656930, guid: e5419b483ef3df34d91fc02fffb76d6a, type: 3}
       propertyPath: historyManager
       value: 
@@ -13120,11 +13152,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3450174963806732063, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 436.82
+      value: 453.05005
       objectReference: {fileID: 0}
     - target: {fileID: 3450174963806732063, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -213.82
+      value: -216.32
       objectReference: {fileID: 0}
     - target: {fileID: 3450174963806732063, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -13198,6 +13230,10 @@ PrefabInstance:
       propertyPath: day6Database
       value: 
       objectReference: {fileID: 11400000, guid: 84b716f20f9211e46bd33663455a84f9, type: 2}
+    - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
+      propertyPath: handsAnimator
+      value: 
+      objectReference: {fileID: 1580764817}
     - target: {fileID: 8138206593931193324, guid: a1d8c394e12e1d745a672e42ebec7dda, type: 3}
       propertyPath: historyManager
       value: 
@@ -13884,6 +13920,7 @@ MonoBehaviour:
   sentenceDisplay: {fileID: 0}
   clearButton: {fileID: 0}
   variant: 0
+  handsAnimator: {fileID: 0}
   startScale: {x: 1, y: 1, z: 1}
   day1Database: {fileID: 0}
   day2Database: {fileID: 0}
