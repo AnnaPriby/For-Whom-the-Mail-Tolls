@@ -154,6 +154,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         slot1.transform.localScale = endScale;
         slot2.transform.localScale = endScale;
         slot3.transform.localScale = endScale;
+
+        //aniamce
         handsAnimator.SetBool("IsCalmWriting", true);
     }
 

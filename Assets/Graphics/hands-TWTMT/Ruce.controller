@@ -143,7 +143,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsInsaneWriting
+    m_ConditionEvent: HitSend
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2080983126996177731}
@@ -152,8 +152,8 @@ AnimatorStateTransition:
   m_IsExit: 0
   serializedVersion: 3
   m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.84210527
+  m_TransitionOffset: 1.5738032
+  m_ExitTime: 0.8586717
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -398,7 +398,7 @@ AnimatorStateMachine:
     m_Position: {x: 430, y: 270, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2080983126996177731}
-    m_Position: {x: 130, y: 240, z: 0}
+    m_Position: {x: 150, y: 260, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6146151120919049047}
     m_Position: {x: 90, y: 490, z: 0}
@@ -407,7 +407,7 @@ AnimatorStateMachine:
     m_Position: {x: 440, y: 190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8260529274714609966}
-    m_Position: {x: 370, y: 420, z: 0}
+    m_Position: {x: 370, y: 430, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

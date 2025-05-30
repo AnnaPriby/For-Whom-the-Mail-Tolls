@@ -78,6 +78,11 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
             }
 
             originalInfoText = infoDisplay.text;
+
+            // 👇 Initial visibility
+            infoDisplay.enabled = true;
+            sentenceDisplay.enabled = false;
+            clearButton.SetActive(false);
         }
 
         if (sendButton != null)
@@ -226,13 +231,17 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
     public string GetMessageWithStats()
     {
-        if (string.IsNullOrWhiteSpace(infoDisplay?.text) || infoDisplay.text == originalInfoText)
+        string currentMessage = sentenceDisplay != null && sentenceDisplay.enabled
+            ? sentenceDisplay.text
+            : null;
+
+        if (string.IsNullOrWhiteSpace(currentMessage))
         {
-            Debug.Log($"⛔ RevealSlot [{name}] skipped. Text: '{infoDisplay?.text}'");
+            Debug.Log($"⛔ RevealSlot [{name}] skipped. Sentence text is empty or null.");
             return null;
         }
 
-        string log = $"{infoDisplay.text.Trim()}\n<size=80%><i>" +
+        string log = $"{currentMessage.Trim()}\n<size=80%><i>" +
                      $"Stamina: {(previousStamina >= 0 ? "+" : "")}{previousStamina}, " +
                      $"Sanity: {(previousSanity >= 0 ? "+" : "")}{previousSanity}, " +
                      $"Damage: {(previousDamage >= 0 ? "" : "-")}{Mathf.Abs(previousDamage)}</i></size>";
@@ -240,7 +249,6 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         Debug.Log($"✅ RevealSlot [{name}] logging: {log}");
         return log;
     }
-
     // Method to clear the slot's content
     public void ClearSlot()
     {
@@ -285,6 +293,12 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
     public void PrepareForNewRound()
     {
+        if (infoDisplay == null || sentenceDisplay == null || clearButton == null)
+        {
+            Debug.LogError($"❌ RevealSlotPro [{name}] is missing UI references. Skipping reset.");
+            return;
+        }
+
         currentItem = null;
 
         int day = GameLoop.Instance != null ? GameLoop.Instance.Day : 1;
@@ -296,10 +310,16 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
             case 3: infoDisplay.text = defaultInfoTextDay3; break;
             case 4: infoDisplay.text = defaultInfoTextDay4; break;
             case 5: infoDisplay.text = defaultInfoTextDay5; break;
+            case 6: infoDisplay.text = defaultInfoTextDay6; break;
             default: infoDisplay.text = defaultInfoTextDay1; break;
         }
 
         originalInfoText = infoDisplay.text;
+
+        infoDisplay.enabled = true;
+        sentenceDisplay.enabled = false;
+        sentenceDisplay.text = "";
+        clearButton.SetActive(false);
 
         statManager.UpdateSlotDelta(-previousStamina, -previousSanity, -previousDamage);
 

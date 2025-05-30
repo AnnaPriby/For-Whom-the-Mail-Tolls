@@ -203,6 +203,7 @@ public class GameLoop : MonoBehaviour
                 SetUI(false, false);
                 coffee.enabled = false;
                 verticalParallax?.StartAutoScroll();
+               
                 break;
            
         }
@@ -350,21 +351,20 @@ public class GameLoop : MonoBehaviour
     }
 
 
-  
+
 
     public void OnScrollFinished()
     {
-        IncreaseDay();
-        ChangeGameState(0);
+        IncreaseDay();  // Increment the day
+        ChangeGameState(0);  // Update the game state to the next phase
 
         foreach (var slot in allRevealSlots)
         {
             if (slot != null)
-                slot.PrepareForNewRound();
+                slot.PrepareForNewRound();  // Reset each slot for the new round
         }
 
-       
-        DraggableItem.ResetUsed();
+        DraggableItem.ResetUsed();  // Reset the used draggable items
     }
 
     public void SaveGameProgress()
