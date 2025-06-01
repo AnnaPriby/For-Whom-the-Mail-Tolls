@@ -4238,7 +4238,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 91, y: 506.375}
-  m_SizeDelta: {x: 2146.5247, y: 1147.2499}
+  m_SizeDelta: {x: 2146.5247, y: 1393}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &680675319
 MonoBehaviour:
@@ -4260,7 +4260,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 52c76366aadd0428b92a668b7b133e08, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b5a95dff6f38a492fae852edb1c1a01c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10187,6 +10187,8 @@ MonoBehaviour:
   refillAmount: 12
   sanityDivisionFactor: 3
   statManager: {fileID: 507051709}
+  startScale: {x: 1, y: 1, z: 1}
+  endScale: {x: 1.1, y: 1.1, z: 1.1}
 --- !u!212 &1904930219
 SpriteRenderer:
   m_ObjectHideFlags: 0

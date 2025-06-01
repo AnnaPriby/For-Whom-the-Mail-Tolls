@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
 using System.Linq;
+using DG.Tweening;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
@@ -150,10 +151,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (canvasGroup != null) canvasGroup.blocksRaycasts = false;
         if (label != null) label.raycastTarget = false;
         if (image != null) image.raycastTarget = false;
+        
+        slot1.transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine);
+        slot2.transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine);
+        slot3.transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine);
 
-        slot1.transform.localScale = endScale;
-        slot2.transform.localScale = endScale;
-        slot3.transform.localScale = endScale;
+        // slot1.transform.localScale = endScale;
+        // slot2.transform.localScale = endScale;
+        // slot3.transform.localScale = endScale;
 
         //aniamce
         handsAnimator.SetBool("IsCalmWriting", true);
@@ -172,24 +177,26 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (canvasGroup != null) canvasGroup.blocksRaycasts = true;
         if (label != null) label.raycastTarget = true;
         if (image != null) image.raycastTarget = true;
+        
+        slot1.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
+        slot2.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
+        slot3.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
 
-        slot1.transform.localScale = startScale;
-        slot2.transform.localScale = startScale;
-        slot3.transform.localScale = startScale;
+        // slot1.transform.localScale = startScale;
+        // slot2.transform.localScale = startScale;
+        // slot3.transform.localScale = startScale;
 
         handsAnimator.SetBool("IsCalmWriting", false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Make the item slightly larger when hovered over
-        transform.localScale = new Vector3(1.2f, 1.2f, 1.2f); // Increase size on hover
+        transform.DOScale(new Vector3(1.2f, 1.2f, 1.2f), 0.3f).SetEase(Ease.InOutSine);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // Reset the size when hover ends
-        transform.localScale = startScale; // Reset to original size
+        transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
     }
 
     public void ValidateAgainstStats()

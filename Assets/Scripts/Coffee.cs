@@ -1,9 +1,10 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 // This script allows a Coffee object to be clicked to restore stamina and reduce sanity
-public class Coffee : MonoBehaviour, IPointerClickHandler
+public class Coffee : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Stamina Refill Settings")]
     public int refillAmount = 12; // Amount of stamina to restore
@@ -13,8 +14,25 @@ public class Coffee : MonoBehaviour, IPointerClickHandler
 
     [Header("Reference to Stat Manager")]
     public StatManager statManager; // Reference to StatManager
+    
+    [Header("UI")]
+    public Vector3 startScale = new Vector3(1f, 1f, 1f);
+    public Vector3 endScale = new Vector3(1.1f, 1.1f, 1.1f);
 
     // Called automatically when this object is clicked
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        // Make the item slightly larger when hovered over
+        //transform.localScale = new Vector3(1.2f, 1.2f, 1.2f); 
+        transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine); // Increase size on hover
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        // Reset the size when hover ends
+        //transform.localScale = startScale; // Reset to original size
+        transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
+    }
     public void OnPointerClick(PointerEventData eventData)
     {
         if (statManager != null)

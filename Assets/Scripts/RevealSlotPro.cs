@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine.UI;
 using System.Linq;
 using System;
+using DG.Tweening;
+using DG.Tweening.Core;
 using Unity.Mathematics;
 
 public class RevealSlotPro : MonoBehaviour, IDropHandler
@@ -12,6 +14,8 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     public TextMeshProUGUI infoDisplay;
     public TextMeshProUGUI sentenceDisplay;
     public GameObject clearButton;
+    public Tween TypeOutSentence;
+    float typingSpeed = 20f;
 
     public enum VariantType { Part1, Part2, Part3 }
 
@@ -168,11 +172,16 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
             return;
         }
 
+        string text = "";
+
         infoDisplay.enabled = false;
         clearButton.SetActive(true);
         sentenceDisplay.enabled = true;
-        sentenceDisplay.text = selectedPart;
-        Debug.Log("text : " + sentenceDisplay.text + " or " + selectedPart);
+        //sentenceDisplay.text = selectedPart;
+        TypeOutSentence = DOTween.To(() => text, x=> text = x, selectedPart, selectedPart.Length / typingSpeed).OnUpdate(() =>
+        {
+            sentenceDisplay.text = text;
+        }); 
 
         currentItem.DisableDragging();
         dropped.SetActive(false);
@@ -188,7 +197,8 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         previousDamage = -Mathf.Abs(newItem.Damage);
 
         // Reset the scale of the object (the one this script is attached to) back to its original size
-        transform.localScale = startScale;
+        transform.DOScale(startScale,0.3f).SetEase(Ease.InOutSine);
+        //transform.localScale = startScale;
 
         // Reset the scale of all RevealSlotPro instances in the scene
         ResetAllScales();
@@ -206,7 +216,8 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
             if (slotPro != null)
             {
                 // Reset the scale of the object this script is attached to
-                slotPro.transform.localScale = slotPro.startScale;
+                //slotPro.transform.localScale = slotPro.startScale;
+                slotPro.transform.DOScale(slotPro.startScale, 0.3f).SetEase(Ease.InOutSine);
             }
         }
 
