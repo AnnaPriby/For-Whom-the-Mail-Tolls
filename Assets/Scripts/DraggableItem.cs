@@ -16,6 +16,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public GameObject slot3;
     public Vector3 startScale = new Vector3(1f, 1f, 1f);
     public Vector3 endScale = new Vector3(1.1f, 1.1f, 1.1f);
+
     [System.Serializable]
     public class DayDatabaseWrapper
     {
@@ -37,6 +38,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     [Header("Animations")]
     public Animator handsAnimator;
+
+    [Tooltip("Sanity level below which insanity animation is triggered")]
+    public int insaneThreshold = 0;
 
     [HideInInspector] public Transform originalParent;
     [HideInInspector] public Transform parentAfterDrag;
@@ -84,8 +88,17 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (originalParent != null)
         {
             transform.SetParent(originalParent);
-            transform.localPosition = Vector3.zero;
+
+            RectTransform rt = GetComponent<RectTransform>();
+            rt.anchorMin = new Vector2(0.5f, 0.5f);
+            rt.anchorMax = new Vector2(0.5f, 0.5f);
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = Vector2.zero;
+            rt.localPosition = Vector3.zero;
+            rt.localScale = Vector3.one;
         }
+
+        ValidateAgainstStats(); // ✅ Ensure it's interactable after being dealt
     }
 
     public void AssignEntry()
@@ -145,48 +158,59 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnBeginDrag(PointerEventData eventData)
     {
         parentAfterDrag = transform.parent;
-        transform.SetParent(transform.root);
+        transform.SetParent(transform.root, true);
         transform.SetAsLastSibling();
 
-        if (canvasGroup != null) canvasGroup.blocksRaycasts = false;
-        if (label != null) label.raycastTarget = false;
-        if (image != null) image.raycastTarget = false;
-        
+        canvasGroup.blocksRaycasts = false;
+
         slot1.transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine);
         slot2.transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine);
         slot3.transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine);
 
-        // slot1.transform.localScale = endScale;
-        // slot2.transform.localScale = endScale;
-        // slot3.transform.localScale = endScale;
-
-        //aniamce
-        handsAnimator.SetBool("IsCalmWriting", true);
+        if (StatManager.Instance != null && StatManager.Instance.CurrentSanity < insaneThreshold)
+        {
+            handsAnimator.SetBool("IsInsaneWriting", true);
+            handsAnimator.SetBool("IsCalmWriting", false);
+        }
+        else
+        {
+            handsAnimator.SetBool("IsInsaneWriting", false);
+            handsAnimator.SetBool("IsCalmWriting", true);
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         transform.position = Input.mousePosition;
-
-        
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        GameObject dropTarget = eventData.pointerEnter;
+
+        if (dropTarget == null || dropTarget.GetComponent<RevealSlotPro>() == null && dropTarget.GetComponent<InventorySlot>() == null)
+        {
+            parentAfterDrag = originalParent;
+        }
+
         transform.SetParent(parentAfterDrag);
-        if (canvasGroup != null) canvasGroup.blocksRaycasts = true;
-        if (label != null) label.raycastTarget = true;
-        if (image != null) image.raycastTarget = true;
-        
+
+        RectTransform rect = GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0.5f, 0.5f);
+        rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = Vector2.zero;
+        rect.localPosition = Vector3.zero;
+        rect.localScale = Vector3.one;
+
+        canvasGroup.blocksRaycasts = true;
+
         slot1.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
         slot2.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
         slot3.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
 
-        // slot1.transform.localScale = startScale;
-        // slot2.transform.localScale = startScale;
-        // slot3.transform.localScale = startScale;
-
         handsAnimator.SetBool("IsCalmWriting", false);
+        handsAnimator.SetBool("IsInsaneWriting", false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -213,6 +237,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             canvasGroup.blocksRaycasts = isUsable;
             canvasGroup.alpha = isUsable ? 1f : 0.5f;
         }
+
+        this.enabled = isUsable;
     }
 
     public static void ResetUsed()
@@ -232,5 +258,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         this.enabled = true;
         if (TryGetComponent(out CanvasGroup cg))
             cg.blocksRaycasts = true;
+    }
+
+    // ✅ Global revalidation (can be called by StatManager)
+    public static void RevalidateAllDraggables()
+    {
+        foreach (var item in FindObjectsOfType<DraggableItem>())
+        {
+            item.ValidateAgainstStats();
+        }
     }
 }

@@ -113,6 +113,7 @@ public class StatManager : MonoBehaviour
         if (staminaSlider == null) return;
         staminaSlider.value = Mathf.Clamp(staminaSlider.value + delta, 0, maxStamina);
         UpdateStaminaVisuals();
+        SanitySpriteManager.Instance?.UpdateAllSprites(CurrentSanity);
     }
 
     public void ApplySanityDelta(int delta)

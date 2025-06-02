@@ -19,6 +19,9 @@ public class Coffee : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     public Vector3 startScale = new Vector3(1f, 1f, 1f);
     public Vector3 endScale = new Vector3(1.1f, 1.1f, 1.1f);
 
+    [Header("Animations")]
+    public Animator handsAnimator;
+
     // Called automatically when this object is clicked
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -37,19 +40,16 @@ public class Coffee : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     {
         if (statManager != null)
         {
-            // Apply stamina boost
             statManager.ApplyStaminaDelta(refillAmount);
 
-            // Sanity division logic
             int currentSanity = statManager.CurrentSanity;
-            int newSanity = currentSanity / Mathf.Max(sanityDivisionFactor, 1); // prevent divide by 0
+            int newSanity = currentSanity / Mathf.Max(sanityDivisionFactor, 1);
             int deltaSanity = newSanity - currentSanity;
             statManager.ApplySanityDelta(deltaSanity);
 
-            // Removed GameLoop.Instance.Coffee();
-            // GameLoop.Instance.Coffee();
-
             Debug.Log($"☕ Coffee used! +{refillAmount} stamina, sanity reduced to {newSanity} (÷{sanityDivisionFactor}).");
         }
+
+        handsAnimator.SetTrigger("CoffeeDrink"); // ✔️ Use trigger
     }
 }

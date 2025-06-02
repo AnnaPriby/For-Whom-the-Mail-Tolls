@@ -18,9 +18,13 @@ public class VerticalParallax : MonoBehaviour
     public float scrollSpeed = 0.5f;
     public float autoScrollDuration = 2.5f; // ✅ NEW: How long auto scroll plays
 
+    // New canvas that moves similarly to middleLayer (like jessica rect)
+    public RectTransform otherCanvasUI;
+
     private Vector3 bgStartPos;
     private Vector3 middleStartPos;
     private Vector2 fgStartPos;
+    private Vector2 otherCanvasStartPos;
 
     private bool dragging = false;
     private Vector3 lastMouseWorldPos;
@@ -33,6 +37,7 @@ public class VerticalParallax : MonoBehaviour
         bgStartPos = background.position;
         middleStartPos = middleLayer.position;
         fgStartPos = foregroundUI.anchoredPosition;
+        otherCanvasStartPos = otherCanvasUI.anchoredPosition; // Store the starting position of the other canvas
     }
 
     void Update()
@@ -70,6 +75,7 @@ public class VerticalParallax : MonoBehaviour
             background.position = Vector3.Lerp(background.position, bgStartPos, Time.deltaTime * returnSpeed);
             middleLayer.position = Vector3.Lerp(middleLayer.position, middleStartPos, Time.deltaTime * returnSpeed);
             foregroundUI.anchoredPosition = Vector2.Lerp(foregroundUI.anchoredPosition, fgStartPos, Time.deltaTime * returnSpeed);
+            otherCanvasUI.anchoredPosition = Vector2.Lerp(otherCanvasUI.anchoredPosition, otherCanvasStartPos, Time.deltaTime * returnSpeed); // Move other canvas UI
         }
     }
 
@@ -132,5 +138,14 @@ public class VerticalParallax : MonoBehaviour
         middleLayer.position = new Vector3(middleLayer.position.x, newMiddleY, middleLayer.position.z);
 
         foregroundUI.anchoredPosition += new Vector2(0, bgMove * foregroundParallaxMultiplier);
+
+        // Move the other canvas similarly to the middle layer
+        float otherCanvasDelta = -bgMove * middleParallaxMultiplier; // Same multiplier as middleLayer
+        float newOtherCanvasY = Mathf.Clamp(
+            otherCanvasUI.anchoredPosition.y + otherCanvasDelta,
+            otherCanvasStartPos.y - middleLayerLimit, // Limit the other canvas within a similar range
+            otherCanvasStartPos.y
+        );
+        otherCanvasUI.anchoredPosition = new Vector2(otherCanvasUI.anchoredPosition.x, newOtherCanvasY);
     }
 }

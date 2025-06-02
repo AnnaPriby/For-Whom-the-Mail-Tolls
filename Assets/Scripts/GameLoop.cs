@@ -56,6 +56,14 @@ public class GameLoop : MonoBehaviour
     public int startingStamina = 20;
     public int startingSanity = 25;
     public int startingDamage = 45;
+
+    [Header("Game Over Canvases (per Stat)")]
+    public GameObject gameOverSanityCanvas;
+    public GameObject gameOverStaminaCanvas;
+    public GameObject gameOverDamageCanvas;
+
+
+
     public int GetCurrentVariant() => currentVariant;
     private Coroutine liveValidationCoroutine = null;
     public int GetStartingStamina() => startingStamina;
@@ -160,6 +168,32 @@ public class GameLoop : MonoBehaviour
                 }
 
                 hasLoggedSendThisTurn = false;
+
+                // Check current stats and show appropriate Game Over UI
+                if (StatManager.Instance != null)
+                {
+                    int currentSanity = StatManager.Instance.CurrentSanity;
+                    int currentStamina = StatManager.Instance.CurrentStamina;
+                    int currentDamage = StatManager.Instance.CurrentDamage;
+
+                    if (currentSanity <= 0 && gameOverSanityCanvas != null)
+                    {
+                        gameOverSanityCanvas.SetActive(true);
+                        Debug.LogWarning("💀 SANITY reached zero → Showing Game Over (Sanity).");
+                    }
+
+                    if (currentStamina <= 0 && gameOverStaminaCanvas != null)
+                    {
+                        gameOverStaminaCanvas.SetActive(true);
+                        Debug.LogWarning("💀 STAMINA reached zero → Showing Game Over (Stamina).");
+                    }
+
+                    if (currentDamage <= 0 && gameOverDamageCanvas != null)
+                    {
+                        gameOverDamageCanvas.SetActive(true);
+                        Debug.LogWarning("💀 DAMAGE reached zero → Showing Game Over (Damage).");
+                    }
+                }
 
                 SetUI(false, true);
                 jessicaMail?.ShowNoMail();
@@ -291,7 +325,7 @@ public class GameLoop : MonoBehaviour
     {
         previousGameState = GameState;
 
-        handsAnimator.SetBool("CoffeeDrink", true);
+       // handsAnimator.SetBool("CoffeeDrink", true);
         
 
         StatManager.Instance.ResetStaminaOnly();
