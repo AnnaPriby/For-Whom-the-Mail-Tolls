@@ -1,5 +1,4 @@
-﻿// GameLoop.cs (with correct logic for restoring previous UI state after coffee)
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -31,12 +30,12 @@ public class GameLoop : MonoBehaviour
     private int currentGameState = -1;
 
     [Header("Coffee Settings")]
-    public int coffeeDraggablesCount = 2; // 🔧 Set this in Inspector
+    public int coffeeDraggablesCount = 2;
 
     [Header("Visuals")]
     public SpriteChanger JessicaReaction;
     public StickyReaction stickyReaction;
-    
+
     [Header("Animations")]
     public Animator handsAnimator;
 
@@ -53,30 +52,37 @@ public class GameLoop : MonoBehaviour
     public int startingSanity = 25;
     public int startingDamage = 45;
 
+
     [Header("Game Over Canvases (per Stat)")]
     public GameObject gameOverSanityCanvas;
     public GameObject gameOverStaminaCanvas;
     public GameObject gameOverDamageCanvas;
 
-
     [Header("Stat-Based Endings")]
     public List<StatRangeSet> statBasedEndings = new List<StatRangeSet>();
-
 
     [System.Serializable]
     public class StatRangeSet
     {
         public GameObject endingCanvas;
-        public Vector2Int sanityRange;
-        public Vector2Int staminaRange;
-        public Vector2Int damageRange;
+
+        [Tooltip("Minimum % sanity loss required for this ending (0–100)")]
+        [Range(0, 100)]
+        public float sanityLossThreshold;
+
+        [Tooltip("Minimum % stamina loss required for this ending (0–100)")]
+        [Range(0, 100)]
+        public float staminaLossThreshold;
+
+        [Tooltip("Minimum % damage loss required for this ending (0–100)")]
+        [Range(0, 100)]
+        public float damageLossThreshold;
     }
 
     public int GetCurrentVariant() => currentVariant;
     private Coroutine liveValidationCoroutine = null;
     public int GetStartingStamina() => startingStamina;
-    private int lastStickyVariant = -1; // 🧠 Stores sticky variant across days
-
+    private int lastStickyVariant = -1;
 
     void Awake()
     {
@@ -84,9 +90,9 @@ public class GameLoop : MonoBehaviour
 #if UNITY_EDITOR
         ResetEditorProgress();
 #endif
-        
+
         jessicaUI?.SetActive(true);
-        playerTurnUI?.gameObject.SetActive(false); // Start hidden
+        playerTurnUI?.gameObject.SetActive(false);
         jessicaUI?.SetActive(true);
         coffee.enabled = false;
         lunchImageUI?.SetActive(false);
@@ -107,40 +113,31 @@ public class GameLoop : MonoBehaviour
         }
         PrepareDraggables();
         ChangeGameState(GameState);
-        stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant);// ✅ Force it to reflect in JessicaMail
-
-
+        stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant);
     }
 
     private void PrepareDraggables()
     {
-        allDraggables = new List<DraggableItem>(originalDraggables); // Just reference them directly
+        allDraggables = new List<DraggableItem>(originalDraggables);
 
         foreach (var item in allDraggables)
         {
             if (item == null) continue;
 
-            // Ensure visibility
             item.gameObject.SetActive(true);
             item.enabled = true;
 
-            // Assign originalParent if not set (failsafe)
             if (item.originalParent == null)
             {
                 item.originalParent = item.transform.parent;
                 Debug.LogWarning($"⚠️ originalParent was null on {item.name}, assigned from transform.parent");
             }
 
-            // Enable raycast for dragging
             if (item.TryGetComponent(out CanvasGroup cg))
                 cg.blocksRaycasts = true;
 
-            // Update variant visuals if it's a story item
             if (item is StoryDraggableItem story)
                 story.UpdateVariantBasedOnDay();
-
-            // ✅ Assign database manually if needed
-            //item.AssignDatabase(); // ← Optional: If you use a method to bind the database
         }
     }
 
@@ -158,6 +155,8 @@ public class GameLoop : MonoBehaviour
         switch (stateSet)
         {
             case 0:
+                coffee.ResetDailyUse();
+
                 handsAnimator.SetBool("HitSend", false);
                 if (Day == 1)
                 {
@@ -166,18 +165,17 @@ public class GameLoop : MonoBehaviour
 
                 if (Day == 1)
                 {
-                    currentVariant = 1;               // ✅ Set manually
+                    currentVariant = 1;
                     ApplyVariantToGame(currentVariant);
-                    stickyReaction?.UpdateJessicaSpriteByVariant(currentVariant);// ✅ Force it to reflect in JessicaMail
+                    stickyReaction?.UpdateJessicaSpriteByVariant(currentVariant);
                 }
                 if (Day > 1 && lastStickyVariant >= 0)
                 {
-                    stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant); // restore previous day's face
+                    stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant);
                 }
 
                 hasLoggedSendThisTurn = false;
 
-                // Check current stats and show appropriate Game Over UI
                 if (StatManager.Instance != null)
                 {
                     int currentSanity = StatManager.Instance.CurrentSanity;
@@ -203,22 +201,25 @@ public class GameLoop : MonoBehaviour
                     }
                 }
 
-
                 if (Day == 7 && StatManager.Instance != null)
                 {
                     int sanity = StatManager.Instance.CurrentSanity;
                     int stamina = StatManager.Instance.CurrentStamina;
                     int damage = StatManager.Instance.CurrentDamage;
 
+                    float sanityLoss = GetStatLossPercentage(startingSanity, sanity);
+                    float staminaLoss = GetStatLossPercentage(startingStamina, stamina);
+                    float damageLoss = GetStatLossPercentage(startingDamage, damage);
+
                     foreach (var ending in statBasedEndings)
                     {
-                        if (sanity >= ending.sanityRange.x && sanity <= ending.sanityRange.y &&
-                            stamina >= ending.staminaRange.x && stamina <= ending.staminaRange.y &&
-                            damage >= ending.damageRange.x && damage <= ending.damageRange.y)
+                        if (sanityLoss >= ending.sanityLossThreshold &&
+                            staminaLoss >= ending.staminaLossThreshold &&
+                            damageLoss >= ending.damageLossThreshold)
                         {
                             ending.endingCanvas?.SetActive(true);
-                            Debug.Log($"🎬 Triggered ending: {ending.endingCanvas.name}");
-                            break; // Only one ending shown
+                            Debug.Log($"🎬 Triggered ending based on % loss: {ending.endingCanvas.name}");
+                            break;
                         }
                     }
                 }
@@ -232,43 +233,33 @@ public class GameLoop : MonoBehaviour
                 coffee.enabled = false;
                 jessicaMail?.ShowNewMail();
                 stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant);
-
                 break;
             case 2:
                 SetUI(false, true);
                 coffee.enabled = false;
                 jessicaMail?.ShowReadMail();
-                
                 break;
             case 3:
-              
-                baseVariantAtWrite = currentVariant; // Save variant intent at start of writing
-                lastStamina = StatManager.Instance.CurrentStamina; // ✅ Add this line
+                baseVariantAtWrite = currentVariant;
+                lastStamina = StatManager.Instance.CurrentStamina;
                 stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant);
                 SetUI(true, false);
                 coffee.enabled = true;
                 DealHand();
-               
                 if (liveValidationCoroutine != null)
                     StopCoroutine(liveValidationCoroutine);
-
                 liveValidationCoroutine = StartCoroutine(LiveValidateDraggables());
                 break;
             case 4:
                 SetUI(false, true);
                 coffee.enabled = false;
                 jessicaMail?.ShowNewMail();
-                
                 break;
             case 5:
-                
                 SetUI(false, false);
                 coffee.enabled = false;
                 verticalParallax?.StartAutoScroll();
-                
-
                 break;
-           
         }
     }
 
@@ -289,10 +280,9 @@ public class GameLoop : MonoBehaviour
         foreach (var item in allDraggables)
         {
             item.DealHand();
-           // item.originalParent?.gameObject.SetActive(false);
         }
-
     }
+
     public void LogPlayerResponseToHistory()
     {
         List<string> parts = new List<string>();
@@ -313,15 +303,10 @@ public class GameLoop : MonoBehaviour
         }
     }
 
-
-
-   
-
-    private int baseVariantAtWrite = 1; // default neutral
+    private int baseVariantAtWrite = 1;
 
     public void LogReceive()
     {
-        
         ChangeGameState(3);
     }
 
@@ -338,27 +323,16 @@ public class GameLoop : MonoBehaviour
         hasLoggedSendThisTurn = true;
 
         totalSanityDamage = sanity;
-       // ChooseVariant();
         SaveGameProgress();
-
-        LogPlayerResponseToHistory(); // only once
-
+        LogPlayerResponseToHistory();
         ChangeGameState(5);
-      //  lastStickyVariant = PredictNextVariant();
-
         Debug.LogWarning("🧠 LogSend CALLED");
     }
 
     public void Coffee()
     {
         previousGameState = GameState;
-
-       // handsAnimator.SetBool("CoffeeDrink", true);
-        
-
         StatManager.Instance.ResetStaminaOnly();
-       // ChangeGameState(COFFEE_STATE_RECEIVE);
-
     }
 
     public void ReturnFromCoffee()
@@ -366,17 +340,6 @@ public class GameLoop : MonoBehaviour
         Debug.Log("🔁 Returning from CoffeeLoop to previous state.");
         ChangeGameState(previousGameState);
     }
-    private void ChooseVariantBasedOnStaminaDamage()
-    {
-        int stamina = StatManager.Instance.CurrentStamina;
-       // currentVariant = stamina >= angry ? 2 : stamina >= neutral ? 1 : 0;
-        ApplyVariantToGame(currentVariant);
-    }
-
-   
-
-
-
 
     private void ApplyVariantToGame(int variant)
     {
@@ -387,18 +350,14 @@ public class GameLoop : MonoBehaviour
             if (original is StoryDraggableItem sdo) sdo.UpdateVariantBasedOnDay();
 
         JessicaReaction?.UpdateJessicaSpriteByVariant(variant);
-        stickyReaction?.UpdateJessicaSpriteByVariant(variant); // ← update once at decision
-        lastStickyVariant = variant; // ← store it for tomorrow
+        stickyReaction?.UpdateJessicaSpriteByVariant(variant);
+        lastStickyVariant = variant;
     }
-
-    
 
     public void IncreaseDay()
     {
         Day++;
         SaveGameProgress();
-   
-
         if (StatManager.Instance != null)
         {
             StatManager.Instance.ClearPendingDelta();
@@ -413,21 +372,16 @@ public class GameLoop : MonoBehaviour
             if (o is StoryDraggableItem sdo) sdo.UpdateVariantBasedOnDay();
     }
 
-
-
-
     public void OnScrollFinished()
     {
-        IncreaseDay();  // Increment the day
-        ChangeGameState(0);  // Update the game state to the next phase
-
+        IncreaseDay();
+        ChangeGameState(0);
         foreach (var slot in allRevealSlots)
         {
             if (slot != null)
-                slot.PrepareForNewRound();  // Reset each slot for the new round
+                slot.PrepareForNewRound();
         }
-
-        DraggableItem.ResetUsed();  // Reset the used draggable items
+        DraggableItem.ResetUsed();
     }
 
     public void SaveGameProgress()
@@ -460,13 +414,13 @@ public class GameLoop : MonoBehaviour
         Resources.Load<StoryEmailsDatabase>("StoryEmailsDatabase");
     }
 
-    private int lastStamina = -1; // 🧠 Track to detect live changes
+    private int lastStamina = -1;
 
     private IEnumerator LiveValidateDraggables()
     {
         Debug.Log("🌀 LiveValidateDraggables STARTED");
 
-        while (GameState == 3 )
+        while (GameState == 3)
         {
             int currentStamina = StatManager.Instance.CurrentStamina;
 
@@ -490,16 +444,13 @@ public class GameLoop : MonoBehaviour
     public void UpdateStickyReaction()
     {
         if (stickyReaction == null) return;
-
-       // int variant = PredictNextVariant(); // 🔁 Use correct variant logic (not simplified one)
-       // stickyReaction.UpdateJessicaSpriteByVariant(variant);
     }
 
-    
-
-   
-
-
+    private float GetStatLossPercentage(int starting, int current)
+    {
+        if (starting == 0) return 0f;
+        return ((float)(starting - current) / starting) * 100f;
+    }
 
 #if UNITY_EDITOR
     private void ResetEditorProgress()

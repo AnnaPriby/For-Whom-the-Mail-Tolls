@@ -14,6 +14,11 @@ public class StatManager : MonoBehaviour
     public TextMeshProUGUI staminaValueText;
     public Image staminaFill;
 
+    [Header("Live Writing Preview Sliders")]
+    [SerializeField] private Slider staminaLiveSlider;
+    [SerializeField] private Slider sanityLiveSlider;
+    [SerializeField] private Slider damageLiveSlider;
+
     [Header("Sanity UI")]
     public Slider sanitySlider;
     public TextMeshProUGUI sanityValueText;
@@ -23,15 +28,15 @@ public class StatManager : MonoBehaviour
     public Slider damageSlider;
     public TextMeshProUGUI damageValueText;
     public Image damageFill;
-    
+
     [Header("Sanity Colors")]
     public Color sanityFull = Color.red;
     public Color sanityLow = Color.black;
-    
+
     [Header("Stamina Colors")]
     public Color staminaFull = Color.blue;
     public Color staminaLow = Color.blue;
-    
+
     [Header("Damage Colors")]
     public Color damageFull = Color.green;
     public Color damageLow = Color.red;
@@ -70,23 +75,13 @@ public class StatManager : MonoBehaviour
         maxSanity = sanity;
         maxDamage = damage;
 
-        if (staminaSlider != null)
-        {
-            staminaSlider.maxValue = stamina;
-            staminaSlider.value = stamina;
-        }
+        if (staminaSlider != null) { staminaSlider.maxValue = stamina; staminaSlider.value = stamina; }
+        if (sanitySlider != null) { sanitySlider.maxValue = sanity; sanitySlider.value = sanity; }
+        if (damageSlider != null) { damageSlider.maxValue = damage; damageSlider.value = damage; }
 
-        if (sanitySlider != null)
-        {
-            sanitySlider.maxValue = sanity;
-            sanitySlider.value = sanity;
-        }
-
-        if (damageSlider != null)
-        {
-            damageSlider.maxValue = damage;
-            damageSlider.value = damage;
-        }
+        if (staminaLiveSlider != null) { staminaLiveSlider.maxValue = stamina; staminaLiveSlider.value = stamina; }
+        if (sanityLiveSlider != null) { sanityLiveSlider.maxValue = sanity; sanityLiveSlider.value = sanity; }
+        if (damageLiveSlider != null) { damageLiveSlider.maxValue = damage; damageLiveSlider.value = damage; }
 
         UpdateAllVisuals();
     }
@@ -137,6 +132,7 @@ public class StatManager : MonoBehaviour
         totalPendingDamage += deltaDamage;
 
         ShowPendingDelta(totalPendingStamina, totalPendingSanity, totalPendingDamage);
+        UpdateLiveWritingPreview(totalPendingStamina, totalPendingSanity, totalPendingDamage);
     }
 
     public void ClearPendingDelta()
@@ -147,13 +143,15 @@ public class StatManager : MonoBehaviour
 
         if (statsDeltaDisplayText != null)
             statsDeltaDisplayText.text = "";
+
+        ResetLiveWritingPreview();
     }
 
     private void ShowPendingDelta(int stamina, int sanity, int damage)
     {
         if (statsDeltaDisplayText == null) return;
 
-        string result = $"Sanity: {(sanity >= 0 ? "+" : "")}<size=30><b>{sanity}</size></b> " + 
+        string result = $"Sanity: {(sanity >= 0 ? "+" : "")}<size=30><b>{sanity}</size></b> " +
                         $"Stamina: {(stamina >= 0 ? "+" : "")}<size=30><b>{stamina}</size></b> " +
                         $"Damage: {(damage >= 0 ? "+" : "")}<size=30><b>{damage}";
 
@@ -197,4 +195,28 @@ public class StatManager : MonoBehaviour
     public int CurrentStamina => Mathf.RoundToInt(staminaSlider.value);
     public int CurrentSanity => Mathf.RoundToInt(sanitySlider.value);
     public int CurrentDamage => Mathf.RoundToInt(damageSlider.value);
+
+    public void UpdateLiveWritingPreview(int deltaStamina, int deltaSanity, int deltaDamage)
+    {
+        if (staminaLiveSlider != null)
+            staminaLiveSlider.value = Mathf.Clamp(CurrentStamina + deltaStamina, 0, staminaLiveSlider.maxValue);
+
+        if (sanityLiveSlider != null)
+            sanityLiveSlider.value = Mathf.Clamp(CurrentSanity + deltaSanity, 0, sanityLiveSlider.maxValue);
+
+        if (damageLiveSlider != null)
+            damageLiveSlider.value = Mathf.Clamp(CurrentDamage + deltaDamage, 0, damageLiveSlider.maxValue);
+    }
+
+    public void ResetLiveWritingPreview()
+    {
+        if (staminaLiveSlider != null)
+            staminaLiveSlider.value = staminaSlider.value;
+
+        if (sanityLiveSlider != null)
+            sanityLiveSlider.value = sanitySlider.value;
+
+        if (damageLiveSlider != null)
+            damageLiveSlider.value = damageSlider.value;
+    }
 }

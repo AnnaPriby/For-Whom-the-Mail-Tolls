@@ -202,6 +202,11 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
 
         // Reset the scale of all RevealSlotPro instances in the scene
         ResetAllScales();
+
+
+        // ✅ Re-enable CameraScript if it was disabled by dragging
+        if (currentItem.cameraScript != null)
+            currentItem.cameraScript.enabled = true;
     }
 
     // Static method to reset the scale of all instances of RevealSlotPro in the scene

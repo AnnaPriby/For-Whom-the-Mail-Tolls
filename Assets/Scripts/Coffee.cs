@@ -22,6 +22,8 @@ public class Coffee : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     [Header("Animations")]
     public Animator handsAnimator;
 
+    private bool hasBeenUsedToday = false;
+
     // Called automatically when this object is clicked
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -38,6 +40,8 @@ public class Coffee : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     }
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (hasBeenUsedToday) return;
+
         if (statManager != null)
         {
             statManager.ApplyStaminaDelta(refillAmount);
@@ -50,6 +54,13 @@ public class Coffee : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
             Debug.Log($"☕ Coffee used! +{refillAmount} stamina, sanity reduced to {newSanity} (÷{sanityDivisionFactor}).");
         }
 
-        handsAnimator.SetTrigger("CoffeeDrink"); // ✔️ Use trigger
+        handsAnimator.SetTrigger("CoffeeDrink");
+        hasBeenUsedToday = true;
+    }
+
+
+    public void ResetDailyUse()
+    {
+        hasBeenUsedToday = false;
     }
 }

@@ -17,6 +17,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public Vector3 startScale = new Vector3(1f, 1f, 1f);
     public Vector3 endScale = new Vector3(1.1f, 1.1f, 1.1f);
 
+    [HideInInspector] public Transform homeSlot; // Slot it originally came from
+
     [System.Serializable]
     public class DayDatabaseWrapper
     {
@@ -39,6 +41,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [Header("Animations")]
     public Animator handsAnimator;
 
+    public CameraScript cameraScript; // Assign this via Inspector or Find it at runtime
+
     [Tooltip("Sanity level below which insanity animation is triggered")]
     public int insaneThreshold = 0;
 
@@ -47,6 +51,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     private DayExperimentalData dayData;
     private CanvasGroup canvasGroup;
+
+    bool droppedInValidSlot = false;
 
     private static HashSet<int> usedIndexes = new();
     private bool isUsable = true;
@@ -75,6 +81,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void DealHand()
     {
         AssignEntry();
+
+        if (homeSlot == null)
+            homeSlot = transform.parent;
 
         gameObject.SetActive(true);
         this.enabled = true;
@@ -177,23 +186,43 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             handsAnimator.SetBool("IsInsaneWriting", false);
             handsAnimator.SetBool("IsCalmWriting", true);
         }
+        if (cameraScript != null)
+            cameraScript.enabled = false; // ✅ Moved here
+
+
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         transform.position = Input.mousePosition;
+
+        
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        GameObject dropTarget = eventData.pointerEnter;
+        Transform dropTarget = eventData.pointerEnter?.transform;
+        
 
-        if (dropTarget == null || dropTarget.GetComponent<RevealSlotPro>() == null && dropTarget.GetComponent<InventorySlot>() == null)
+        if (dropTarget != null)
         {
-            parentAfterDrag = originalParent;
+            // Check for RevealSlot
+            if (dropTarget.GetComponent<RevealSlotPro>() != null)
+            {
+                droppedInValidSlot = true;
+                parentAfterDrag = dropTarget; // Let RevealSlot handle parenting
+            }
+
+            // Check for InventorySlot
+            else if (dropTarget.GetComponent<InventorySlot>() != null)
+            {
+                droppedInValidSlot = true;
+                parentAfterDrag = dropTarget;
+            }
         }
 
-        transform.SetParent(parentAfterDrag);
+        transform.SetParent(homeSlot); // always go back to original slot
+        transform.localPosition = Vector3.zero;
 
         RectTransform rect = GetComponent<RectTransform>();
         rect.anchorMin = new Vector2(0.5f, 0.5f);
@@ -211,6 +240,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         handsAnimator.SetBool("IsCalmWriting", false);
         handsAnimator.SetBool("IsInsaneWriting", false);
+
+        if (cameraScript != null)
+            cameraScript.enabled = true;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
