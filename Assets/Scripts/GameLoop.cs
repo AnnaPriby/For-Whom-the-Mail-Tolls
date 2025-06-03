@@ -16,7 +16,6 @@ public class GameLoop : MonoBehaviour
     public GameObject noMailUI;
 
 
-
     [Header("Game Objects")]
     public Coffee coffee;
     public VerticalParallax verticalParallax;
@@ -33,9 +32,6 @@ public class GameLoop : MonoBehaviour
 
     [Header("Coffee Settings")]
     public int coffeeDraggablesCount = 2; // 🔧 Set this in Inspector
-
-
-
 
     [Header("Visuals")]
     public SpriteChanger JessicaReaction;
@@ -63,6 +59,18 @@ public class GameLoop : MonoBehaviour
     public GameObject gameOverDamageCanvas;
 
 
+    [Header("Stat-Based Endings")]
+    public List<StatRangeSet> statBasedEndings = new List<StatRangeSet>();
+
+
+    [System.Serializable]
+    public class StatRangeSet
+    {
+        public GameObject endingCanvas;
+        public Vector2Int sanityRange;
+        public Vector2Int staminaRange;
+        public Vector2Int damageRange;
+    }
 
     public int GetCurrentVariant() => currentVariant;
     private Coroutine liveValidationCoroutine = null;
@@ -192,6 +200,26 @@ public class GameLoop : MonoBehaviour
                     {
                         gameOverDamageCanvas.SetActive(true);
                         Debug.LogWarning("💀 DAMAGE reached zero → Showing Game Over (Damage).");
+                    }
+                }
+
+
+                if (Day == 7 && StatManager.Instance != null)
+                {
+                    int sanity = StatManager.Instance.CurrentSanity;
+                    int stamina = StatManager.Instance.CurrentStamina;
+                    int damage = StatManager.Instance.CurrentDamage;
+
+                    foreach (var ending in statBasedEndings)
+                    {
+                        if (sanity >= ending.sanityRange.x && sanity <= ending.sanityRange.y &&
+                            stamina >= ending.staminaRange.x && stamina <= ending.staminaRange.y &&
+                            damage >= ending.damageRange.x && damage <= ending.damageRange.y)
+                        {
+                            ending.endingCanvas?.SetActive(true);
+                            Debug.Log($"🎬 Triggered ending: {ending.endingCanvas.name}");
+                            break; // Only one ending shown
+                        }
                     }
                 }
 
