@@ -61,6 +61,12 @@ public class GameLoop : MonoBehaviour
     [Header("Stat-Based Endings")]
     public List<StatRangeSet> statBasedEndings = new List<StatRangeSet>();
 
+    [Header("Texts to Disable During Scroll")]
+    public List<TMPro.TextMeshProUGUI> textsToDisableDuringScroll;
+
+    [Header("Optional Write State Script")]
+    public MonoBehaviour writingModeScript;  // Assign the script to enable during GameState 3
+
     [System.Serializable]
     public class StatRangeSet
     {
@@ -87,6 +93,8 @@ public class GameLoop : MonoBehaviour
     void Awake()
     {
         Instance = this;
+
+        
 #if UNITY_EDITOR
         ResetEditorProgress();
 #endif
@@ -98,6 +106,9 @@ public class GameLoop : MonoBehaviour
         lunchImageUI?.SetActive(false);
         noMailUI?.SetActive(false);
         GameState = 0;
+
+        if (writingModeScript != null)
+            writingModeScript.enabled = false;
     }
 
     void Start()
@@ -246,9 +257,15 @@ public class GameLoop : MonoBehaviour
                 SetUI(true, false);
                 coffee.enabled = true;
                 DealHand();
+
                 if (liveValidationCoroutine != null)
                     StopCoroutine(liveValidationCoroutine);
                 liveValidationCoroutine = StartCoroutine(LiveValidateDraggables());
+
+                // ✅ Enable the script during writing mode
+                if (writingModeScript != null)
+                    writingModeScript.enabled = true;
+
                 break;
             case 4:
                 SetUI(false, true);
@@ -258,6 +275,12 @@ public class GameLoop : MonoBehaviour
             case 5:
                 SetUI(false, false);
                 coffee.enabled = false;
+
+                // Disable text elements
+                foreach (var text in textsToDisableDuringScroll)
+                    if (text != null)
+                        text.gameObject.SetActive(false);
+
                 verticalParallax?.StartAutoScroll();
                 break;
         }
@@ -382,6 +405,11 @@ public class GameLoop : MonoBehaviour
                 slot.PrepareForNewRound();
         }
         DraggableItem.ResetUsed();
+
+        // Re-enable text elements after scroll finishes
+        foreach (var text in textsToDisableDuringScroll)
+            if (text != null)
+                text.gameObject.SetActive(true);
     }
 
     public void SaveGameProgress()

@@ -56,7 +56,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private DayExperimentalData dayData;
     private CanvasGroup canvasGroup;
 
-    bool droppedInValidSlot = false;
+   // bool droppedInValidSlot = false;
 
     private static HashSet<int> usedIndexes = new();
     private bool isUsable = true;
@@ -224,14 +224,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             // Check for RevealSlot
             if (dropTarget.GetComponent<RevealSlotPro>() != null)
             {
-                droppedInValidSlot = true;
+               // droppedInValidSlot = true;
                 parentAfterDrag = dropTarget; // Let RevealSlot handle parenting
             }
 
             // Check for InventorySlot
             else if (dropTarget.GetComponent<InventorySlot>() != null)
             {
-                droppedInValidSlot = true;
+               // droppedInValidSlot = true;
                 parentAfterDrag = dropTarget;
             }
         }

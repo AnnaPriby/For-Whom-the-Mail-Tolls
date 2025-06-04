@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class VerticalParallax : MonoBehaviour
 {
@@ -16,10 +18,13 @@ public class VerticalParallax : MonoBehaviour
 
     [Header("Auto Scroll Settings")]
     public float scrollSpeed = 0.5f;
-    public float autoScrollDuration = 2.5f; // ✅ NEW: How long auto scroll plays
+    public float autoScrollDuration = 2.5f;
 
-    // New canvas that moves similarly to middleLayer (like jessica rect)
+    [Header("Optional UI Layers")]
     public RectTransform otherCanvasUI;
+
+    [Header("Disable While Dragging")]
+    public TextMeshProUGUI[] textsToDisableWhileDragging;
 
     private Vector3 bgStartPos;
     private Vector3 middleStartPos;
@@ -30,14 +35,14 @@ public class VerticalParallax : MonoBehaviour
     private Vector3 lastMouseWorldPos;
 
     private bool autoScrolling = false;
-    private float scrollTimer = 0f; // ✅ NEW: Timer tracking how long we've been scrolling
+    private float scrollTimer = 0f;
 
     void Start()
     {
         bgStartPos = background.position;
         middleStartPos = middleLayer.position;
         fgStartPos = foregroundUI.anchoredPosition;
-        otherCanvasStartPos = otherCanvasUI.anchoredPosition; // Store the starting position of the other canvas
+        otherCanvasStartPos = otherCanvasUI.anchoredPosition;
     }
 
     void Update()
@@ -45,7 +50,7 @@ public class VerticalParallax : MonoBehaviour
         if (autoScrolling)
         {
             AutoScroll();
-            return; // Skip drag controls while auto-scrolling
+            return;
         }
 
         Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -54,11 +59,13 @@ public class VerticalParallax : MonoBehaviour
         {
             dragging = true;
             lastMouseWorldPos = mouseWorld;
+            SetTextVisibility(false);
         }
 
         if (Input.GetMouseButtonUp(0))
         {
             dragging = false;
+            SetTextVisibility(true);
         }
 
         if (dragging)
@@ -67,7 +74,6 @@ public class VerticalParallax : MonoBehaviour
             float deltaY = currentMouseWorld.y - lastMouseWorldPos.y;
 
             MoveParallax(deltaY);
-
             lastMouseWorldPos = currentMouseWorld;
         }
         else
@@ -75,7 +81,7 @@ public class VerticalParallax : MonoBehaviour
             background.position = Vector3.Lerp(background.position, bgStartPos, Time.deltaTime * returnSpeed);
             middleLayer.position = Vector3.Lerp(middleLayer.position, middleStartPos, Time.deltaTime * returnSpeed);
             foregroundUI.anchoredPosition = Vector2.Lerp(foregroundUI.anchoredPosition, fgStartPos, Time.deltaTime * returnSpeed);
-            otherCanvasUI.anchoredPosition = Vector2.Lerp(otherCanvasUI.anchoredPosition, otherCanvasStartPos, Time.deltaTime * returnSpeed); // Move other canvas UI
+            otherCanvasUI.anchoredPosition = Vector2.Lerp(otherCanvasUI.anchoredPosition, otherCanvasStartPos, Time.deltaTime * returnSpeed);
         }
     }
 
@@ -93,7 +99,7 @@ public class VerticalParallax : MonoBehaviour
     public void StartAutoScroll()
     {
         autoScrolling = true;
-        scrollTimer = 0f; // ✅ Reset timer when starting
+        scrollTimer = 0f;
     }
 
     private void AutoScroll()
@@ -107,15 +113,13 @@ public class VerticalParallax : MonoBehaviour
         {
             autoScrolling = false;
 
-            // Clamp background at end
             float minY = bgStartPos.y - dragLimit;
             background.position = new Vector3(background.position.x, minY, background.position.z);
 
-            // Clamp middle layer
             float middleMax = middleStartPos.y + middleLayerLimit;
             middleLayer.position = new Vector3(middleLayer.position.x, Mathf.Min(middleLayer.position.y, middleMax), middleLayer.position.z);
 
-            GameLoop.Instance.OnScrollFinished(); // ✅ Tell GameLoop that scroll finished!
+            GameLoop.Instance.OnScrollFinished();
         }
     }
 
@@ -139,13 +143,23 @@ public class VerticalParallax : MonoBehaviour
 
         foregroundUI.anchoredPosition += new Vector2(0, bgMove * foregroundParallaxMultiplier);
 
-        // Move the other canvas similarly to the middle layer
-        float otherCanvasDelta = -bgMove * middleParallaxMultiplier; // Same multiplier as middleLayer
+        float otherCanvasDelta = -bgMove * middleParallaxMultiplier;
         float newOtherCanvasY = Mathf.Clamp(
             otherCanvasUI.anchoredPosition.y + otherCanvasDelta,
-            otherCanvasStartPos.y - middleLayerLimit, // Limit the other canvas within a similar range
+            otherCanvasStartPos.y - middleLayerLimit,
             otherCanvasStartPos.y
         );
         otherCanvasUI.anchoredPosition = new Vector2(otherCanvasUI.anchoredPosition.x, newOtherCanvasY);
+    }
+
+    private void SetTextVisibility(bool visible)
+    {
+        if (textsToDisableWhileDragging == null) return;
+
+        foreach (var tmp in textsToDisableWhileDragging)
+        {
+            if (tmp != null)
+                tmp.gameObject.SetActive(visible);
+        }
     }
 }
