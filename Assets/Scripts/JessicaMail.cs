@@ -118,8 +118,9 @@ public class JessicaMail : MonoBehaviour
     {
         if (statManager != null)
         {
-            statManager.ApplyStaminaDelta(stamina);
+            //statManager.ApplyStaminaDelta(stamina);
             statManager.ApplySanityDelta(sanity);
+            statManager.UpdateLiveWritingPreview(0, sanity,0);
             Debug.Log($"✅ Applied Variant Stats: Stamina {stamina}, Sanity {sanity}");
         }
         else
