@@ -16,6 +16,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public GameObject slot3;
     public Vector3 startScale = new Vector3(1f, 1f, 1f);
     public Vector3 endScale = new Vector3(1.1f, 1.1f, 1.1f);
+    public Vector3 punchScale = new Vector3(0.1f, 0.1f, 0.1f);
 
     [HideInInspector] public Transform homeSlot; // Slot it originally came from
 
@@ -42,6 +43,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public Animator handsAnimator;
 
     public CameraScript cameraScript; // Assign this via Inspector or Find it at runtime
+    public SlotBounce slotBounce1;
+    public SlotBounce slotBounce2;
+    public SlotBounce slotBounce3;
 
     [Tooltip("Sanity level below which insanity animation is triggered")]
     public int insaneThreshold = 0;
@@ -62,6 +66,11 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public int Stamina => dayData != null ? (staminaVersion == StatVersion.Version1 ? dayData.Stamina1 : dayData.Stamina2) : 0;
     public int Sanity => dayData != null ? (sanityVersion == StatVersion.Version1 ? dayData.Sanity1 : dayData.Sanity2) : 0;
     public int Damage => dayData != null ? (damageVersion == StatVersion.Version1 ? dayData.Damage1 : dayData.Damage2) : 0;
+    
+    private string FormatWithSign(int value)
+    {
+        return value >= 0 ? $"+{value}" : value.ToString();
+    }
 
     public DayExperimentalData AssignedData => dayData;
 
@@ -152,12 +161,11 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             label.text = $"\"{dayData.Phrase}\"";
             label.raycastTarget = true;
 
-            stats.text = $"<color=#1b9902>Sanity: " +
-                         $"<color=#0063cc> Stamina: " +
-                         $"<color=#cc0025>Damage: \n<color=#000>" +
-                         $"<b><size=30><mark=#5dc24c66>{Sanity}</b></size></mark>" +
-                         $"<b><size=30><mark=#057bfa66>{Stamina}</b></size></mark>" +
-                         $"<size=30><b><mark=#f74e5b66>{Damage}</b>";
+            stats.text = $"<b><size=30>" +
+                         $"<color=#5dc24c>{FormatWithSign(Sanity)} </color>" +
+                         $"<color=#057bfa>{FormatWithSign(Stamina)} </color>" +
+                         $"<color=#f74e5b>{FormatWithSign(Damage)}</color></b>";
+
             stats.raycastTarget = true;
         }
 
@@ -172,9 +180,12 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         canvasGroup.blocksRaycasts = false;
 
-        slot1.transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine);
-        slot2.transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine);
-        slot3.transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine);
+        // slot1.transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine);
+        // slot2.transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine);
+        // slot3.transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine);
+        slot1.transform.DOPunchScale(punchScale, 0.5f, 1, 0);
+        slot2.transform.DOPunchScale(punchScale, 0.5f, 1, 0);
+        slot3.transform.DOPunchScale(punchScale, 0.5f, 1, 0);
 
         if (StatManager.Instance != null && StatManager.Instance.CurrentSanity < insaneThreshold)
         {
@@ -188,8 +199,12 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
         if (cameraScript != null)
             cameraScript.enabled = false; // ✅ Moved here
-
-
+        if (slotBounce1 != null)
+            slotBounce1.EnableBounce();
+        if (slotBounce2 != null)
+            slotBounce2.EnableBounce();
+        if (slotBounce3 != null)
+            slotBounce3.EnableBounce();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -234,15 +249,21 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         canvasGroup.blocksRaycasts = true;
 
-        slot1.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
-        slot2.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
-        slot3.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
+        // slot1.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
+        // slot2.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
+        // slot3.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
 
         handsAnimator.SetBool("IsCalmWriting", false);
         handsAnimator.SetBool("IsInsaneWriting", false);
 
         if (cameraScript != null)
             cameraScript.enabled = true;
+        if (slotBounce1 != null)
+            slotBounce1.DisableBounce();
+        if (slotBounce2 != null)
+            slotBounce2.DisableBounce();
+        if (slotBounce3 != null)
+            slotBounce3.DisableBounce();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
