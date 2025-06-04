@@ -12,6 +12,8 @@ public class Coffee : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     [Header("Sanity Adjustment Settings")]
     public int sanityDivisionFactor = 3; // Factor to divide current sanity by
 
+    public float sanityMultiplier = 2f / 3f;
+
     [Header("Reference to Stat Manager")]
     public StatManager statManager; // Reference to StatManager
     
@@ -47,7 +49,8 @@ public class Coffee : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
             statManager.ApplyStaminaDelta(refillAmount);
 
             int currentSanity = statManager.CurrentSanity;
-            int newSanity = currentSanity / Mathf.Max(sanityDivisionFactor, 1);
+            //int newSanity = currentSanity / Mathf.Max(sanityDivisionFactor, 1);
+            int newSanity = (int)(currentSanity * sanityMultiplier);
             int deltaSanity = newSanity - currentSanity;
             statManager.ApplySanityDelta(deltaSanity);
 
