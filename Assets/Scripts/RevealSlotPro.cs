@@ -186,15 +186,17 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         currentItem.DisableDragging();
         dropped.SetActive(false);
 
+        int newDamage = -Mathf.Abs(newItem.Damage); // ⛔️ always treated as negative
+        int deltaDamage = newDamage - previousDamage;
+
         int deltaStamina = newItem.Stamina - previousStamina;
         int deltaSanity = newItem.Sanity - previousSanity;
-        int deltaDamage = -Mathf.Abs(newItem.Damage) - (-Mathf.Abs(previousDamage));
 
         statManager.UpdateSlotDelta(deltaStamina, deltaSanity, deltaDamage);
 
         previousStamina = newItem.Stamina;
         previousSanity = newItem.Sanity;
-        previousDamage = -Mathf.Abs(newItem.Damage);
+        previousDamage = newDamage;
 
         // Reset the scale of the object (the one this script is attached to) back to its original size
         transform.DOScale(startScale,0.3f).SetEase(Ease.InOutSine);

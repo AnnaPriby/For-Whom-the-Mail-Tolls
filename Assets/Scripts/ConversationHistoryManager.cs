@@ -36,10 +36,16 @@ public class ConversationHistoryManager : MonoBehaviour
 
     public void ToggleHistory()
     {
-        conversationHistoryPanel.SetActive(!conversationHistoryPanel.activeSelf);
-        if (conversationHistoryPanel.activeSelf)
+        bool show = !conversationHistoryPanel.activeSelf;
+        conversationHistoryPanel.SetActive(show);
+
+        if (GameLoop.Instance != null && GameLoop.Instance.playerTurnUI != null)
+            GameLoop.Instance.playerTurnUI.gameObject.SetActive(!show); // Hide player UI when history is shown
+
+        if (show)
             ScrollToBottom();
     }
+
 
     public void AddJessicaMessage(string text)
     {
@@ -61,10 +67,16 @@ public class ConversationHistoryManager : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         ScrollToBottom();
     }
-
     private void ScrollToBottom()
     {
+        StartCoroutine(SnapToBottomNextFrame());
+    }
+
+    private System.Collections.IEnumerator SnapToBottomNextFrame()
+    {
+        yield return null; // Wait for UI layout to finish
         Canvas.ForceUpdateCanvases();
         scrollRect.verticalNormalizedPosition = 0f;
     }
+
 }
