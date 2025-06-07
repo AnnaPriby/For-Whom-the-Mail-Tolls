@@ -2888,7 +2888,7 @@ Transform:
   m_GameObject: {fileID: 254057146}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0002, y: 1.6702, z: 0}
+  m_LocalPosition: {x: 0.0002, y: 1.93, z: 0}
   m_LocalScale: {x: 0.9229901, y: 1.2300828, z: 0.009232941}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4687,6 +4687,7 @@ MonoBehaviour:
   movablesUp: {x: 0, y: 180.8, z: 0}
   movablesDown: {x: 0, y: -140, z: 0}
   movablesStart: {x: 0, y: 0, z: 0}
+  textStart: {x: 0, y: 0, z: 0}
   movables:
   - movableGroup: {fileID: 312348966}
   - movableGroup: {fileID: 900419343}
@@ -14353,7 +14354,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -30, y: 558}
+  m_AnchoredPosition: {x: -30, y: 582.35}
   m_SizeDelta: {x: 600, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1611413373
@@ -18154,7 +18155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1263.74, y: -269.3}
+  m_AnchoredPosition: {x: -1263.74, y: -445.1}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &64302942153822461

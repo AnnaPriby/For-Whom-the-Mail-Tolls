@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using System;
+using TMPro;
 using UnityEngine.Serialization;
 
 public class CameraScript : MonoBehaviour
@@ -10,7 +11,6 @@ public class CameraScript : MonoBehaviour
 
    public float mDelta = 10; // Pixels. The width border at the edge in which the movement work;
    public Camera cam;
-   //public Transform movables;
 
    [Serializable]
    public class Movable
@@ -30,8 +30,8 @@ public class CameraScript : MonoBehaviour
       foreach (Movable movable in movables)
       {
          movable.movableGroup.DOLocalMove(movablesDown, 1f);
+         
       }
-      //movables.DOLocalMoveY(-140f, 1f);
    }
 
    if (Input.mousePosition.y <= 0 + mDelta)
@@ -41,7 +41,6 @@ public class CameraScript : MonoBehaviour
       {
          movable.movableGroup.DOLocalMove(movablesUp, 1f);
       }
-      //movables.DOLocalMoveY(140f, 1f);
    }
 
    if (Input.mousePosition.y <= Screen.height - mDelta && Input.mousePosition.y > 0 + mDelta)
@@ -51,7 +50,6 @@ public class CameraScript : MonoBehaviour
       {
          movable.movableGroup.DOLocalMove(movablesStart, 1f);
       }
-      //movables.DOLocalMoveY(0f, 1f);
    }
    }
 
