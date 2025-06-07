@@ -249,10 +249,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         canvasGroup.blocksRaycasts = true;
 
-        // slot1.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
-        // slot2.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
-        // slot3.transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
-
         handsAnimator.SetBool("IsCalmWriting", false);
         handsAnimator.SetBool("IsInsaneWriting", false);
 

@@ -1,11 +1,13 @@
-﻿using DG.Tweening;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public class StatManager : MonoBehaviour
 {
     public static StatManager Instance;
+    
+    
     public Vector3 originalScale = new Vector3(1f, 1f, 1f);
     public Vector3 punchScale = new Vector3(0.5f, 0.5f, 0.5f);
 
@@ -51,10 +53,15 @@ public class StatManager : MonoBehaviour
     private int totalPendingStamina = 0;
     private int totalPendingSanity = 0;
     private int totalPendingDamage = 0;
+
+    private int newValStamina;
+    private int newValSanity;
+    private int newValDamage;
     
-    private float displayedStamina;
-    private float displayedSanity;
-    private float displayedDamage;
+    public int CurrentStamina => Mathf.RoundToInt(staminaSlider.value);
+    public int CurrentSanity => Mathf.RoundToInt(sanitySlider.value);
+    public int CurrentDamage => Mathf.RoundToInt(damageSlider.value);
+
 
     public enum StatType
     {
@@ -73,15 +80,7 @@ public class StatManager : MonoBehaviour
 
     void Start()
     {
-        
         UpdateAllVisuals();
-        staminaSlider.DOKill();
-        sanitySlider.DOKill();
-        damageSlider.DOKill();
-        
-        displayedStamina = staminaSlider.value;
-        displayedSanity = sanitySlider.value;
-        displayedDamage = damageSlider.value;
     }
 
     public void SetStartingStats(int stamina, int sanity, int damage)
@@ -97,9 +96,8 @@ public class StatManager : MonoBehaviour
         if (staminaLiveSlider != null) { staminaLiveSlider.maxValue = stamina; staminaLiveSlider.value = stamina; }
         if (sanityLiveSlider != null) { sanityLiveSlider.maxValue = sanity; sanityLiveSlider.value = sanity; }
         if (damageLiveSlider != null) { damageLiveSlider.maxValue = damage; damageLiveSlider.value = damage; }
-        
-        UpdateAllVisuals();
 
+        UpdateAllVisuals();
     }
 
     public void ResetStaminaOnly()
@@ -122,40 +120,22 @@ public class StatManager : MonoBehaviour
     public void ApplyStaminaDelta(int delta)
     {
         if (staminaSlider == null) return;
-        
-        displayedStamina = Mathf.Clamp(displayedStamina + delta, 0, maxStamina);
-
-        staminaSlider.DOKill();
-        staminaSlider.DOValue(displayedStamina, 1f)
-            .SetEase(Ease.InOutSine);
-            
+        staminaSlider.value = Mathf.Clamp(staminaSlider.value + delta, 0, maxStamina);
         UpdateStaminaVisuals();
-
         SanitySpriteManager.Instance?.UpdateAllSprites(CurrentSanity);
     }
 
     public void ApplySanityDelta(int delta)
     {
         if (sanitySlider == null) return;
-        
-        displayedSanity = Mathf.Clamp(displayedSanity + delta, 0, maxSanity);
-        
-        sanitySlider.DOKill();
-        sanitySlider.DOValue(displayedSanity, 1f)
-            .SetEase(Ease.InOutSine);
-        
+        sanitySlider.value = Mathf.Clamp(sanitySlider.value + delta, 0, maxSanity);
         UpdateSanityVisuals();
     }
 
     public void ApplyDamageDelta(int delta)
     {
         if (damageSlider == null) return;
-        
-        displayedDamage = Mathf.Clamp(displayedDamage + delta, 0, maxDamage);
-        damageSlider.DOKill();
-        damageSlider.DOValue(displayedDamage, 1f)
-            .SetEase(Ease.InOutSine);
-        
+        damageSlider.value = Mathf.Clamp(damageSlider.value + delta, 0, maxDamage);
         UpdateDamageVisuals();
     }
 
@@ -195,11 +175,8 @@ public class StatManager : MonoBehaviour
     private void UpdateStaminaVisuals()
     {
         if (staminaValueText != null)
-        {
             staminaValueText.text = Mathf.RoundToInt(staminaSlider.value).ToString();
-            staminaValueText.transform.DOPunchScale(punchScale, 0.3f, 1, 0).OnComplete(() =>  staminaValueText.transform.localScale = Vector3.one);
-        }
-            
+        staminaValueText.transform.DOPunchScale(punchScale, 0.3f, 1, 0).OnComplete(() =>  staminaValueText.transform.localScale = Vector3.one);
 
         if (staminaFill != null)
             staminaFill.color = Color.Lerp(staminaLow, staminaFull, staminaSlider.value / maxStamina);
@@ -208,10 +185,8 @@ public class StatManager : MonoBehaviour
     private void UpdateSanityVisuals()
     {
         if (sanityValueText != null)
-        {
             sanityValueText.text = Mathf.RoundToInt(sanitySlider.value).ToString();
-            sanityValueText.transform.DOPunchScale(punchScale, 0.3f, 1,0).OnComplete(() =>  sanityValueText.transform.localScale = Vector3.one);
-        }
+        sanityValueText.transform.DOPunchScale(punchScale, 0.3f, 1, 0).OnComplete(() =>  sanityValueText.transform.localScale = Vector3.one);
 
         if (sanityFill != null)
             sanityFill.color = Color.Lerp(sanityLow, sanityFull, sanitySlider.value / maxSanity);
@@ -220,10 +195,7 @@ public class StatManager : MonoBehaviour
     private void UpdateDamageVisuals()
     {
         if (damageValueText != null)
-        {
             damageValueText.text = Mathf.RoundToInt(damageSlider.value).ToString();
-            damageValueText.transform.DOPunchScale(punchScale, 0.3f, 1,0).OnComplete(() =>  damageValueText.transform.localScale = Vector3.one);
-        }
 
         if (damageFill != null)
             damageFill.color = Color.Lerp(damageLow, damageFull, damageSlider.value / maxDamage);
@@ -236,30 +208,27 @@ public class StatManager : MonoBehaviour
         UpdateDamageVisuals();
     }
 
-    public int CurrentStamina => Mathf.RoundToInt(staminaSlider.value);
-    public int CurrentSanity => Mathf.RoundToInt(sanitySlider.value);
-    public int CurrentDamage => Mathf.RoundToInt(damageSlider.value);
-
     public void UpdateLiveWritingPreview(int deltaStamina, int deltaSanity, int deltaDamage)
     {
-        float targetStamina = Mathf.Clamp(CurrentStamina + deltaStamina, 0, staminaLiveSlider.maxValue);
-        float targetSanity = Mathf.Clamp(CurrentSanity + deltaSanity, 0, sanityLiveSlider.maxValue);
-        float targetDamage = Mathf.Clamp(CurrentDamage + deltaDamage, 0, damageLiveSlider.maxValue);
-    
-        // Tween the value
-        staminaLiveSlider.DOValue(targetStamina, 1f).SetEase(Ease.InOutSine);
-        sanityLiveSlider.DOValue(targetSanity, 1f).SetEase(Ease.InOutSine);
-        damageLiveSlider.DOValue(targetDamage, 1f).SetEase(Ease.InOutSine);
-        
-        // if (staminaLiveSlider != null)
-        //     staminaLiveSlider.value = Mathf.Clamp(CurrentStamina + deltaStamina, 0, staminaLiveSlider.maxValue);
-        //
-        // if (sanityLiveSlider != null)
-        //     sanityLiveSlider.value = Mathf.Clamp(CurrentSanity + deltaSanity, 0, sanityLiveSlider.maxValue);
-        //
-        // if (damageLiveSlider != null)
-        //     damageLiveSlider.value = Mathf.Clamp(CurrentDamage + deltaDamage, 0, damageLiveSlider.maxValue);
+        if (staminaLiveSlider != null)
+        {
+            float newVal = Mathf.Clamp(CurrentStamina + deltaStamina, 0, staminaLiveSlider.maxValue);
+            staminaLiveSlider.DOValue(newVal, 0.3f);
+        }
+
+        if (sanityLiveSlider != null)
+        {
+            float newVal = Mathf.Clamp(CurrentSanity + deltaSanity, 0, sanityLiveSlider.maxValue);
+            sanityLiveSlider.DOValue(newVal, 0.3f);
+        }
+
+        if (damageLiveSlider != null)
+        {
+            float newVal = Mathf.Clamp(CurrentDamage + deltaDamage, 0, damageLiveSlider.maxValue);
+            damageLiveSlider.DOValue(newVal, 0.3f);
+        }
     }
+
 
     public void ResetLiveWritingPreview()
     {
