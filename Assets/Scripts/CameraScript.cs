@@ -34,7 +34,7 @@ public class CameraScript : MonoBehaviour
       }
    }
 
-   if (Input.mousePosition.y <= 0 + mDelta)
+   if (Input.mousePosition.y <= 0 + (mDelta * 1.5) )
    {
       cam.transform.DOMoveY(-1f, 1f);
       foreach (Movable movable in movables)

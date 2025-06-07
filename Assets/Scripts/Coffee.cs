@@ -29,15 +29,11 @@ public class Coffee : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     // Called automatically when this object is clicked
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Make the item slightly larger when hovered over
-        //transform.localScale = new Vector3(1.2f, 1.2f, 1.2f); 
         transform.DOScale(endScale, 0.3f).SetEase(Ease.InOutSine); // Increase size on hover
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // Reset the size when hover ends
-        //transform.localScale = startScale; // Reset to original size
         transform.DOScale(startScale, 0.3f).SetEase(Ease.InOutSine);
     }
     public void OnPointerClick(PointerEventData eventData)
@@ -49,7 +45,6 @@ public class Coffee : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
             statManager.ApplyStaminaDelta(refillAmount);
 
             int currentSanity = statManager.CurrentSanity;
-            //int newSanity = currentSanity / Mathf.Max(sanityDivisionFactor, 1);
             int newSanity = (int)(currentSanity * sanityMultiplier);
             int deltaSanity = newSanity - currentSanity;
             statManager.ApplySanityDelta(deltaSanity);

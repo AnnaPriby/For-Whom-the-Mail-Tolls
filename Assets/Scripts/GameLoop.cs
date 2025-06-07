@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
+using UnityEngine.Serialization;
 using static UnityEngine.UI.Image;
 
 public class GameLoop : MonoBehaviour
@@ -67,7 +68,9 @@ public class GameLoop : MonoBehaviour
     public List<TextMeshProUGUI> textsToDisableDuringScroll;
 
     [Header("Optional Write State Script")]
-    public MonoBehaviour writingModeScript;  // Assign the script to enable during GameState 3
+    public MonoBehaviour camScript;
+
+    public GameObject coffeeObject;
 
     [System.Serializable]
     public class StatRangeSet
@@ -109,8 +112,8 @@ public class GameLoop : MonoBehaviour
         noMailUI?.SetActive(false);
         GameState = 0;
 
-        if (writingModeScript != null)
-            writingModeScript.enabled = false;
+        if (camScript != null)
+            camScript.enabled = false;
     }
 
     void Start()
@@ -265,9 +268,8 @@ public class GameLoop : MonoBehaviour
                 liveValidationCoroutine = StartCoroutine(LiveValidateDraggables());
 
                 // ✅ Enable the script during writing mode
-                if (writingModeScript != null)
-                    writingModeScript.enabled = true;
-
+                if (camScript != null)
+                    camScript.enabled = true;
                 break;
             case 4:
                 SetUI(false, true);
