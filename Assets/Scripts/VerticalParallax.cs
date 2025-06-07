@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -155,11 +156,19 @@ public class VerticalParallax : MonoBehaviour
     private void SetTextVisibility(bool visible)
     {
         if (textsToDisableWhileDragging == null) return;
-
-        foreach (var tmp in textsToDisableWhileDragging)
-        {
-            if (tmp != null)
-                tmp.gameObject.SetActive(visible);
-        }
+        
+        if (visible)
+            foreach (var tmp in textsToDisableWhileDragging)
+            {
+                if (tmp != null)
+                    tmp.DOFade(1f, 1f);
+            }
+        
+        if (!visible)
+            foreach (var tmp in textsToDisableWhileDragging)
+            {
+                if (tmp != null)
+                    tmp.DOFade(0f, 1f);
+            }
     }
 }

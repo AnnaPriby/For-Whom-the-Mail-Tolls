@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using DG.Tweening;
+using TMPro;
 using static UnityEngine.UI.Image;
 
 public class GameLoop : MonoBehaviour
@@ -62,7 +64,7 @@ public class GameLoop : MonoBehaviour
     public List<StatRangeSet> statBasedEndings = new List<StatRangeSet>();
 
     [Header("Texts to Disable During Scroll")]
-    public List<TMPro.TextMeshProUGUI> textsToDisableDuringScroll;
+    public List<TextMeshProUGUI> textsToDisableDuringScroll;
 
     [Header("Optional Write State Script")]
     public MonoBehaviour writingModeScript;  // Assign the script to enable during GameState 3
@@ -279,7 +281,10 @@ public class GameLoop : MonoBehaviour
                 // Disable text elements
                 foreach (var text in textsToDisableDuringScroll)
                     if (text != null)
-                        text.gameObject.SetActive(false);
+                    {
+                         text.alpha = 0;
+                    }
+                       
 
                 verticalParallax?.StartAutoScroll();
                 break;
@@ -409,7 +414,7 @@ public class GameLoop : MonoBehaviour
         // Re-enable text elements after scroll finishes
         foreach (var text in textsToDisableDuringScroll)
             if (text != null)
-                text.gameObject.SetActive(true);
+                text.DOFade(1f, 1f);
     }
 
     public void SaveGameProgress()
