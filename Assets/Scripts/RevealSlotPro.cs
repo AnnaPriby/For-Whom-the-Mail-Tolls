@@ -43,6 +43,11 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
     public StatManager statManager;
     public Button sendButton;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip calmTypingClip;
+    public AudioClip insaneTypingClip;
+
     [Header("Starting Info Text (Editable)")]
     [TextArea]
     public string defaultInfoTextDay1 = "📝 Drop your message here...";
@@ -92,11 +97,33 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         if (sendButton != null)
             sendButton.onClick.AddListener(OnSendButtonClicked);
     }
+    [Tooltip("Sanity level below which insanity animation is triggered")]
+    public int insaneThreshold = 0;
+
 
     public void OnDrop(PointerEventData eventData)
     {
+        if (StatManager.Instance != null && StatManager.Instance.CurrentSanity < insaneThreshold)
+        {
+            handsAnimator.SetTrigger("IsInsaneWriting 0");  // 🔥 One-shot animation
 
-        handsAnimator.SetBool("IsCalmWriting", false);
+            //AUDIO
+            if (audioSource != null && insaneTypingClip != null)
+                audioSource.PlayOneShot(insaneTypingClip);
+        }
+        else
+        {
+            handsAnimator.SetTrigger("IsCalmWriting 0");    // ✍️ One-shot animation
+
+            
+            //AUDIO
+            if (audioSource != null && calmTypingClip != null)
+                audioSource.PlayOneShot(calmTypingClip);
+        }
+
+
+
+
         GameObject dropped = eventData.pointerDrag;
         DraggableItem newItem = dropped?.GetComponent<DraggableItem>();
         if (newItem == null) return;
@@ -247,7 +274,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
             GameLoop.Instance.ReturnFromCoffee();
 
 
-        handsAnimator.SetBool("HitSend", true);
+        handsAnimator.SetTrigger("HitSend");
     }
 
     public string GetMessageWithStats()

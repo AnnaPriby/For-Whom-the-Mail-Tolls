@@ -51,6 +51,11 @@ public class JessicaMail : MonoBehaviour
     [Header("References")]
     public StatManager statManager;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip newMailSound;
+    public AudioClip readMailSound; // 👈 Add this
+
     private void Start()
     {
         if (openButton != null)
@@ -76,6 +81,13 @@ public class JessicaMail : MonoBehaviour
         noMailUI?.SetActive(false);
         newMailUI?.SetActive(true);
         readMailUI?.SetActive(false);
+
+        // ✅ Play read mail sound
+        if (audioSource != null && readMailSound != null)
+        {
+            audioSource.PlayOneShot(readMailSound);
+        }
+
     }
 
     public void ShowReadMail()
@@ -83,6 +95,8 @@ public class JessicaMail : MonoBehaviour
         noMailUI?.SetActive(false);
         newMailUI?.SetActive(false);
         readMailUI?.SetActive(true);
+
+       
 
         ShowEmail();
     }
@@ -149,55 +163,13 @@ public class JessicaMail : MonoBehaviour
     // COFFEE SYSTEM (Unchanged)
     // =============================
 
-    public void ShowCoffeeMailIntro()
-    {
-        CloseAllMailUI();
-        CoffeeNewMailUI?.SetActive(true);
-        SetupCoffeeMailButtons();
-    }
+  
 
-    public void ShowCoffeeMailContent()
-    {
-        CloseAllMailUI();
-        CoffeeReadMailUI?.SetActive(true);
+   
 
-        if (coffeeEmailsDatabase != null && coffeeEmailsDatabase.entries.Count > 0)
-        {
-            int coffeeIndex = Mathf.Clamp(emailIndex, 0, coffeeEmailsDatabase.entries.Count - 1);
-            StoryDataTypes coffeeEntry = coffeeEmailsDatabase.entries[coffeeIndex];
+  
 
-            List<EmailVariant> validVariants = new List<EmailVariant>();
-            foreach (var variant in coffeeEntry.variants)
-            {
-                if (!string.IsNullOrWhiteSpace(variant.MainText))
-                    validVariants.Add(variant);
-            }
-
-            if (validVariants.Count == 0)
-            {
-                CoffeeMailText.text = "☕ (No valid coffee email found)";
-            }
-            else
-            {
-                EmailVariant selected = validVariants[0]; // First available
-                CoffeeMailText.text = selected.MainText;
-                ApplyVariantStats(selected.Stamina, selected.Sanity);
-            }
-        }
-    }
-
-    public void ShowCoffeeReplyUI()
-    {
-        CloseAllMailUI();
-        CoffeeReplyUI?.SetActive(true);
-    }
-
-    public void SetupCoffeeMailButtons()
-    {
-        CoffeeOpenButton?.onClick.AddListener(() => GameLoop.Instance.ChangeGameState(91));
-        CoffeeReplyButton?.onClick.AddListener(() => GameLoop.Instance.ChangeGameState(92));
-        CoffeeSendButton?.onClick.AddListener(() => GameLoop.Instance.ReturnFromCoffee());
-    }
+  
 
     public void CloseAllMailUI()
     {

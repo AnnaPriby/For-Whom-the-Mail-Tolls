@@ -16,7 +16,11 @@ public class Coffee : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     [Header("Reference to Stat Manager")]
     public StatManager statManager; // Reference to StatManager
-    
+
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip drinkSound;
+
     [Header("UI")]
     public Vector3 startScale = new Vector3(1f, 1f, 1f);
     public Vector3 endScale = new Vector3(1.1f, 1.1f, 1.1f);
@@ -50,6 +54,11 @@ public class Coffee : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
             statManager.ApplySanityDelta(deltaSanity);
 
             Debug.Log($"☕ Coffee used! +{refillAmount} stamina, sanity reduced to {newSanity} (÷{sanityDivisionFactor}).");
+        }
+
+        if (audioSource != null && drinkSound != null)
+        {
+            audioSource.PlayOneShot(drinkSound);
         }
 
         handsAnimator.SetTrigger("CoffeeDrink");

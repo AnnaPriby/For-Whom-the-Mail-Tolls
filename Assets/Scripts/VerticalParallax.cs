@@ -51,8 +51,10 @@ public class VerticalParallax : MonoBehaviour
         if (autoScrolling)
         {
             AutoScroll();
+            SetTextVisibility(false);
             return;
         }
+        SetTextVisibility(true);
 
         Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -101,6 +103,8 @@ public class VerticalParallax : MonoBehaviour
     {
         autoScrolling = true;
         scrollTimer = 0f;
+        
+
     }
 
     private void AutoScroll()
@@ -161,14 +165,14 @@ public class VerticalParallax : MonoBehaviour
             foreach (var tmp in textsToDisableWhileDragging)
             {
                 if (tmp != null)
-                    tmp.DOFade(1f, 1f);
+                    tmp.DOFade(0.5f, 0.5f);
             }
         
         if (!visible)
             foreach (var tmp in textsToDisableWhileDragging)
             {
                 if (tmp != null)
-                    tmp.DOFade(0f, 1f);
+                    tmp.DOFade(0f, 0.5f);
             }
     }
 }

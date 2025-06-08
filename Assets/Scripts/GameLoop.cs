@@ -65,7 +65,7 @@ public class GameLoop : MonoBehaviour
     public List<StatRangeSet> statBasedEndings = new List<StatRangeSet>();
 
     [Header("Texts to Disable During Scroll")]
-    public List<TextMeshProUGUI> textsToDisableDuringScroll;
+    public List<TextMeshProUGUI> textsToDisableWhileDragging;
 
     [Header("Optional Write State Script")]
     public MonoBehaviour camScript;
@@ -77,16 +77,13 @@ public class GameLoop : MonoBehaviour
     {
         public GameObject endingCanvas;
 
-        [Tooltip("Minimum % sanity loss required for this ending (0–100)")]
-        [Range(0, 100)]
+        [Tooltip("Trigger if sanity is equal or below this value")]
         public float sanityLossThreshold;
 
-        [Tooltip("Minimum % stamina loss required for this ending (0–100)")]
-        [Range(0, 100)]
+        [Tooltip("Trigger if stamina is equal or below this value")]
         public float staminaLossThreshold;
 
-        [Tooltip("Minimum % damage loss required for this ending (0–100)")]
-        [Range(0, 100)]
+        [Tooltip("Trigger if damage is equal or below this value")]
         public float damageLossThreshold;
     }
 
@@ -171,9 +168,10 @@ public class GameLoop : MonoBehaviour
         switch (stateSet)
         {
             case 0:
+                SetTextVisibility(true, true);
                 coffee.ResetDailyUse();
 
-                handsAnimator.SetBool("HitSend", false);
+                
                 if (Day == 1)
                 {
                     StatManager.Instance.SetStartingStats(startingStamina, startingSanity, startingDamage);
@@ -221,20 +219,20 @@ public class GameLoop : MonoBehaviour
                 {
                     int sanity = StatManager.Instance.CurrentSanity;
                     int stamina = StatManager.Instance.CurrentStamina;
-                    int damage = StatManager.Instance.CurrentDamage;
-
-                    float sanityLoss = GetStatLossPercentage(startingSanity, sanity);
-                    float staminaLoss = GetStatLossPercentage(startingStamina, stamina);
-                    float damageLoss = GetStatLossPercentage(startingDamage, damage);
+                    int damage = StatManager.Instance.CurrentDamage; // Opponent HP
 
                     foreach (var ending in statBasedEndings)
                     {
-                        if (sanityLoss >= ending.sanityLossThreshold &&
-                            staminaLoss >= ending.staminaLossThreshold &&
-                            damageLoss >= ending.damageLossThreshold)
+                        if (ending.endingCanvas == null) continue;
+
+                        bool sanityOK = sanity <= ending.sanityLossThreshold;
+                        bool staminaOK = stamina <= ending.staminaLossThreshold;
+                        bool damageOK = damage <= ending.damageLossThreshold;
+
+                        if (sanityOK && staminaOK && damageOK)
                         {
-                            ending.endingCanvas?.SetActive(true);
-                            Debug.Log($"🎬 Triggered ending based on % loss: {ending.endingCanvas.name}");
+                            ending.endingCanvas.SetActive(true);
+                            Debug.Log($"🎬 Triggered ending: {ending.endingCanvas.name}");
                             break;
                         }
                     }
@@ -267,9 +265,18 @@ public class GameLoop : MonoBehaviour
                     StopCoroutine(liveValidationCoroutine);
                 liveValidationCoroutine = StartCoroutine(LiveValidateDraggables());
 
-                // ✅ Enable the script during writing mode
                 if (camScript != null)
                     camScript.enabled = true;
+
+                // ✅ Check stamina condition and jump
+                if (StatManager.Instance.CurrentStamina <= 10)
+                {
+                    Debug.Log("☕ Triggering coffee jump due to low stamina");
+                    coffeeObject.transform.DOLocalMoveY(coffeeObject.transform.localPosition.y + 40f, 0.2f)
+                    .SetEase(Ease.OutQuad)
+                    .SetLoops(2, LoopType.Yoyo);
+                }
+
                 break;
             case 4:
                 SetUI(false, true);
@@ -277,17 +284,10 @@ public class GameLoop : MonoBehaviour
                 jessicaMail?.ShowNewMail();
                 break;
             case 5:
+
+               SetTextVisibility(false, true);
                 SetUI(false, false);
                 coffee.enabled = false;
-
-                // Disable text elements
-                foreach (var text in textsToDisableDuringScroll)
-                    if (text != null)
-                    {
-                         text.alpha = 0;
-                    }
-                       
-
                 verticalParallax?.StartAutoScroll();
                 break;
         }
@@ -412,11 +412,8 @@ public class GameLoop : MonoBehaviour
                 slot.PrepareForNewRound();
         }
         DraggableItem.ResetUsed();
-
-        // Re-enable text elements after scroll finishes
-        foreach (var text in textsToDisableDuringScroll)
-            if (text != null)
-                text.DOFade(1f, 1f);
+        
+        SetTextVisibility(true); // Show the texts (alpha 0.5)
     }
 
     public void SaveGameProgress()
@@ -481,11 +478,30 @@ public class GameLoop : MonoBehaviour
         if (stickyReaction == null) return;
     }
 
-    private float GetStatLossPercentage(int starting, int current)
+    private void SetTextVisibility(bool visible, bool instant = false)
     {
-        if (starting == 0) return 0f;
-        return ((float)(starting - current) / starting) * 100f;
+        if (textsToDisableWhileDragging == null) return;
+
+        float targetAlpha = visible ? 0.5f : 0f;
+
+        foreach (var tmp in textsToDisableWhileDragging)
+        {
+            if (tmp == null) continue;
+
+            if (instant)
+            {
+                Color c = tmp.color;
+                c.a = targetAlpha;
+                tmp.color = c;
+            }
+            else
+            {
+                tmp.DOFade(targetAlpha, 0.5f);
+            }
+        }
     }
+
+
 
 #if UNITY_EDITOR
     private void ResetEditorProgress()

@@ -187,16 +187,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         slot2.transform.DOPunchScale(punchScale, 0.5f, 1, 0);
         slot3.transform.DOPunchScale(punchScale, 0.5f, 1, 0);
 
-        if (StatManager.Instance != null && StatManager.Instance.CurrentSanity < insaneThreshold)
-        {
-            handsAnimator.SetBool("IsInsaneWriting", true);
-            handsAnimator.SetBool("IsCalmWriting", false);
-        }
-        else
-        {
-            handsAnimator.SetBool("IsInsaneWriting", false);
-            handsAnimator.SetBool("IsCalmWriting", true);
-        }
+        
         if (cameraScript != null)
             cameraScript.enabled = false; // ✅ Moved here
         if (slotBounce1 != null)
