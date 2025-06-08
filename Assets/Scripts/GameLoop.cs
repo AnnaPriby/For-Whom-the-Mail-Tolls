@@ -195,24 +195,26 @@ public class GameLoop : MonoBehaviour
                     int currentSanity = StatManager.Instance.CurrentSanity;
                     int currentStamina = StatManager.Instance.CurrentStamina;
                     int currentDamage = StatManager.Instance.CurrentDamage;
-
-                    if (currentSanity <= 0 && gameOverSanityCanvas != null)
-                    {
-                        gameOverSanityCanvas.SetActive(true);
-                        Debug.LogWarning("💀 SANITY reached zero → Showing Game Over (Sanity).");
-                    }
-
-                    if (currentStamina <= 0 && gameOverStaminaCanvas != null)
-                    {
-                        gameOverStaminaCanvas.SetActive(true);
-                        Debug.LogWarning("💀 STAMINA reached zero → Showing Game Over (Stamina).");
-                    }
-
+                    
+                    
                     if (currentDamage <= 0 && gameOverDamageCanvas != null)
                     {
                         gameOverDamageCanvas.SetActive(true);
                         Debug.LogWarning("💀 DAMAGE reached zero → Showing Game Over (Damage).");
                     }
+
+                    else if (currentSanity <= 0 && gameOverSanityCanvas != null)
+                    {
+                        gameOverSanityCanvas.SetActive(true);
+                        Debug.LogWarning("💀 SANITY reached zero → Showing Game Over (Sanity).");
+                    }
+
+                    else if (currentStamina <= 0 && gameOverStaminaCanvas != null)
+                    {
+                        gameOverStaminaCanvas.SetActive(true);
+                        Debug.LogWarning("💀 STAMINA reached zero → Showing Game Over (Stamina).");
+                    }
+
                 }
 
                 if (Day == 7 && StatManager.Instance != null)
