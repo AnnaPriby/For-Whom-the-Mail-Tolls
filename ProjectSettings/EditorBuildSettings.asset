@@ -15,9 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Story.unity
     guid: d41ebdbcdeba43342a32156694cabd58
   - enabled: 1
-    path: Assets/Scenes/Anna_MainScreenTogether 1.unity
-    guid: 7f0d09eeb9703e64083be61ad3adc67f
-  - enabled: 1
     path: Assets/Scenes/Day1.unity
     guid: 95e0c2c7d21f97148b6ee2823849f08c
+  - enabled: 0
+    path: Assets/Scenes/Anna_MainScreenTogether 1.unity
+    guid: 7f0d09eeb9703e64083be61ad3adc67f
   m_configObjects: {}
