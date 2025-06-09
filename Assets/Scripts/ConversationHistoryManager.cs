@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class ConversationHistoryManager : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class ConversationHistoryManager : MonoBehaviour
     public ScrollRect scrollRect;
     public GameObject conversationHistoryPanel;
 
-
+    private List<string> historyMessages = new List<string>();
 
     private void ClearHistory()
     {
@@ -49,14 +50,15 @@ public class ConversationHistoryManager : MonoBehaviour
 
     public void AddJessicaMessage(string text)
     {
+        historyMessages.Add("J:" + text); // ✅ Track for saving
         AddMessage(text, jessicaMessagePrefab);
     }
 
     public void AddPlayerMessage(string text)
     {
+        historyMessages.Add("P:" + text); // ✅ Track for saving
         AddMessage(text, playerMessagePrefab);
     }
-
     private void AddMessage(string text, GameObject prefab)
     {
         GameObject msg = Instantiate(prefab, messageContentParent);
@@ -78,5 +80,40 @@ public class ConversationHistoryManager : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         scrollRect.verticalNormalizedPosition = 0f;
     }
+
+    public void SaveHistory()
+    {
+        string joined = string.Join("<SEP>", historyMessages);
+        PlayerPrefs.SetString("ConversationHistory", joined);
+    }
+
+    public void LoadHistory()
+    {
+        if (!PlayerPrefs.HasKey("ConversationHistory")) return;
+
+        ClearHistory();
+        historyMessages.Clear();
+
+        string joined = PlayerPrefs.GetString("ConversationHistory");
+        string[] entries = joined.Split(new[] { "<SEP>" }, System.StringSplitOptions.None);
+
+        foreach (var entry in entries)
+        {
+            if (string.IsNullOrWhiteSpace(entry)) continue;
+
+            if (entry.StartsWith("J:"))
+                AddJessicaMessage(entry.Substring(2));
+            else if (entry.StartsWith("P:"))
+                AddPlayerMessage(entry.Substring(2));
+        }
+    }
+
+    public void ClearStoredHistory()
+    {
+        PlayerPrefs.DeleteKey("ConversationHistory");
+        historyMessages.Clear();
+        ClearHistory();
+    }
+
 
 }

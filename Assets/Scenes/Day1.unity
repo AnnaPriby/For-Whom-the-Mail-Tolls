@@ -4802,7 +4802,6 @@ GameObject:
   m_Component:
   - component: {fileID: 507051707}
   - component: {fileID: 507051709}
-  - component: {fileID: 507051710}
   m_Layer: 0
   m_Name: StatManager
   m_TagString: Untagged
@@ -4858,18 +4857,6 @@ MonoBehaviour:
   staminaLow: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
   damageFull: {r: 0.79607844, g: 0.3764706, b: 0.31764707, a: 1}
   damageLow: {r: 0.745283, g: 0.08768036, b: 0, a: 1}
---- !u!114 &507051710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 507051706}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11fe2dd667a4a458eb283d8a0c29dd95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -20298,10 +20285,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4724605475275468626}
     - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: cameraScript
-      value: 
-      objectReference: {fileID: 519420033}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
       propertyPath: coffeeObject
       value: 
       objectReference: {fileID: 1904930214}
@@ -20318,33 +20301,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1580764817}
     - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: startingDamage
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: startingSanity
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: stickyReaction
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
       propertyPath: JessicaReaction
       value: 
       objectReference: {fileID: 651324830}
     - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: startingStamina
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
       propertyPath: verticalParallax
       value: 
       objectReference: {fileID: 1244636681}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: writingModeScript
-      value: 
-      objectReference: {fileID: 519420033}
     - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
       propertyPath: gameOverDamageCanvas
       value: 
@@ -20381,10 +20344,6 @@ PrefabInstance:
       propertyPath: allDraggables.Array.data[5]
       value: 
       objectReference: {fileID: 4910571072387646101}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: statBasedEndings.Array.size
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
       propertyPath: allRevealSlots.Array.data[0]
       value: 
@@ -20425,62 +20384,6 @@ PrefabInstance:
       propertyPath: originalDraggables.Array.data[5]
       value: 
       objectReference: {fileID: 4910571072387646101}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: textsToDisableDuringScroll.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: textsToDisableDuringScroll.Array.data[0]
-      value: 
-      objectReference: {fileID: 1611413373}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: statBasedEndings.Array.data[0].endingCanvas
-      value: 
-      objectReference: {fileID: 1062962159}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: statBasedEndings.Array.data[1].endingCanvas
-      value: 
-      objectReference: {fileID: 741859964}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: statBasedEndings.Array.data[2].endingCanvas
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: statBasedEndings.Array.data[0].damageLossThreshold
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: statBasedEndings.Array.data[0].sanityLossThreshold
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: statBasedEndings.Array.data[1].damageLossThreshold
-      value: 45
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: statBasedEndings.Array.data[1].sanityLossThreshold
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: statBasedEndings.Array.data[2].damageLossThreshold
-      value: 51.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: statBasedEndings.Array.data[2].sanityLossThreshold
-      value: 56.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: statBasedEndings.Array.data[0].staminaLossThreshold
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: statBasedEndings.Array.data[1].staminaLossThreshold
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7740419126676389504, guid: 17a76c81e81d7ba4ba76658a7b171686, type: 3}
-      propertyPath: statBasedEndings.Array.data[2].staminaLossThreshold
-      value: 46.1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

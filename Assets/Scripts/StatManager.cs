@@ -6,8 +6,8 @@ using DG.Tweening;
 public class StatManager : MonoBehaviour
 {
     public static StatManager Instance;
-    
-    
+
+
     public Vector3 originalScale = new Vector3(1f, 1f, 1f);
     public Vector3 punchScale = new Vector3(0.5f, 0.5f, 0.5f);
 
@@ -57,7 +57,7 @@ public class StatManager : MonoBehaviour
     private int newValStamina;
     private int newValSanity;
     private int newValDamage;
-    
+
     public int CurrentStamina => Mathf.RoundToInt(staminaSlider.value);
     public int CurrentSanity => Mathf.RoundToInt(sanitySlider.value);
     public int CurrentDamage => Mathf.RoundToInt(damageSlider.value);
@@ -176,7 +176,7 @@ public class StatManager : MonoBehaviour
     {
         if (staminaValueText != null)
             staminaValueText.text = Mathf.RoundToInt(staminaSlider.value).ToString();
-        staminaValueText.transform.DOPunchScale(punchScale, 0.3f, 1, 0).OnComplete(() =>  staminaValueText.transform.localScale = Vector3.one);
+        staminaValueText.transform.DOPunchScale(punchScale, 0.3f, 1, 0).OnComplete(() => staminaValueText.transform.localScale = Vector3.one);
 
         if (staminaFill != null)
             staminaFill.color = Color.Lerp(staminaLow, staminaFull, staminaSlider.value / maxStamina);
@@ -186,7 +186,7 @@ public class StatManager : MonoBehaviour
     {
         if (sanityValueText != null)
             sanityValueText.text = Mathf.RoundToInt(sanitySlider.value).ToString();
-        sanityValueText.transform.DOPunchScale(punchScale, 0.3f, 1, 0).OnComplete(() =>  sanityValueText.transform.localScale = Vector3.one);
+        sanityValueText.transform.DOPunchScale(punchScale, 0.3f, 1, 0).OnComplete(() => sanityValueText.transform.localScale = Vector3.one);
 
         if (sanityFill != null)
             sanityFill.color = Color.Lerp(sanityLow, sanityFull, sanitySlider.value / maxSanity);

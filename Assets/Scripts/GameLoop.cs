@@ -95,10 +95,8 @@ public class GameLoop : MonoBehaviour
     {
         Instance = this;
 
-        
-#if UNITY_EDITOR
-        ResetEditorProgress();
-#endif
+
+
 
         jessicaUI?.SetActive(true);
         playerTurnUI?.gameObject.SetActive(false);
@@ -170,7 +168,7 @@ public class GameLoop : MonoBehaviour
                 SetTextVisibility(true, true);
                 coffee.ResetDailyUse();
 
-                
+
                 if (Day == 1)
                 {
                     StatManager.Instance.SetStartingStats(startingStamina, startingSanity, startingDamage);
@@ -194,8 +192,8 @@ public class GameLoop : MonoBehaviour
                     int currentSanity = StatManager.Instance.CurrentSanity;
                     int currentStamina = StatManager.Instance.CurrentStamina;
                     int currentDamage = StatManager.Instance.CurrentDamage;
-                    
-                    
+
+
                     if (currentDamage <= 0 && gameOverDamageCanvas != null)
                     {
                         gameOverDamageCanvas.SetActive(true);
@@ -230,7 +228,7 @@ public class GameLoop : MonoBehaviour
                             gameOverDamageCanvas.SetActive(true);
                             Debug.LogWarning("💀 DAMAGE reached zero → Showing Game Over (Damage).");
                         }
-                        else 
+                        else
                         {
                             gameOverStaminaCanvas.SetActive(true);
                             Debug.LogWarning("💀 STAMINA reached zero → Showing Game Over (Stamina).");
@@ -286,7 +284,7 @@ public class GameLoop : MonoBehaviour
                 break;
             case 5:
 
-               SetTextVisibility(false, true);
+                SetTextVisibility(false, true);
                 SetUI(false, false);
                 coffee.enabled = false;
                 verticalParallax?.StartAutoScroll();
@@ -413,7 +411,7 @@ public class GameLoop : MonoBehaviour
                 slot.PrepareForNewRound();
         }
         DraggableItem.ResetUsed();
-        
+
         SetTextVisibility(true); // Show the texts (alpha 0.5)
     }
 

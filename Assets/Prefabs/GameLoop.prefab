@@ -54,30 +54,6 @@ MonoBehaviour:
   GameState: 0
   Day: 1
   coffeeDraggablesCount: 1
-  angry: 15
-  neutral: 11
-  damagelow: 2
-  damagehigh: 4
-  damagelowDay1: 2
-  damagehighDay1: 4
-  damagelowDay2Evil: 2
-  damagelowDay2Neutral: 1
-  damagehighDay2Neutral: 3
-  damagelowDay2Nice: 0
-  damagelowDay3Evil: 2
-  damagehighDay3Evil: 4
-  damagelowDay3EvilTransition: 2
-  damagehighDay3EvilTransition: 4
-  damagelowDay3Neutral: 1
-  damagehighDay3Neutral: 3
-  damagelowDay3NiceTransition: 0
-  damagehighDay3NiceTransition: 2
-  damagelowDay3Nice: 0
-  damagehighDay3Nice: 2
-  damagelowDay4: 2
-  damagehighDay4: 4
-  damagelowDay5: 2
-  damagehighDay5: 4
   JessicaReaction: {fileID: 0}
   stickyReaction: {fileID: 0}
   handsAnimator: {fileID: 0}
@@ -102,6 +78,12 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  startingStamina: 18
-  startingSanity: 25
-  startingDamage: 45
+  startingStamina: 20
+  startingSanity: 30
+  startingDamage: 50
+  gameOverSanityCanvas: {fileID: 0}
+  gameOverStaminaCanvas: {fileID: 0}
+  gameOverDamageCanvas: {fileID: 0}
+  textsToDisableWhileDragging: []
+  camScript: {fileID: 0}
+  coffeeObject: {fileID: 0}

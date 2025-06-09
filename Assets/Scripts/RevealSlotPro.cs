@@ -402,4 +402,6 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         previousSanity = 0;
         previousDamage = 0;
     }
+
+
 }

@@ -26,8 +26,18 @@ public class LoadSceneButton : MonoBehaviour
 
     public void StartNewGame()
     {
-        PlayerPrefs.DeleteAll();
+        // Clear old progress
+        PlayerPrefs.DeleteKey("SavedDay");
+        PlayerPrefs.DeleteKey("SavedGameState");
         PlayerPrefs.SetInt("ContinueGame", 0);
+
+        // ✅ Reset base stats manually
+        PlayerPrefs.SetInt("SavedSanity", 25);
+        PlayerPrefs.SetInt("SavedStamina", 20);
+        PlayerPrefs.SetInt("SavedDamage", 45);
+        PlayerPrefs.SetInt("SavedDay", 1);
+        PlayerPrefs.SetInt("SavedGameState", 0);
+
         PlayerPrefs.Save();
 
         SceneManager.LoadScene(sceneName);
@@ -37,6 +47,17 @@ public class LoadSceneButton : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("SavedDay") && PlayerPrefs.HasKey("SavedGameState"))
         {
+            int savedGameState = PlayerPrefs.GetInt("SavedGameState", 0);
+
+            // ✅ Only adjust sanity if resuming from GameState 2
+            if (savedGameState == 2)
+            {
+                int sanity = PlayerPrefs.GetInt("SavedSanity", 25); // fallback to default sanity if not set
+                sanity += 2;
+                PlayerPrefs.SetInt("SavedSanity", sanity);
+                Debug.Log("🧠 +2 Sanity applied on Continue from GameState 2.");
+            }
+
             PlayerPrefs.SetInt("ContinueGame", 1);
             PlayerPrefs.Save();
 
@@ -48,4 +69,5 @@ public class LoadSceneButton : MonoBehaviour
             StartNewGame();
         }
     }
+
 }

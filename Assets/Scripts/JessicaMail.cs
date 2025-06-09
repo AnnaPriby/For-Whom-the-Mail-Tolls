@@ -20,7 +20,6 @@ public class JessicaMail : MonoBehaviour
     [Header("Conversation History")]
     public ConversationHistoryManager historyManager;
 
-
     [Header("Coffee Email Support")]
     public CoffeeEmailsDatabase coffeeEmailsDatabase;
 
@@ -54,7 +53,10 @@ public class JessicaMail : MonoBehaviour
     [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip newMailSound;
-    public AudioClip readMailSound; // 👈 Add this
+    public AudioClip readMailSound;
+
+    // 🆕 Track which email indices have already applied stats
+    private HashSet<int> appliedEmailStats = new HashSet<int>();
 
     private void Start()
     {
@@ -82,12 +84,10 @@ public class JessicaMail : MonoBehaviour
         newMailUI?.SetActive(true);
         readMailUI?.SetActive(false);
 
-        // ✅ Play read mail sound
         if (audioSource != null && readMailSound != null)
         {
             audioSource.PlayOneShot(readMailSound);
         }
-
     }
 
     public void ShowReadMail()
@@ -95,8 +95,6 @@ public class JessicaMail : MonoBehaviour
         noMailUI?.SetActive(false);
         newMailUI?.SetActive(false);
         readMailUI?.SetActive(true);
-
-       
 
         ShowEmail();
     }
@@ -121,20 +119,26 @@ public class JessicaMail : MonoBehaviour
         if (jessicaEmailText != null)
             jessicaEmailText.text = entry.mainText;
 
-        // ✅ Add to conversation history
         if (historyManager != null)
             historyManager.AddJessicaMessage(entry.mainText);
 
-        ApplyVariantStats(entry.stamina, entry.sanity);
+        // 🛡️ Prevent stat re-application
+        if (!appliedEmailStats.Contains(index))
+        {
+            ApplyVariantStats(entry.stamina, entry.sanity);
+            appliedEmailStats.Add(index);
+        }
+        else
+        {
+            Debug.Log($"🟡 Stats for email index {index} already applied. Skipping.");
+        }
     }
 
     private void ApplyVariantStats(int stamina, int sanity)
     {
         if (statManager != null)
         {
-            
-            statManager.UpdateLiveWritingPreview(0, sanity,0);
-            //statManager.ResetLiveWritingPreview();
+            statManager.UpdateLiveWritingPreview(0, sanity, 0);
             statManager.ApplySanityDelta(sanity);
             Debug.Log($"✅ Applied Variant Stats: Stamina {stamina}, Sanity {sanity}");
         }
@@ -157,19 +161,7 @@ public class JessicaMail : MonoBehaviour
         Debug.Log("➡️ Moving to next Story Email. Now at index: " + emailIndex);
     }
 
-    public void SetVariant(int _) { /* not needed anymore */ }
-
-    // =============================
-    // COFFEE SYSTEM (Unchanged)
-    // =============================
-
-  
-
-   
-
-  
-
-  
+    public void SetVariant(int _) { /* Not used */ }
 
     public void CloseAllMailUI()
     {
