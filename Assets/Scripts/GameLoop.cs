@@ -61,8 +61,7 @@ public class GameLoop : MonoBehaviour
     public GameObject gameOverStaminaCanvas;
     public GameObject gameOverDamageCanvas;
 
-    [Header("Stat-Based Endings")]
-    public List<StatRangeSet> statBasedEndings = new List<StatRangeSet>();
+
 
     [Header("Texts to Disable During Scroll")]
     public List<TextMeshProUGUI> textsToDisableWhileDragging;
@@ -219,24 +218,24 @@ public class GameLoop : MonoBehaviour
 
                 if (Day == 7 && StatManager.Instance != null)
                 {
-                    int sanity = StatManager.Instance.CurrentSanity;
-                    int stamina = StatManager.Instance.CurrentStamina;
-                    int damage = StatManager.Instance.CurrentDamage; // Opponent HP
-
-                    foreach (var ending in statBasedEndings)
+                    if (StatManager.Instance != null)
                     {
-                        if (ending.endingCanvas == null) continue;
+                        int currentSanity = StatManager.Instance.CurrentSanity;
+                        int currentStamina = StatManager.Instance.CurrentStamina;
+                        int currentDamage = StatManager.Instance.CurrentDamage;
 
-                        bool sanityOK = sanity <= ending.sanityLossThreshold;
-                        bool staminaOK = stamina <= ending.staminaLossThreshold;
-                        bool damageOK = damage <= ending.damageLossThreshold;
 
-                        if (sanityOK && staminaOK && damageOK)
+                        if (currentDamage <= 0 && gameOverDamageCanvas != null)
                         {
-                            ending.endingCanvas.SetActive(true);
-                            Debug.Log($"🎬 Triggered ending: {ending.endingCanvas.name}");
-                            break;
+                            gameOverDamageCanvas.SetActive(true);
+                            Debug.LogWarning("💀 DAMAGE reached zero → Showing Game Over (Damage).");
                         }
+                        else 
+                        {
+                            gameOverStaminaCanvas.SetActive(true);
+                            Debug.LogWarning("💀 STAMINA reached zero → Showing Game Over (Stamina).");
+                        }
+
                     }
                 }
 

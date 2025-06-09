@@ -219,9 +219,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 6492
+        y: 6481
         width: 1922
-        height: 955
+        height: 866
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -242,7 +242,7 @@ TextureImporter:
         x: 1922
         y: 6492
         width: 1922
-        height: 955
+        height: 866
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -263,7 +263,7 @@ TextureImporter:
         x: 3844
         y: 6492
         width: 1922
-        height: 955
+        height: 866
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -284,7 +284,7 @@ TextureImporter:
         x: 5766
         y: 6492
         width: 1922
-        height: 955
+        height: 866
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -387,7 +387,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 5766
-        y: 5423
+        y: 5407
         width: 1922
         height: 866
       alignment: 0
@@ -785,8 +785,8 @@ TextureImporter:
       name: coffeedrinking_32
       rect:
         serializedVersion: 2
-        x: 3844
-        y: 1082
+        x: 3847
+        y: 1069
         width: 1922
         height: 866
       alignment: 0
@@ -806,8 +806,8 @@ TextureImporter:
       name: coffeedrinking_33
       rect:
         serializedVersion: 2
-        x: 5766
-        y: 1082
+        x: 5773
+        y: 1065
         width: 1922
         height: 866
       alignment: 0
@@ -830,7 +830,7 @@ TextureImporter:
         x: 7688
         y: 1082
         width: 1922
-        height: 1082
+        height: 866
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
