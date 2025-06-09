@@ -20,9 +20,9 @@ MonoBehaviour:
     Sanity2: -2
     Stamina2: -2
     Damage2: 2
-    Part1: Let me clarify myself further,
+    Part1: Let me clarify myself further.
     Part2: Let me clarify how much you've offended me.
-    Part3: Let me clarify
+    Part3: Hope your cooperation's value was clarified
   - Phrase: Being on the same page
     Sanity1: 1
     Stamina1: -4
@@ -31,8 +31,8 @@ MonoBehaviour:
     Stamina2: -3
     Damage2: 3
     Part1: I'd love for us to be on the same page.
-    Part2: I think you and my doggy are on the same page looks wise
-    Part3: Let's be on the same page when it comes to looking good in the office
+    Part2: I think you and my doggy are on the same page lookswise.
+    Part3: Let's be on the same page when it comes to looking good in the office.
   - Phrase: In my personal opinion
     Sanity1: -1
     Stamina1: -3
@@ -41,7 +41,7 @@ MonoBehaviour:
     Stamina2: -4
     Damage2: 5
     Part1: My personal opinion might be better left unsaid.
-    Part2: In my personal opinion, youre not much of a catch either
+    Part2: In my personal opinion, youre not much of a catch either.
     Part3: In my personal opinion, our dynamic makes this work interesting.
   - Phrase: Thanks for your input
     Sanity1: -3
@@ -60,6 +60,6 @@ MonoBehaviour:
     Sanity2: 2
     Stamina2: -6
     Damage2: 4
-    Part1: Perhaps you should consider shutting the fuuck up
-    Part2: Perhaps it's time for us to straight up fight it out
-    Part3: Perhaps you should get fired
+    Part1: Perhaps you should consider shutting the fuuck up.
+    Part2: Perhaps it's time for us to straight up fight it out.
+    Part3: Perhaps you should get fired.

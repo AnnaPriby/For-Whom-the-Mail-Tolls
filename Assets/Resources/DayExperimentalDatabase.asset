@@ -30,13 +30,14 @@ MonoBehaviour:
     Sanity2: -2
     Stamina2: -2
     Damage2: 2
-    Part1: Hello Linda, Of course I'll do my part.
-    Part2: Of course I also need to know next weeks schedule because of my dogs surgery.
+    Part1: Hello Linda, of course I'll do my part.
+    Part2: Of course, I also need to know next week's schedule because of my dog's
+      surgery.
     Part3: Of course my mistake will be fixed.
   - Phrase: As you may remember
     Sanity1: -1
     Stamina1: -1
-    Damage1: 4
+    Damage1: 3
     Sanity2: -3
     Stamina2: -2
     Damage2: 3
@@ -46,7 +47,7 @@ MonoBehaviour:
   - Phrase: I'm busy
     Sanity1: -1
     Stamina1: -1
-    Damage1: 5
+    Damage1: 4
     Sanity2: -4
     Stamina2: -3
     Damage2: 4

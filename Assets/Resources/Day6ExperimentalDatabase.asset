@@ -20,9 +20,9 @@ MonoBehaviour:
     Sanity2: -2
     Stamina2: -5
     Damage2: 4
-    Part1: UR the one being reported
-    Part2: I go down you go down with me bitch
-    Part3: You, me, 12:00 outside  see you tthere
+    Part1: UR the one being reported.
+    Part2: I go down you go down with me bitch.
+    Part3: You, me, 12:00 outside  see you there.
   - Phrase: Hope this helps!
     Sanity1: 2
     Stamina1: -4
@@ -30,8 +30,8 @@ MonoBehaviour:
     Sanity2: -5
     Stamina2: -3
     Damage2: 6
-    Part1: See U in hell,
-    Part2: Spawn of Satan
+    Part1: See U in hell.
+    Part2: Spawn of Satan.
     Part3: Please die.
   - Phrase: Moving forward.
     Sanity1: 3
@@ -40,9 +40,9 @@ MonoBehaviour:
     Sanity2: -3
     Stamina2: -7
     Damage2: 7
-    Part1: Sleep with one eye open tonight,
-    Part2: you'll be wishing you never fucking met me
-    Part3: youll rue the day your filthy mutt paws touched my beloved picture
+    Part1: Sleep with one eye open tonight.
+    Part2: You'll be wishing you never fucking met me.
+    Part3: You'll rue the day your filthy mutt paws touched my beloved picture.
   - Phrase: Milord
     Sanity1: 7
     Stamina1: -4
@@ -51,8 +51,8 @@ MonoBehaviour:
     Stamina2: -4
     Damage2: 10
     Part1: U blasphemous fiend!!!
-    Part2: I bestow a cursee upon yee and thy bloodline
-    Part3: The royal council shall grant me your head
+    Part2: I bestow a cursee upon yee and thy bloodline.
+    Part3: The royal council shall grant me your head.
   - Phrase: Woof
     Sanity1: 5
     Stamina1: -8

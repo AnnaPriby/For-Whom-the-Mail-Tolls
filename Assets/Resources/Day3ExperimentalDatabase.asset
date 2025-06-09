@@ -30,13 +30,13 @@ MonoBehaviour:
     Sanity2: -2
     Stamina2: -2
     Damage2: 3
-    Part1: Yes, what a shame someone would steal a picture of such a sweet dog
-    Part2: It's a shame someone would steal someones delicious snack.
-    Part3: It's truly such a shame and hopefully wont repeat itself!
+    Part1: Yes, what a shame that someone would steal a picture of such a sweet dog.
+    Part2: It's a shame someone would steal someone's delicious snack.
+    Part3: It's truly such a shame and hopefully won't repeat itself!
   - Phrase: Whom it may concern.
     Sanity1: -2
     Stamina1: 2
-    Damage1: 5
+    Damage1: 4
     Sanity2: -3
     Stamina2: -3
     Damage2: 5
@@ -51,9 +51,9 @@ MonoBehaviour:
     Sanity2: -3
     Stamina2: -4
     Damage2: 5
-    Part1: Dear Jessica, life truly is unjust - towards dogs and humans alike.
+    Part1: Dear Jessica, it's a dog eat dog world.
     Part2: Life is unjust towards dogs and humans alike.
-    Part3: Life is unjust towards dogs and humans alike.
+    Part3: Life's unjust. Let's put these dog days behind us!
   - Phrase: Poor you
     Sanity1: -4
     Stamina1: 0

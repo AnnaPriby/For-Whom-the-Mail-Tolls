@@ -20,9 +20,9 @@ MonoBehaviour:
     Sanity2: -2
     Stamina2: -2
     Damage2: 2
-    Part1: As per my last email, I'm on it
-    Part2: As per my last email, I've been preoccupied
-    Part3: As per my last, I'm on it
+    Part1: As per my last email, I'm on it.
+    Part2: As per my last email, my dog is a mess.
+    Part3: As per my last email, I'm on it.
   - Phrase: Baby girl,
     Sanity1: -2
     Stamina1: -1
@@ -30,27 +30,27 @@ MonoBehaviour:
     Sanity2: 2
     Stamina2: -4
     Damage2: 3
-    Part1: You're right baby girl
-    Part2: Daddy's been busy, baby girl
-    Part3: Don't worry about it baby girl
+    Part1: You're right baby girl.
+    Part2: Daddy's been busy, baby girl.
+    Part3: Don't worry about it baby girl.
   - Phrase: Friendly reminder,
     Sanity1: -1
     Stamina1: -2
-    Damage1: 5
+    Damage1: 4
     Sanity2: -5
     Stamina2: -2
     Damage2: 4
     Part1: Your friendly reminder has been acknowledged!
-    Part2: Friendly reminder - I've got my own stuff going on.
+    Part2: Friendly reminder - I've got a little wicked thing to take care of.
     Part3: Friendly reminder that we will get throught this!
   - Phrase: Correct me if I'm wrong
     Sanity1: -1
     Stamina1: -3
-    Damage1: 5
+    Damage1: 4
     Sanity2: -3
     Stamina2: -3
     Damage2: 4
-    Part1: Correct me if I'm wrong, but we've been over this
+    Part1: Correct me if I'm wrong, but we've been over this.
     Part2: Correct me if I'm wrong, but this challenge can be overcome easily.
     Part3: Correct me if I'm wrong, but have I ever let you down?
   - Phrase: I appreciate
@@ -61,5 +61,5 @@ MonoBehaviour:
     Stamina2: -1
     Damage2: 1
     Part1: I appreciate your repeated reminders.
-    Part2: I appreciate you trying to get this thing finished
+    Part2: I appreciate you trying to get this thing finished.
     Part3: I appreciate you :)

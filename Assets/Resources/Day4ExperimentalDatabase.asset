@@ -22,7 +22,7 @@ MonoBehaviour:
     Damage2: 2
     Part1: I know yogurts are essential to keeping one's energy going.
     Part2: Yogurts, much like dogs, get a person energized.
-    Part3: Your energy is contagious
+    Part3: Your energy is contagious.
   - Phrase: Safety first.
     Sanity1: -1
     Stamina1: -2
@@ -30,7 +30,7 @@ MonoBehaviour:
     Sanity2: -2
     Stamina2: -2
     Damage2: 3
-    Part1: I would hate for you to feel unsafe because of this thievery
+    Part1: I would hate for you to feel unsafe because of this thievery.
     Part2: I thought my picture made this cubicle a safe space, too.
     Part3: I feel safer knowing you are over there.
   - Phrase: Kitten
@@ -40,9 +40,9 @@ MonoBehaviour:
     Sanity2: -5
     Stamina2: -3
     Damage2: 5
-    Part1: Oh nooooo kitten
+    Part1: Oh nooooo, kitten.
     Part2: My dog is not a kitten but I love him just the same.
-    Part3: Your such a swet kitty kitty come herre kitty kitty
+    Part3: You're such a sweet kitty kitty come herre kitty kitty
   - Phrase: As has been mentioned
     Sanity1: -4
     Stamina1: -1
@@ -60,6 +60,6 @@ MonoBehaviour:
     Sanity2: 1
     Stamina2: -5
     Damage2: 3
-    Part1: Oh my good Jessica, you bitch.
-    Part2: Speaking of bitches, my dog needs surgery.
+    Part1: Oh my GOD Jessica, you bitch.
+    Part2: Speaking of bitches, my dog needs a surgery.
     Part3: So leave me alone, bitch.
