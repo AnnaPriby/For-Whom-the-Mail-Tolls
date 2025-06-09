@@ -4743,44 +4743,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiImages:
-  - image: {fileID: 1644305226}
-    defaultSprite: {fileID: 21300000, guid: b453bcd51d4aa6343908cb411d804f67, type: 3}
-    lowSanitySprite: {fileID: 21300000, guid: 412cefac516076c46a2b71b81a006781, type: 3}
+  - image: {fileID: 701165338}
+    defaultSprite: {fileID: 21300000, guid: adb3e2a77d17a1c47b8e09445d61ce3e, type: 3}
+    lowSanitySprite: {fileID: 21300000, guid: 4bb54c1dbab85b544a7b6356aacde101, type: 3}
+    sanityThreshold: 25
+  - image: {fileID: 1983881464}
+    defaultSprite: {fileID: 21300000, guid: 7087583a00f0e3a4a9a45ea31c4cbd2f, type: 3}
+    lowSanitySprite: {fileID: 21300000, guid: 24711544c8229ff42bdfede7d458503f, type: 3}
+    sanityThreshold: 20
+  - image: {fileID: 1904930216}
+    defaultSprite: {fileID: 21300000, guid: 6cd2fac3fbc53d3428e2796bfaaebf53, type: 3}
+    lowSanitySprite: {fileID: 21300000, guid: e18c2a49401ce5243a6f41545c46cb51, type: 3}
     sanityThreshold: 16
   - image: {fileID: 1927563344}
     defaultSprite: {fileID: 21300000, guid: c214ad2d582234144ba5c51943ae8ca1, type: 3}
     lowSanitySprite: {fileID: 21300000, guid: 5cdb9d0d4a2bc1e4892647bd4bc3cd11, type: 3}
-    sanityThreshold: 13
-  - image: {fileID: 701165338}
-    defaultSprite: {fileID: 21300000, guid: adb3e2a77d17a1c47b8e09445d61ce3e, type: 3}
-    lowSanitySprite: {fileID: 21300000, guid: 4bb54c1dbab85b544a7b6356aacde101, type: 3}
     sanityThreshold: 12
-  - image: {fileID: 1904930216}
-    defaultSprite: {fileID: 21300000, guid: 6cd2fac3fbc53d3428e2796bfaaebf53, type: 3}
-    lowSanitySprite: {fileID: 21300000, guid: e18c2a49401ce5243a6f41545c46cb51, type: 3}
-    sanityThreshold: 10
-  - image: {fileID: 1983881464}
-    defaultSprite: {fileID: 21300000, guid: 7087583a00f0e3a4a9a45ea31c4cbd2f, type: 3}
-    lowSanitySprite: {fileID: 21300000, guid: 24711544c8229ff42bdfede7d458503f, type: 3}
-    sanityThreshold: 4
+  - image: {fileID: 1644305226}
+    defaultSprite: {fileID: 21300000, guid: b453bcd51d4aa6343908cb411d804f67, type: 3}
+    lowSanitySprite: {fileID: 21300000, guid: 412cefac516076c46a2b71b81a006781, type: 3}
+    sanityThreshold: 6
   - image: {fileID: 680675319}
     defaultSprite: {fileID: 21300000, guid: b5a95dff6f38a492fae852edb1c1a01c, type: 3}
     lowSanitySprite: {fileID: 21300000, guid: 3d898fe1a90845a47a17bca219296601, type: 3}
-    sanityThreshold: 4
+    sanityThreshold: 2
   spriteRenderers:
   - renderer: {fileID: 254057151}
     defaultSprite: {fileID: 21300000, guid: 14d0c57a8eb21ae44836b7dc6383892c, type: 3}
     lowSanitySprite: {fileID: 21300000, guid: 72e22c28eba25184993f59fc20971cc7, type: 3}
-    sanityThreshold: 1
+    sanityThreshold: 2
   - renderer: {fileID: 651324832}
     defaultSprite: {fileID: 21300000, guid: acca9562f1131a6499f1e2e8b4a3e408, type: 3}
     lowSanitySprite: {fileID: 21300000, guid: da12513d92a183a49834f1986f4041ca, type: 3}
     sanityThreshold: 20
-  tmpTexts:
-  - text: {fileID: 958853745488538200}
-    defaultFont: {fileID: 11400000, guid: b9ed8f7a0832b4606ad727dee2222cfc, type: 2}
-    lowSanityFont: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
-    sanityThreshold: 3
+  tmpTexts: []
 --- !u!4 &496386515
 Transform:
   m_ObjectHideFlags: 0
