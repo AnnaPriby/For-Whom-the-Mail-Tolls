@@ -162,14 +162,19 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             label.raycastTarget = true;
 
             stats.text = $"<b><size=30>" +
-                         $"<color=#5dc24c>{FormatWithSign(Sanity)} </color>" +
-                         $"<color=#057bfa>{FormatWithSign(Stamina)} </color>" +
-                         $"<color=#f74e5b>{FormatWithSign(Damage)}</color></b>";
+               $"<color=#5dc24c>{FormatWithSign(Sanity)} </color>" +
+               $"<color=#057bfa>{FormatWithSign(Stamina)} </color>" +
+               $"<color=#f74e5b>{FormatDamageAlwaysMinus(Damage)}</color></b>";
 
             stats.raycastTarget = true;
         }
 
         Debug.Log($"🎴 {name} assigned → Phrase: '{dayData.Phrase}', SA: {Sanity}, ST: {Stamina}, DMG: {Damage}");
+    }
+
+    private string FormatDamageAlwaysMinus(int value)
+    {
+        return value == 0 ? "0" : "-" + Mathf.Abs(value);
     }
 
     public void OnBeginDrag(PointerEventData eventData)

@@ -89,13 +89,34 @@ public class StatManager : MonoBehaviour
         maxSanity = sanity;
         maxDamage = damage;
 
-        if (staminaSlider != null) { staminaSlider.maxValue = stamina; staminaSlider.value = stamina; }
-        if (sanitySlider != null) { sanitySlider.maxValue = sanity; sanitySlider.value = sanity; }
-        if (damageSlider != null) { damageSlider.maxValue = damage; damageSlider.value = damage; }
+        // MAIN sliders - Set max and value
+        if (staminaSlider != null)
+        {
+            staminaSlider.maxValue = maxStamina;
+            staminaSlider.value = maxStamina;
+        }
 
-        if (staminaLiveSlider != null) { staminaLiveSlider.maxValue = stamina; staminaLiveSlider.value = stamina; }
-        if (sanityLiveSlider != null) { sanityLiveSlider.maxValue = sanity; sanityLiveSlider.value = sanity; }
-        if (damageLiveSlider != null) { damageLiveSlider.maxValue = damage; damageLiveSlider.value = damage; }
+        if (sanitySlider != null)
+        {
+            sanitySlider.maxValue = maxSanity;
+            sanitySlider.value = maxSanity;
+        }
+
+        if (damageSlider != null)
+        {
+            damageSlider.maxValue = maxDamage;
+            damageSlider.value = maxDamage;
+        }
+
+        // PREVIEW sliders - Set only max, value will sync after SetStats()
+        if (staminaLiveSlider != null)
+            staminaLiveSlider.maxValue = maxStamina;
+
+        if (sanityLiveSlider != null)
+            sanityLiveSlider.maxValue = maxSanity;
+
+        if (damageLiveSlider != null)
+            damageLiveSlider.maxValue = maxDamage;
 
         UpdateAllVisuals();
     }
@@ -201,7 +222,7 @@ public class StatManager : MonoBehaviour
             damageFill.color = Color.Lerp(damageLow, damageFull, damageSlider.value / maxDamage);
     }
 
-    private void UpdateAllVisuals()
+    public void UpdateAllVisuals()
     {
         UpdateStaminaVisuals();
         UpdateSanityVisuals();
@@ -241,4 +262,37 @@ public class StatManager : MonoBehaviour
         if (damageLiveSlider != null)
             damageLiveSlider.value = damageSlider.value;
     }
+
+    public void SetStats(int sanity, int stamina, int damage)
+    {
+        if (sanitySlider != null)
+        {
+            maxSanity = Mathf.Max(sanity, 1); // Ensure max isn't 0
+           // sanitySlider.maxValue = maxSanity;
+            sanitySlider.value = sanity;
+        }
+
+        if (staminaSlider != null)
+        {
+            maxStamina = Mathf.Max(stamina, 1);
+           // staminaSlider.maxValue = maxStamina;
+            staminaSlider.value = stamina;
+        }
+
+        if (damageSlider != null)
+        {
+            maxDamage = Mathf.Max(damage, 1);
+           // damageSlider.maxValue = maxDamage;
+            damageSlider.value = damage;
+        }
+
+        // Update the live sliders too
+       // if (staminaLiveSlider != null) { staminaLiveSlider.maxValue = maxStamina; staminaLiveSlider.value = stamina; }
+        //if (sanityLiveSlider != null) { sanityLiveSlider.maxValue = maxSanity; sanityLiveSlider.value = sanity; }
+        //if (damageLiveSlider != null) { damageLiveSlider.maxValue = maxDamage; damageLiveSlider.value = damage; }
+
+        UpdateAllVisuals();
+    }
+
+
 }

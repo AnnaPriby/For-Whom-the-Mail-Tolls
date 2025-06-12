@@ -30,6 +30,7 @@ public class LoadSceneButton : MonoBehaviour
         PlayerPrefs.DeleteKey("SavedDay");
         PlayerPrefs.DeleteKey("SavedGameState");
         PlayerPrefs.SetInt("ContinueGame", 0);
+        PlayerPrefs.DeleteKey("ReachedEnding"); // ⬅️ Add this
 
         // ✅ Reset base stats manually
         PlayerPrefs.SetInt("SavedSanity", 25);
@@ -45,29 +46,24 @@ public class LoadSceneButton : MonoBehaviour
 
     public void ContinueGame()
     {
-        if (PlayerPrefs.HasKey("SavedDay") && PlayerPrefs.HasKey("SavedGameState"))
+        bool hasSave = PlayerPrefs.HasKey("SavedDay") && PlayerPrefs.HasKey("SavedGameState");
+        bool reachedEnding = PlayerPrefs.GetInt("ReachedEnding", 0) == 1;
+
+        if (!hasSave || reachedEnding)
         {
-            int savedGameState = PlayerPrefs.GetInt("SavedGameState", 0);
-
-            // ✅ Only adjust sanity if resuming from GameState 2
-            if (savedGameState == 2)
-            {
-                int sanity = PlayerPrefs.GetInt("SavedSanity", 25); // fallback to default sanity if not set
-                sanity += 2;
-                PlayerPrefs.SetInt("SavedSanity", sanity);
-                Debug.Log("🧠 +2 Sanity applied on Continue from GameState 2.");
-            }
-
-            PlayerPrefs.SetInt("ContinueGame", 1);
-            PlayerPrefs.Save();
-
-            SceneManager.LoadScene(sceneName);
-        }
-        else
-        {
-            Debug.LogWarning("❌ No saved game found! Starting New Game instead.");
+            Debug.Log("🔁 Restarting game from beginning (either no save or reached ending).");
             StartNewGame();
+            return;
         }
+
+        int savedGameState = PlayerPrefs.GetInt("SavedGameState", 0);
+
+        
+        PlayerPrefs.SetInt("ContinueGame", 1);
+        PlayerPrefs.Save();
+
+        SceneManager.LoadScene(sceneName);
     }
+
 
 }

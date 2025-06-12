@@ -63,6 +63,7 @@ public class GameLoop : MonoBehaviour
 
 
 
+
     [Header("Texts to Disable During Scroll")]
     public List<TextMeshProUGUI> textsToDisableWhileDragging;
 
@@ -90,6 +91,8 @@ public class GameLoop : MonoBehaviour
     private Coroutine liveValidationCoroutine = null;
     public int GetStartingStamina() => startingStamina;
     private int lastStickyVariant = -1;
+
+    
 
     void Awake()
     {
@@ -167,10 +170,15 @@ public class GameLoop : MonoBehaviour
             case 0:
                 SetTextVisibility(true, true);
                 coffee.ResetDailyUse();
+               StatManager.Instance.UpdateAllVisuals();
 
+                int currentSanity = StatManager.Instance.CurrentSanity;
+                int currentStamina = StatManager.Instance.CurrentStamina;
+                int currentDamage = StatManager.Instance.CurrentDamage;
 
-                if (Day == 1)
+                if (Day == 1 && PlayerPrefs.GetInt("ContinueGame", 0) == 0)
                 {
+                    // Only apply starting stats for a brand new game
                     StatManager.Instance.SetStartingStats(startingStamina, startingSanity, startingDamage);
                 }
 
@@ -189,9 +197,7 @@ public class GameLoop : MonoBehaviour
 
                 if (StatManager.Instance != null)
                 {
-                    int currentSanity = StatManager.Instance.CurrentSanity;
-                    int currentStamina = StatManager.Instance.CurrentStamina;
-                    int currentDamage = StatManager.Instance.CurrentDamage;
+                    
 
 
                     if (currentDamage <= 0 && gameOverDamageCanvas != null)
@@ -218,9 +224,7 @@ public class GameLoop : MonoBehaviour
                 {
                     if (StatManager.Instance != null)
                     {
-                        int currentSanity = StatManager.Instance.CurrentSanity;
-                        int currentStamina = StatManager.Instance.CurrentStamina;
-                        int currentDamage = StatManager.Instance.CurrentDamage;
+                       
 
 
                         if (currentDamage <= 0 && gameOverDamageCanvas != null)
@@ -236,7 +240,15 @@ public class GameLoop : MonoBehaviour
 
                     }
                 }
+                
 
+                if (currentDamage <= 0 || currentSanity <= 0 || currentStamina <= 0 || Day >= 7)
+                {
+                    PlayerPrefs.SetInt("ReachedEnding", 1);
+                    PlayerPrefs.Save();
+                }
+
+                SaveGameProgress();
                 SetUI(false, true);
                 jessicaMail?.ShowNoMail();
                 StartCoroutine(WaitThenGoToNewMail());
@@ -246,6 +258,7 @@ public class GameLoop : MonoBehaviour
                 coffee.enabled = false;
                 jessicaMail?.ShowNewMail();
                 stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant);
+                SaveGameProgress();
                 break;
             case 2:
                 SetUI(false, true);
@@ -253,6 +266,8 @@ public class GameLoop : MonoBehaviour
                 jessicaMail?.ShowReadMail();
                 break;
             case 3:
+                SaveGameProgress();
+                StatManager.Instance.UpdateAllVisuals();
                 baseVariantAtWrite = currentVariant;
                 lastStamina = StatManager.Instance.CurrentStamina;
                 stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant);
@@ -288,6 +303,7 @@ public class GameLoop : MonoBehaviour
                 SetUI(false, false);
                 coffee.enabled = false;
                 verticalParallax?.StartAutoScroll();
+                SaveGameProgress();
                 break;
         }
     }
@@ -414,27 +430,54 @@ public class GameLoop : MonoBehaviour
 
         SetTextVisibility(true); // Show the texts (alpha 0.5)
     }
-
     public void SaveGameProgress()
     {
         PlayerPrefs.SetInt("SavedDay", Day);
         PlayerPrefs.SetInt("SavedGameState", GameState);
         PlayerPrefs.SetInt("ContinueGame", 1);
+
+        if (StatManager.Instance != null)
+        {
+            PlayerPrefs.SetInt("SavedSanity", StatManager.Instance.CurrentSanity);
+            PlayerPrefs.SetInt("SavedStamina", StatManager.Instance.CurrentStamina);
+            PlayerPrefs.SetInt("SavedDamage", StatManager.Instance.CurrentDamage);
+        }
+
         PlayerPrefs.Save();
     }
 
     public void LoadGameProgress()
     {
         Day = PlayerPrefs.GetInt("SavedDay", 1);
-        GameState = PlayerPrefs.GetInt("SavedGameState", 1);
-    }
+        GameState = PlayerPrefs.GetInt("SavedGameState", 0);
 
+        int sanity = PlayerPrefs.GetInt("SavedSanity", startingSanity);
+        int stamina = PlayerPrefs.GetInt("SavedStamina", startingStamina);
+        int damage = PlayerPrefs.GetInt("SavedDamage", startingDamage);
+
+        if (StatManager.Instance != null)
+        {
+            // Step 1: Set max values
+            StatManager.Instance.SetStartingStats(startingStamina, startingSanity, startingDamage);
+
+            // Step 2: Set current values only (do not change max)
+            StatManager.Instance.SetStats(sanity, stamina, damage);
+
+            // Step 3: Sync visuals
+            StatManager.Instance.UpdateAllVisuals();
+            StatManager.Instance.ResetLiveWritingPreview();
+        }
+    }
     public void ResetProgress()
     {
         Day = 1;
         GameState = 0;
         PlayerPrefs.SetInt("ContinueGame", 0);
         PlayerPrefs.Save();
+
+        StatManager.Instance?.SetStartingStats(startingStamina, startingSanity, startingDamage);
+        StatManager.Instance?.UpdateAllVisuals();
+        StatManager.Instance?.ResetLiveWritingPreview();
     }
 
     private void PreloadStoryDatabases()
@@ -444,6 +487,8 @@ public class GameLoop : MonoBehaviour
         Resources.Load<StorySolutionDatabase>("StorySolutionDatabase");
         Resources.Load<StoryEmailsDatabase>("StoryEmailsDatabase");
     }
+
+
 
     private int lastStamina = -1;
 
@@ -502,15 +547,5 @@ public class GameLoop : MonoBehaviour
 
 
 
-#if UNITY_EDITOR
-    private void ResetEditorProgress()
-    {
-        PlayerPrefs.DeleteKey("SavedDay");
-        PlayerPrefs.DeleteKey("SavedGameState");
-        PlayerPrefs.DeleteKey("ContinueGame");
-        PlayerPrefs.Save();
-        Day = 1;
-        GameState = 0;
-    }
-#endif
+
 }
