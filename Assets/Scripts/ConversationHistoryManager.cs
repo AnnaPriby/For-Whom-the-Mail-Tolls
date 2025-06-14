@@ -50,14 +50,16 @@ public class ConversationHistoryManager : MonoBehaviour
 
     public void AddJessicaMessage(string text)
     {
-        historyMessages.Add("J:" + text); // ✅ Track for saving
+        historyMessages.Add("J:" + text);
         AddMessage(text, jessicaMessagePrefab);
+        SaveHistory(); // Auto-save after add
     }
 
     public void AddPlayerMessage(string text)
     {
-        historyMessages.Add("P:" + text); // ✅ Track for saving
+        historyMessages.Add("P:" + text);
         AddMessage(text, playerMessagePrefab);
+        SaveHistory(); // Auto-save after add
     }
     private void AddMessage(string text, GameObject prefab)
     {

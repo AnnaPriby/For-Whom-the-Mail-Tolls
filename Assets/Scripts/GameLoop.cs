@@ -111,6 +111,7 @@ public class GameLoop : MonoBehaviour
 
         if (camScript != null)
             camScript.enabled = false;
+        ConversationHistoryManager.Instance?.LoadHistory();
     }
 
     void Start()
@@ -127,6 +128,8 @@ public class GameLoop : MonoBehaviour
         PrepareDraggables();
         ChangeGameState(GameState);
         stickyReaction?.UpdateJessicaSpriteByVariant(lastStickyVariant);
+
+        
     }
 
     private void PrepareDraggables()
@@ -478,6 +481,13 @@ public class GameLoop : MonoBehaviour
         StatManager.Instance?.SetStartingStats(startingStamina, startingSanity, startingDamage);
         StatManager.Instance?.UpdateAllVisuals();
         StatManager.Instance?.ResetLiveWritingPreview();
+
+        // ✅ Clear conversation history as well
+        if (ConversationHistoryManager.Instance != null)
+        {
+            ConversationHistoryManager.Instance.ClearStoredHistory();
+            Debug.Log("🗑️ Conversation history has been reset.");
+        }
     }
 
     private void PreloadStoryDatabases()
