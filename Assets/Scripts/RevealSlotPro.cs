@@ -292,7 +292,7 @@ public class RevealSlotPro : MonoBehaviour, IDropHandler
         string log = $"{currentMessage.Trim()}\n<size=80%><i>" +
                      $"{(previousStamina >= 0 ? "+" : "")}{previousStamina}, " +
                      $"{(previousSanity >= 0 ? "+" : "")}{previousSanity}, " +
-                     $"{(previousDamage >= 0 ? "" : "-")}{Mathf.Abs(previousDamage)}</i></size>";
+                       $"+{Mathf.Abs(previousDamage)}</i></size>";
 
         Debug.Log($"✅ RevealSlot [{name}] logging: {log}");
         return log;

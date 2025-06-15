@@ -187,8 +187,8 @@ public class StatManager : MonoBehaviour
         if (statsDeltaDisplayText == null) return;
 
         string result = $"Sanity: {(sanity >= 0 ? "+" : "")}<size=30><b>{sanity}</size></b> " +
-                        $"Stamina: {(stamina >= 0 ? "+" : "")}<size=30><b>{stamina}</size></b> " +
-                        $"Damage: {(damage >= 0 ? "+" : "")}<size=30><b>{damage}";
+                $"Stamina: {(stamina >= 0 ? "+" : "")}<size=30><b>{stamina}</size></b> " +
+                $"Damage: +<size=30><b>{Mathf.Abs(damage)}</size></b>";
 
         statsDeltaDisplayText.text = result.Trim();
     }

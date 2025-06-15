@@ -174,7 +174,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     private string FormatDamageAlwaysMinus(int value)
     {
-        return value == 0 ? "0" : "-" + Mathf.Abs(value);
+        return value == 0 ? "0" : "+" + Mathf.Abs(value);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
