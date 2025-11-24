@@ -230,7 +230,7 @@ public class GameLoop : MonoBehaviour
                        
 
 
-                        if (currentDamage <= 0 && gameOverDamageCanvas != null)
+                        if (currentDamage <= 0 && gameOverDamageCanvas != null || currentSanity >= 0 && currentStamina >= 0)
                         {
                             gameOverDamageCanvas.SetActive(true);
                             Debug.LogWarning("💀 DAMAGE reached zero → Showing Game Over (Damage).");
