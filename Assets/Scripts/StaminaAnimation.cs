@@ -50,18 +50,18 @@ public class StaminaAnimation : MonoBehaviour
         Vector3 handsStart = handsRT.anchoredPosition;
         
         backgroundRT.anchoredPosition += new Vector2(0, -0.1f*panOffset);
-        jessicaRT.anchoredPosition += new Vector2(0, -1.8f*panOffset);
+        jessicaRT.anchoredPosition += new Vector2(0, -1.4f*panOffset);
         cubicleRT.anchoredPosition += new Vector2(0, -panOffset);
         handsRT.anchoredPosition += new Vector2(0, -panOffset);
         
         
-        backgroundRT.DOAnchorPos(backgroundStart, fadeDuration).SetEase(Ease.InOutSine).SetDelay(0.5f);
-        jessicaRT.DOAnchorPos(jessicaStart, fadeDuration).SetEase(Ease.InOutSine).SetDelay(0.5f);
-        cubicleRT.DOAnchorPos(cubicleStart, fadeDuration).SetEase(Ease.InOutSine).SetDelay(1.5f);
-        handsRT.DOAnchorPos(handsStart, fadeDuration).SetEase(Ease.InOutSine).SetDelay(2.5f).OnComplete(StartStory);
+        backgroundRT.DOAnchorPos(backgroundStart, panDuration).SetEase(Ease.InOutSine).SetDelay(0.5f).OnComplete(StartStory);
+        jessicaRT.DOAnchorPos(jessicaStart, panDuration*0.5f).SetEase(Ease.InOutSine).SetDelay(1.5f);
+        cubicleRT.DOAnchorPos(cubicleStart, panDuration*0.5f).SetEase(Ease.InOutSine).SetDelay(2.5f);
+        handsRT.DOAnchorPos(handsStart, panDuration*0.5f).SetEase(Ease.InOutSine).SetDelay(2.5f);
         
-        handsChildRT.DOShakePosition(50f,10).SetLoops(-1, LoopType.Yoyo);
-        jessicaChildRT.DOShakePosition(50f,5).SetLoops(-1, LoopType.Yoyo);
+        handsChildRT.DOShakePosition(50f,5).SetLoops(-1, LoopType.Yoyo);
+        jessicaChildRT.DOShakePosition(50f,2).SetLoops(-1, LoopType.Yoyo);
         
 
 
