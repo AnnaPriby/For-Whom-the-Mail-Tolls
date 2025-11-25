@@ -66,7 +66,12 @@ public class TMPStoryController : MonoBehaviour
         }
 
         if (currentLine == 2)
+        {
+            pictureFrame.gameObject.SetActive(true);
             pictureFrame?.DOFade(1f, 1f);
+            
+        }
+            
         
         mainText.text = storyLines[currentLine];
 
