@@ -19,7 +19,7 @@ public class IntroAnimation : MonoBehaviour
 
     public float fadeDuration = 2f;
     public float panDuration = 3f;
-    public float panOffset = 500f; // distance camera pans to the left (UI elements move right)
+    public float panOffset = 500f; 
 
     void Start()
     {
