@@ -43,6 +43,7 @@ public class StaminaAnimation : MonoBehaviour
 
         // Fade-in background
         backgroundImage.DOColor(new Color(1f, 1f, 1f, 1f), fadeDuration).SetEase(Ease.InOutSine);
+        UIImage.DOColor(new Color(1f, 1f, 1f, 1f), fadeDuration).SetEase(Ease.InOutSine);
 
         Vector3 backgroundStart = backgroundRT.anchoredPosition;
         Vector3 jessicaStart = jessicaRT.anchoredPosition;

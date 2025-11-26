@@ -201,8 +201,6 @@ public class GameLoop : MonoBehaviour
                 if (StatManager.Instance != null)
                 {
                     
-
-
                     if (currentDamage <= 0 && gameOverDamageCanvas != null)
                     {
                         gameOverDamageCanvas.SetActive(true);
