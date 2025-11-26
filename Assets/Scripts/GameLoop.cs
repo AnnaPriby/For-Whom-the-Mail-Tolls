@@ -6,6 +6,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine.Serialization;
 using static UnityEngine.UI.Image;
+using UnityEngine.SceneManagement;
 
 public class GameLoop : MonoBehaviour
 {
@@ -60,6 +61,7 @@ public class GameLoop : MonoBehaviour
     public GameObject gameOverSanityCanvas;
     public GameObject gameOverStaminaCanvas;
     public GameObject gameOverDamageCanvas;
+    public string CutsceneName;
 
 
 
@@ -197,46 +199,56 @@ public class GameLoop : MonoBehaviour
                 }
 
                 hasLoggedSendThisTurn = false;
+                
+                //pokud před koncem hry
 
                 if (StatManager.Instance != null)
                 {
-                    
-                    if (currentDamage <= 0 && gameOverDamageCanvas != null)
+                    //porazíš jessicu
+                    if (currentDamage <= 0)
                     {
-                        gameOverDamageCanvas.SetActive(true);
+                        //SceneManager.LoadScene("CSUltimateWin");
+                        CutsceneName = "CSUltimateWin";
                         Debug.LogWarning("💀 DAMAGE reached zero → Showing Game Over (Damage).");
                     }
 
-                    else if (currentSanity <= 0 && gameOverSanityCanvas != null)
+                    else if (currentSanity <= 0)
                     {
-                        gameOverSanityCanvas.SetActive(true);
+                        //SceneManager.LoadScene("CSInsanity");
+                        CutsceneName = "CSInsanity";
                         Debug.LogWarning("💀 SANITY reached zero → Showing Game Over (Sanity).");
                     }
 
-                    else if (currentStamina <= 0 && gameOverStaminaCanvas != null)
+                    else if (currentStamina <= 0)
                     {
-                        gameOverStaminaCanvas.SetActive(true);
+                        //SceneManager.LoadScene("CSStamina");
+                        CutsceneName = "CSStamina";
                         Debug.LogWarning("💀 STAMINA reached zero → Showing Game Over (Stamina).");
                     }
 
                 }
 
-                if (Day == 7 && StatManager.Instance != null)
+                if (Day >= 7 && StatManager.Instance != null)
                 {
                     if (StatManager.Instance != null)
                     {
-                       
 
-
-                        if (currentDamage <= 0 && gameOverDamageCanvas != null || currentSanity >= 0 && currentStamina >= 0)
+                        if (currentDamage <= 0)
                         {
-                            gameOverDamageCanvas.SetActive(true);
+                            //SceneManager.LoadScene("CSUltimateWin");
+                            CutsceneName = "CSUltimateWin";
                             Debug.LogWarning("💀 DAMAGE reached zero → Showing Game Over (Damage).");
+                        }
+                        else if (currentSanity <= 0)
+                        {
+                            //SceneManager.LoadScene("CSInsanity");
+                            CutsceneName = "CSInsanity";
+                            Debug.LogWarning("💀 STAMINA reached zero → Showing Game Over (Stamina).");
                         }
                         else
                         {
-                            gameOverStaminaCanvas.SetActive(true);
-                            Debug.LogWarning("💀 STAMINA reached zero → Showing Game Over (Stamina).");
+                            //SceneManager.LoadScene("CSStamina");
+                            CutsceneName = "CSStamina";
                         }
 
                     }
@@ -247,6 +259,7 @@ public class GameLoop : MonoBehaviour
                 {
                     PlayerPrefs.SetInt("ReachedEnding", 1);
                     PlayerPrefs.Save();
+                    Cutscene(CutsceneName);
                 }
 
                 SaveGameProgress();
@@ -307,6 +320,11 @@ public class GameLoop : MonoBehaviour
                 SaveGameProgress();
                 break;
         }
+    }
+
+    public void Cutscene(string cutsceneName)
+    {
+        SceneManager.LoadScene(cutsceneName);
     }
 
     private void SetUI(bool playerTurn, bool jessica)
