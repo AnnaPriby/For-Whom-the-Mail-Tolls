@@ -345,7 +345,7 @@ MonoBehaviour:
   coffee: {fileID: 80383131}
   UI: {fileID: 1809168812}
   fadeDuration: 3
-  panDuration: 16
+  panDuration: 7
   panOffset: 1900
 --- !u!114 &515813600
 MonoBehaviour:
@@ -639,11 +639,11 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 796827714}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 88f31163b6b257d498885e5663435b49, type: 3}
+  m_Resource: {fileID: 8300000, guid: b11c3a36b8f596843be1a1879406e846, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.116
   m_Pitch: 1
