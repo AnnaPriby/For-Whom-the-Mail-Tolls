@@ -22,6 +22,8 @@ public class LossAnimation : MonoBehaviour
     private RectTransform handsChildRT;
     private RectTransform jessicaChildRT;
     
+    public AudioSource audioSource;
+    
     public float fadeDuration = 2f;
     public float panDuration = 3f;
     public float panOffset = 500f;

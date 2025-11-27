@@ -17,4 +17,17 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Anna_MainScreenTogether 1.unity
     guid: 7f0d09eeb9703e64083be61ad3adc67f
+  - enabled: 1
+    path: Assets/Scenes/Intro.unity
+    guid: d62c1e2920da14e18970492d73e4a99c
+  - enabled: 1
+    path: Assets/Scenes/CSInsanity.unity
+    guid: 35bb3bd1202184cc99e77d9da98b4928
+  - enabled: 1
+    path: Assets/Scenes/CSUltimateWin.unity
+    guid: 7c00b1d0b8b2045a7b562af6fdbbe544
+  - enabled: 1
+    path: Assets/Scenes/CSStamina.unity
+    guid: 27fe5359860564fa5870759ec4c18362
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0
